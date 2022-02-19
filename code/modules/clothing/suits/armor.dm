@@ -195,7 +195,7 @@
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	time_to_unequip = 20
 	time_to_equip = 20
-
+	allowed = list(/obj/item/weapon/gun/shotgun/combat/riot, /obj/item/weapon/gun/launcher/grenade/m81/riot, /obj/item/device/flashlight)
 
 /obj/item/clothing/suit/armor/swat
 	name = "swat suit"
