@@ -91,6 +91,79 @@
 	else
 		..()
 
+/obj/item/weapon/shield/riot/flash
+	name = "modified riot shield"
+	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder. This one has had an industrial flash embedded within it."
+
+	icon_state = "riot_f"
+	item_state = "riot_f"
+	base_icon_state = "riot_f"
+
+	var/times_used = 0 //Number of times it's been used.
+	var/broken = 0     //Is the flash burnt out?
+	var/last_used = 0 //last world.time it was used.
+	var/brightness = 3
+
+/obj/item/weapon/shield/riot/flash/proc/flash_recharge()
+	//capacitor recharges over time
+	for(var/i=0, i<3, i++)
+		if(last_used+600 > world.time)
+			break
+		last_used += 600
+		times_used -= 2
+	last_used = world.time
+	times_used = max(0,round(times_used)) //sanity
+
+
+/obj/item/weapon/shield/riot/flash/attack(mob/living/M, mob/user)
+	if(!user || !M)	return	//sanity
+	if(!ishuman(M)) return
+
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [src.name] by [key_name(user)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to flash [key_name(M)]</font>")
+	msg_admin_attack("[key_name(user)] used the [src.name] to flash [key_name(M)] in [get_area(src)] ([src.loc.x],[src.loc.y],[src.loc.z]).", src.loc.x, src.loc.y, src.loc.z)
+
+	if(!skillcheck(user, SKILL_POLICE, SKILL_POLICE_SKILLED))
+		to_chat(user, SPAN_WARNING("You don't seem to know how to use [src]..."))
+		return
+	if(broken)
+		to_chat(user, SPAN_WARNING("\The [src] is broken."))
+		return
+	flash_recharge()
+	if(isXeno(M))
+		to_chat(user, "You can't find any eyes!")
+		return
+
+	//spamming the flash before it's fully charged (60seconds) increases the chance of it  breaking
+	//It will never break on the first use.
+	switch(times_used)
+		if(0 to 3)
+			last_used = world.time
+			times_used++
+		else	//can only use it 3 times a minute
+			to_chat(user, SPAN_WARNING("*click* *click*"))
+			return
+	playsound(src.loc, 'sound/weapons/flash.ogg', 25, 1)
+	var/flashfail = 0
+
+	if(iscarbon(M))
+		flashfail = !M.flash_eyes(brightness)
+		if(!flashfail)
+			M.KnockDown(15)
+	else if(isSilicon(M))
+		M.KnockDown(rand(10,15))
+	else
+		flashfail = 1
+
+	if(!flashfail)
+		if(!isSilicon(M))
+			user.visible_message("<span class='disarm'>[user] blinds [M] with the [src]!</span>")
+		else
+			user.visible_message(SPAN_NOTICE("[user] overloads [M]'s sensors with the [src]!"))
+	else
+		user.visible_message(SPAN_NOTICE("[user] fails to blind [M] with the [src]!"))
+	return
+
 /obj/item/weapon/shield/energy
 	name = "energy combat shield"
 	desc = "A shield capable of stopping most projectile and melee attacks. It can be retracted, expanded, and stored anywhere."

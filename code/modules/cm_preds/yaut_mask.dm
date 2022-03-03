@@ -28,7 +28,7 @@
 	flags_item = ITEM_PREDATOR
 	filtered_gases = list("phoron", "sleeping_agent", "carbon_dioxide")
 	gas_filter_strength = 3
-	eye_protection = 2
+	eye_protection = 3
 	var/current_goggles = 0 //0: OFF. 1: NVG. 2: Thermals. 3: Mesons
 	vision_impair = VISION_IMPAIR_NONE
 	unacidable = TRUE
