@@ -13,6 +13,7 @@
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
+	var/brightness = 1
 
 /obj/item/device/flash/proc/flash_recharge()
 	//capacitor recharges over time
@@ -64,7 +65,7 @@
 	var/flashfail = 0
 
 	if(iscarbon(M))
-		flashfail = !M.flash_eyes()
+		flashfail = !M.flash_eyes(brightness)
 		if(!flashfail)
 			M.KnockDown(10)
 
