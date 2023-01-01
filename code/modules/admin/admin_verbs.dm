@@ -188,7 +188,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/construct_env_dmm,
 	/client/proc/enter_tree,
 	/client/proc/set_tree_points,
-	/client/proc/purge_data_tab
+	/client/proc/purge_data_tab,
+	/client/proc/admin_deserialize,
+	/client/proc/admin_serialize
 )
 
 var/list/admin_verbs_debug_advanced = list(
