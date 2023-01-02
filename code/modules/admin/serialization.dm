@@ -45,11 +45,9 @@
 	// Currently: Limbs/organs only
 	var/list/data = ..()
 	var/list/limbs_list = list()
-	var/list/organs_list = list()
 	var/list/equip_list = list()
 	var/list/implant_list = list()
 	data["limbs"] = limbs_list
-	data["iorgans"] = organs_list
 	data["equip"] = equip_list
 	data["implant_list"] = implant_list
 	data["age"] = age
@@ -60,21 +58,15 @@
 
 	// Limbs
 	for(var/limb in limbs)
-		var/obj/limb/L = bodyparts_by_name[limb]
+		var/obj/limb/L = limbs[limb]
 		if(!L)
 			limbs_list[limb] = "missing"
 			continue
-
-		limbs_list[limb] = O.serialize()
-
-	// Internal organs/augments
-	for(var/organ in internal_organs)
-		var/obj/item/organ/O = organ
-		organs_list[O.name] = O.serialize()
+		limbs_list[limb] = L.serialize()
 
 	// Equipment
-	equip_list.len = slots_amt
-	for(var/i = 1, i < slots_amt, i++)
+	equip_list.len = TOTAL_SLOTS
+	for(var/i = 1, i < TOTAL_SLOTS, i++)
 		var/obj/item/thing = get_item_by_slot(i)
 		if(thing != null)
 			equip_list[i] = thing.serialize()
@@ -86,7 +78,6 @@
 
 /mob/living/carbon/human/deserialize(list/data)
 	var/list/limbs_list = data["limbs"]
-	var/list/organs_list = data["iorgans"]
 	var/list/equip_list = data["equip"]
 	var/list/implant_list = data["implant_list"]
 	var/turf/T = get_turf(src)
@@ -102,54 +93,35 @@
 		if(limbs_list[limb] == "missing")
 			continue
 
-	for(var/organ in organs_list)
-		// As above, "New" code handles insertion, DNA sync
-		list_to_object(organs_list[organ], src)
-
 	for(var/thing in implant_list)
 		var/implant_data = implant_list[thing]
 		var/path = text2path(implant_data["type"])
 		var/obj/item/implant/implant = new path(T)
-		if(!implant.implant(src, src))
+		if(!implant.implanted(src, src))
 			qdel(implant)
 
-	UpdateAppearance()
+//	UpdateAppearance()
 
 	// De-serialize equipment
 	// #1: Jumpsuit
 	// #2: Outer suit
 	// #3+: Everything else
-	if(islist(equip_list[slot_w_uniform]))
-		var/obj/item/clothing/C = list_to_object(equip_list[slot_w_uniform], T)
-		equip_to_slot_if_possible(C, slot_w_uniform)
+	if(islist(equip_list[w_uniform]))
+		var/obj/item/clothing/C = list_to_object(equip_list[w_uniform], T)
+		equip_to_slot_if_possible(C, w_uniform)
 
-	if(islist(equip_list[slot_wear_suit]))
-		var/obj/item/clothing/C = list_to_object(equip_list[slot_wear_suit], T)
-		equip_to_slot_if_possible(C, slot_wear_suit)
+	if(islist(equip_list[wear_suit]))
+		var/obj/item/clothing/C = list_to_object(equip_list[wear_suit], T)
+		equip_to_slot_if_possible(C, wear_suit)
 
-	for(var/i = 1, i < slots_amt, i++)
-		if(i == slot_w_uniform || i == slot_wear_suit)
+	for(var/i = 1, i < TOTAL_SLOTS, i++)
+		if(i == w_uniform || i == wear_suit)
 			continue
 		if(islist(equip_list[i]))
 			var/obj/item/clothing/C = list_to_object(equip_list[i], T)
 			equip_to_slot_if_possible(C, i)
 	update_icons()
 
-	..()
-
-
-/// Organs
-/obj/item/organ/serialize()
-	var/data = ..()
-	if(status)
-		data["status"] = status
-	return data
-
-/obj/item/organ/deserialize(data)
-	if(isnum(data["status"]))
-		if(data["status"] & ORGAN_ROBOT)
-			robotize()
-		status = data["status"]
 	..()
 
 /// Storage
@@ -169,7 +141,6 @@
 	data["content"] = content_list
 	data["slots"] = storage_slots
 	data["max_w_class"] = max_w_class
-	data["max_c_w_class"] = max_combined_w_class
 	for(var/thing in contents)
 		var/atom/movable/AM = thing
 		// This code does not watch out for infinite loops
@@ -184,8 +155,6 @@
 		storage_slots = data["slots"]
 	if(isnum(data["max_w_class"]))
 		max_w_class = data["max_w_class"]
-	if(isnum(data["max_c_w_class"]))
-		max_combined_w_class = data["max_c_w_class"]
 	for(var/thing in contents)
 		qdel(thing) // out with the old
 	for(var/thing in data["content"])
@@ -229,29 +198,20 @@
 /obj/item/card/id/serialize()
 	var/list/data = ..()
 
-	data["sex"] = sex
-	data["age"] = age
 	data["btype"] = blood_type
-	data["dna_hash"] = dna_hash
-	data["fprint_hash"] = fingerprint_hash
 	data["access"] = access
 	data["job"] = assignment
 	data["account"] = associated_account_number
 	data["owner"] = registered_name
+	data["item_name"] = name
 	return data
 
 /obj/item/card/id/deserialize(list/data)
-	sex = data["sex"]
-	age = data["age"]
 	blood_type = data["btype"]
-	dna_hash = data["dna_hash"]
-	fingerprint_hash = data["fprint_hash"]
 	access = data["access"] // No need for a copy, the list isn't getting touched
 	assignment = data["job"]
 	associated_account_number = data["account"]
 	registered_name = data["owner"]
-	mining_points = data["mining"]
-	// We'd need to use icon serialization(b64) to save the photo, and I don't feel like i
-	UpdateName()
-	RebuildHTML()
+	name = data["item_name"]
+
 	..()

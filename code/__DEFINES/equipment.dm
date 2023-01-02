@@ -199,6 +199,7 @@
 #define WEAR_IN_L_STORE  "in_l_store"
 #define WEAR_IN_R_STORE  "in_r_store"
 #define WEAR_IN_SHOES "in_shoes"
+#define TOTAL_SLOTS 30 //Please update this if adding new slots.
 
 // Contained Sprites
 #define WORN_LHAND "_lh"
