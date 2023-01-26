@@ -3,7 +3,7 @@
 	fprefix = "PMC."
 	pay_multiplier = 2.5 // they have money. but they sold their soul to the company. is it really worth it
 
-//Standard PMCs
+/// Standard PMCs ##########
 /datum/paygrade/pmc/standard
 	paygrade = "PMC-OP"
 	name = "Operator"
@@ -15,7 +15,7 @@
 	prefix = "ENF."
 	pay_multiplier = 2.6
 
-//PMC Field Specialists
+/// PMC Field Specialists ###########
 /datum/paygrade/pmc/vehicle
 	paygrade = "PMC-VS"
 	name = "Vehicle Specialist"
@@ -26,12 +26,18 @@
 	paygrade = "PMC-SS"
 	name = "Support Specialist"
 	prefix = "SPS."
-	pay_multiplier = 2.8
+	pay_multiplier = 3
 
 /datum/paygrade/pmc/medic
 	paygrade = "PMC-MS"
 	name = "Medical Specialist"
 	prefix = "SPM."
+	pay_multiplier = 2.8
+
+/datum/paygrade/pmc/engineer
+	paygrade = "PMC-TS"
+	name = "Technical Specialist"
+	prefix = "TEC."
 	pay_multiplier = 2.8
 
 /datum/paygrade/pmc/spec
@@ -46,7 +52,7 @@
 	prefix = "SPX."
 	pay_multiplier = 4
 
-//PMC Elite
+/// Elite PMCs #########
 /datum/paygrade/pmc/elite
 	paygrade = "PMC-ELR"
 	name = "Elite Responder"
@@ -65,12 +71,12 @@
 	prefix = "ELG."
 	pay_multiplier = 5
 
-//PMC Command
+/// PMC Command ##########
 /datum/paygrade/pmc/teamlead
 	paygrade = "PMC-TL"
 	name = "Team Leader"
 	prefix = "TML."
-	pay_multiplier = 3.5
+	pay_multiplier = 4
 
 /datum/paygrade/pmc/elitelead
 	paygrade = "PMC-ETL"
@@ -82,12 +88,6 @@
 	paygrade = "PMC-DOC"
 	name = "Trauma Surgeon"
 	prefix = "TRI."
-	pay_multiplier = 4
-
-/datum/paygrade/pmc/engineer
-	paygrade = "PMC-TECH"
-	name = "Corporate Technician"
-	prefix = "TEC."
 	pay_multiplier = 4
 
 /datum/paygrade/pmc/director

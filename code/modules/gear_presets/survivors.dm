@@ -1139,7 +1139,7 @@
 	faction = FACTION_WY
 	faction_group = list(FACTION_WY, FACTION_MARINE, FACTION_SURVIVOR)
 	rank = JOB_WY_GOON
-	paygrade = "WEY-GOON"
+	paygrade = "WY-G"
 	idtype = /obj/item/card/id/silver/cl
 	skills = /datum/skills/civilian/survivor/goon
 	languages = list(LANGUAGE_ENGLISH, LANGUAGE_JAPANESE)

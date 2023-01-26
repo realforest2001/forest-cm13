@@ -1,27 +1,28 @@
 /datum/paygrade/twe
 	name = "TWE Paygrade"
 	pay_multiplier = 2 // less people = more to pay them
+	fprefix = "3WE."
 
 //TWE RMC
-/datum/paygrade/twe/rc1
-	paygrade = "TC1"
+/datum/paygrade/twe/commando/standard
+	paygrade = "3W-C1"
 	name = "Yonto"
 	prefix = "Yt."
 
-/datum/paygrade/twe/rc2
-	paygrade = "TC2"
+/datum/paygrade/twe/commando/technician
+	paygrade = "3W-C2"
 	name = "Santo"
 	prefix = "St."
 	pay_multiplier = 2.1
 
-/datum/paygrade/twe/rc3
-	paygrade = "TC3"
+/datum/paygrade/twe/commando/specialist
+	paygrade = "3W-C3"
 	name = "Nito"
 	prefix = "Nt."
 	pay_multiplier = 2.2
 
-/datum/paygrade/twe/rc4
-	paygrade = "TC4"
+/datum/paygrade/twe/commando/leader
+	paygrade = "3W-C4"
 	name = "Itto"
 	prefix = "It."
 	pay_multiplier = 2.3

@@ -13,14 +13,18 @@
 	switch(_role)
 		if(JOB_PMC_DIRECTOR)
 			hud_icon_state = "sd"
-		if(JOB_PMC_LEADER, JOB_PMC_LEAD_INVEST)
+		if(JOB_PMC_LEADER)
 			hud_icon_state = "ld"
+		if(JOB_PMC_LEAD_INVEST)
+			hud_icon_state = "ld_i"
 		if(JOB_PMC_DOCTOR)
 			hud_icon_state = "td"
 		if(JOB_PMC_ENGINEER)
 			hud_icon_state = "ct"
-		if(JOB_PMC_MEDIC, JOB_PMC_INVESTIGATOR)
+		if(JOB_PMC_MEDIC)
 			hud_icon_state = "md"
+		if(JOB_PMC_INVESTIGATOR)
+			hud_icon_state = "md_i"
 		if(JOB_PMC_SYNTH)
 			hud_icon_state = "syn"
 	if(hud_icon_state)

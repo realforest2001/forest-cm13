@@ -5,6 +5,7 @@
 /datum/paygrade/civilian/civilian
 	paygrade = "C"
 	name = "Civilian"
+	prefix = "C"
 
 /datum/paygrade/civilian/nurse
 	paygrade = "CN"

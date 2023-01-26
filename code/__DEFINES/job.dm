@@ -155,8 +155,8 @@ var/global/list/job_command_roles = JOB_COMMAND_ROLES_LIST
 
 //-------- PMC --------//
 #define JOB_PMC "PMC Standard"
-#define JOB_PMC_ENGINEER "PMC Corporate Technician"
-#define JOB_PMC_MEDIC "PMC Corporate Medic"
+#define JOB_PMC_ENGINEER "PMC Combat Technician"
+#define JOB_PMC_MEDIC "PMC Combat Medic"
 #define JOB_PMC_DOCTOR "PMC Trauma Surgeon"
 #define JOB_PMC_INVESTIGATOR "PMC Medical Investigator"
 #define JOB_PMC_ELITE "PMC Elite"
@@ -186,6 +186,7 @@ var/global/list/job_command_roles = JOB_COMMAND_ROLES_LIST
 
 //-------- WY Goons --------//
 #define JOB_WY_GOON "WY Corporate Security"
+#define JOB_WY_GOON_MEDIC "WY Corporate Medic"
 #define JOB_WY_GOON_LEAD "WY Corporate Security Lead"
 
 //---- Contractors ----//

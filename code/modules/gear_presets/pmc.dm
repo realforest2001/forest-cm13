@@ -576,7 +576,7 @@
 
 	assignment = JOB_PMC_ENGINEER
 	rank = JOB_PMC_ENGINEER
-	paygrade = "PMC-TECH"
+	paygrade = "PMC-TS"
 	role_comm_title = "TEC"
 	skills = /datum/skills/pmc/engineer
 	headset_type = /obj/item/device/radio/headset/distress/PMC/cct

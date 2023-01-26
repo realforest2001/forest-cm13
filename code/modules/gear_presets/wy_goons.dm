@@ -61,7 +61,7 @@
 
 	assignment = JOB_WY_GOON
 	rank = JOB_WY_GOON
-	paygrade = "WEY-GOON"
+	paygrade = "WY-G"
 	skills = /datum/skills/MP
 
 /datum/equipment_preset/goon/standard/load_gear(mob/living/carbon/human/H)
@@ -94,7 +94,7 @@
 
 	assignment = JOB_WY_GOON_LEAD
 	rank = JOB_WY_GOON_LEAD
-	paygrade = "WEY-GOON-L"
+	paygrade = "WY-GL"
 	skills = /datum/skills/MP
 
 /datum/equipment_preset/goon/lead/load_gear(mob/living/carbon/human/H)
