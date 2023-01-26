@@ -29,50 +29,69 @@
 
 
 //TWE Naval Officers
-/datum/paygrade/twe/o1
-	paygrade = "TO1"
-	name = "Seaman"
-	prefix = "SN."
+/datum/paygrade/twe/officer/grade1
+	paygrade = "3W-O1"
+	name = "Midshipman"
+	prefix = "Mds."
+	pay_multiplier = 2.75
+
+/datum/paygrade/twe/officer/grade2
+	paygrade = "3W-O2"
+	name = "Sub Lieutenant"
+	prefix = "SLT."
 	pay_multiplier = 3
 
-/datum/paygrade/twe/o2
-	paygrade = "TO2"
-	name = "Leading Seaman"
-	prefix = "LR."
-	pay_multiplier = 3.25
-
-/datum/paygrade/twe/o3
-	paygrade = "TO3"
-	name = "Standing Officer"
-	prefix = "SO."
+/datum/paygrade/twe/officer/grade3
+	paygrade = "3W-O3"
+	name = "Lieutenant"
+	prefix = "LT."
 	pay_multiplier = 3.5
 
-/datum/paygrade/twe/o3e
-	paygrade = "TO3E"
-	name = "Warrant Officer"
-	prefix = "WO."
-	pay_multiplier = 3.5
+/datum/paygrade/twe/officer/grade4
+	paygrade = "3W-O4"
+	name = "Lieutenant Commander"
+	prefix = "LCDR."
+	pay_multiplier = 4
 
-/datum/paygrade/twe/o4
-	paygrade = "TO4"
+/datum/paygrade/twe/officer/grade5
+	paygrade = "3W-O5"
+	name = "Commander"
+	prefix = "CDR."
+	pay_multiplier = 4.5
+
+/datum/paygrade/twe/officer/grade6
+	paygrade = "3W-O6"
 	name = "Captain"
-	prefix = "Cpt."
+	prefix = "CPT."
 	pay_multiplier = 5
 
-/datum/paygrade/twe/o5
-	paygrade = "TO5"
+/datum/paygrade/twe/officer/grade7
+	paygrade = "3W-O7"
+	name = "Commodore"
+	prefix = "CDRE."
+	pay_multiplier = 6
+
+/datum/paygrade/twe/officer/grade8
+	paygrade = "3W-O4"
+	name = "Rear Admiral"
+	prefix = "RADM."
+	pay_multiplier = 8
+
+/datum/paygrade/twe/officer/grade9
+	paygrade = "3W-O9"
+	name = "Vice Admiral"
+	prefix = "VADM."
+	pay_multiplier = 10
+
+/datum/paygrade/twe/officer/grade10
+	paygrade = "3W-O10"
 	name = "Admiral"
 	prefix = "ADM."
-	pay_multiplier = 7
+	pay_multiplier = 12
 
-/datum/paygrade/twe/o6
-	paygrade = "TO6"
+/datum/paygrade/twe/officer/grade10C
+	paygrade = "3W-O10C"
 	name = "Grand Admiral"
 	prefix = "GADM."
-	pay_multiplier = 9
+	pay_multiplier = 15
 
-/datum/paygrade/twe/o7
-	paygrade = "TO7"
-	name = "Emperor"
-	prefix = "ER."
-	pay_multiplier = 1000
