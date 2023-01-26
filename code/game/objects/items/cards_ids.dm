@@ -114,6 +114,19 @@
 	assignment = new_assignment
 	name = "[registered_name]'s ID Card ([assignment])"
 
+/obj/item/card/id/equipped(mob/living/carbon/human/H, slot)
+	if(istype(H))
+		H.update_inv_head() //updating marine helmet squad coloring
+		H.update_inv_wear_suit()
+	..()
+
+/obj/item/card/id/dropped(mob/user)
+	if(istype(user,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = user
+		H.update_inv_head() //Don't do a full update yet
+		H.update_inv_wear_suit()
+	..()
+
 /obj/item/card/id/GetAccess()
 	return access
 
@@ -225,7 +238,7 @@
 	assignment = "General"
 
 /obj/item/card/id/general/New()
-	access = get_all_centcom_access()
+	access = get_all_accesses()
 
 /obj/item/card/id/provost
 	name = "provost holo-badge"
@@ -235,8 +248,28 @@
 	assignment = "Provost"
 
 /obj/item/card/id/provost/New()
-	access = get_all_centcom_access()
+	access = get_all_accesses()
 
+/// TWE ID Cards
+/obj/item/card/id/twe
+	name = "TWE holo-badge"
+	desc = "The rose gold holo-badge of the Three World Empire. Seeing this in UA space is extremely rare."
+	icon_state = "twe"
+
+/obj/item/card/id/twe/New()
+	access = get_all_accesses()
+
+/obj/item/card/id/twe/command
+	name = "TWE command holo-badge"
+	desc = "The rose gold holo-badge of the Three World Empire. Seeing this in UA space is extremely rare. This one has a flashy blue fiberglass core, denoting seniority."
+	icon_state = "twe_cmd"
+
+/obj/item/card/id/twe/royal
+	name = "TWE royal identification"
+	desc = "A fiberglass ID card used by the TWE Imperial Family."
+	icon_state = "twe_royal"
+
+/// Legacy Cards
 /obj/item/card/id/syndicate
 	name = "agent card"
 	access = list(ACCESS_ILLEGAL_PIRATE)
@@ -335,21 +368,7 @@
 	..()
 
 
-/obj/item/card/id/equipped(mob/living/carbon/human/H, slot)
-	if(istype(H))
-		H.update_inv_head() //updating marine helmet squad coloring
-		H.update_inv_wear_suit()
-	..()
-
-/obj/item/card/id/dropped(mob/user)
-	if(istype(user,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = user
-		H.update_inv_head() //Don't do a full update yet
-		H.update_inv_wear_suit()
-	..()
-
-
-
+/// Marine ID Tags
 /obj/item/card/id/dogtag
 	name = "dog tag"
 	desc = "A marine dog tag."
@@ -406,7 +425,8 @@
 			msg += "<br>[i]. \"[fallen_names[i]] - [fallen_assgns[i]] - [fallen_blood_types[i]]\""
 		. += SPAN_NOTICE("[msg]")
 
-// Used to authenticate to CORSAT machines. Doesn't do anything except have its type variable
+
+/// Used to authenticate to CORSAT machines. Doesn't do anything except have its type variable
 /obj/item/card/data/corsat
 	name = "CORSAT administration code"
 	desc = "A disk of data containing one of the CORSAT administration authentication codes necessary to lift the biohazard lockdown."

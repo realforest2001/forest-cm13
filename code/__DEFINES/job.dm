@@ -248,23 +248,20 @@ var/global/list/job_command_roles = JOB_COMMAND_ROLES_LIST
 //-------- TWE --------//
 #define JOB_TWE_REPRESENTATIVE "TWE Representative"
 
-#define JOB_TWE_YONTO "RMC Yonto"
-#define JOB_TWE_SANTO "RMC Santo"
-#define JOB_TWE_NITO "RMC Nito"
-#define JOB_TWE_ITTO "RMC Itto"
+#define JOB_TWE_CDO "Royal Marine Commando"
+#define JOB_TWE_CDO_ENG "Royal Marine Commando Engineer"
+#define JOB_TWE_CDO_MED "Royal Marine Commando Medic"
+#define JOB_TWE_CDO_SPEC "Royal Marine Commando Specialist"
+#define JOB_TWE_CDO_SL "Royal Marine Commando Leader"
 
-#define TWE_COMMANDO_JOB_LIST list(JOB_TWE_YONTO, JOB_TWE_SANTO, JOB_TWE_NITO, JOB_TWE_ITTO)
+#define TWE_COMMANDO_JOB_LIST list(JOB_TWE_CDO, JOB_TWE_CDO_ENG, JOB_TWE_CDO_MED, JOB_TWE_CDO_SPEC, JOB_TWE_CDO_SL)
 
-#define JOB_TWE_SEAMAN "TWE Seaman"
-#define JOB_TWE_LSEAMAN "TWE Leading Seaman"
-#define JOB_TWE_SO "TWE Standing Officer"
-#define JOB_TWE_WO "TWE Warrant Officer"
 #define JOB_TWE_CPT "TWE Captain"
 #define JOB_TWE_ADM "TWE Admiral"
 #define JOB_TWE_GADM "TWE Grand Admiral"
-#define JOB_TWE_ER "TWE Emperor"
+#define JOB_TWE_ROYAL "TWE Royalty"
 
-#define TWE_OFFICER_JOB_LIST list(JOB_TWE_SEAMAN, JOB_TWE_LSEAMAN, JOB_TWE_SO, JOB_TWE_WO, JOB_TWE_CPT, JOB_TWE_ADM, JOB_TWE_GADM, JOB_TWE_ER)
+#define TWE_OFFICER_JOB_LIST list(JOB_TWE_CPT, JOB_TWE_ADM, JOB_TWE_GADM)
 
 //-------- PROVOST --------//
 #define JOB_PROVOST_ENFORCER "Provost Enforcer"
