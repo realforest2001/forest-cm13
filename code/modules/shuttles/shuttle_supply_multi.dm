@@ -249,7 +249,7 @@
 	for(var/obj/structure/machinery/door/poddoor/railing/M in railingz[deck])
 		if(M.density)
 			effective = 1
-			INVOKE_ASYNC(M, /obj/structure/machinery/door.proc/open)
+			INVOKE_ASYNC(M, TYPE_PROC_REF(/obj/structure/machinery/door, open))
 
 	for(var/obj/structure/machinery/door/airlock/multi_tile/almayer/elevator_3wide/D in range(GLOB.supply_elevator_turfs[deck], 4))
 		D.locked = FALSE
@@ -584,7 +584,7 @@
 		var/T_fake_zlevel = T_area.fake_zlevel
 		choices["Deck [T_fake_zlevel]"] = image(icon = icon, icon_state = "ec_button_[T_fake_zlevel]")
 
-	addtimer(CALLBACK(src, .proc/elevator_check), 10 SECONDS, TIMER_UNIQUE)
+	addtimer(CALLBACK(src, PROC_REF(elevator_check)), 10 SECONDS, TIMER_UNIQUE)
 
 /obj/item/elevator_contoller/proc/elevator_check()
 	my_elevator = supply_controller.shuttle
@@ -685,7 +685,7 @@
 
 	var/list/tether_effects = apply_tether(tether_from, tether_to, range = attached_to.range, icon = "wire", always_face = FALSE)
 	tether_effect = tether_effects["tetherer_tether"]
-	RegisterSignal(tether_effect, COMSIG_PARENT_QDELETING, .proc/reset_tether)
+	RegisterSignal(tether_effect, COMSIG_PARENT_QDELETING, PROC_REF(reset_tether))
 
 /obj/item/elevator_contoller/dropped(mob/user)
 	. = ..()
@@ -716,8 +716,8 @@
 
 	if(attached_to && loc.z != attached_to.z)
 		zlevel_transfer = TRUE
-		zlevel_transfer_timer = addtimer(CALLBACK(src, .proc/try_doing_tether), zlevel_transfer_timeout, TIMER_UNIQUE|TIMER_STOPPABLE)
-		//RegisterSignal(attached_to, COMSIG_MOVABLE_MOVED, .proc/transmitter_move_handler)
+		zlevel_transfer_timer = addtimer(CALLBACK(src, PROC_REF(try_doing_tether)), zlevel_transfer_timeout, TIMER_UNIQUE|TIMER_STOPPABLE)
+		//RegisterSignal(attached_to, COMSIG_MOVABLE_MOVED, PROC_REF(transmitter_move_handler))
 		return TRUE
 	return FALSE
 
@@ -757,7 +757,7 @@
 	. = ..()
 
 	attached_to = new /obj/item/elevator_contoller(src)
-	RegisterSignal(attached_to, COMSIG_PARENT_PREQDELETED, .proc/override_delete)
+	RegisterSignal(attached_to, COMSIG_PARENT_PREQDELETED, PROC_REF(override_delete))
 
 	for(var/obj/structure/action_relay/AR in range(10, src))
 		AR.target = src

@@ -809,7 +809,7 @@
 /area/westerneye/hallways/hangar)
 "apF" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network/vehicle,
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle,
 /turf/open/floor/almayer{
 	icon_state = "plate";
 	tag = "icon-sterile"
@@ -977,7 +977,7 @@
 /area/almayer/living/grunt_rnr)
 "asB" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network,
+/obj/structure/machinery/computer/cameras/almayer_network,
 /obj/structure/machinery/computer/secure_data{
 	pixel_x = 17
 	},
@@ -1391,7 +1391,7 @@
 /area/westerneye/shipboard/brig/perma)
 "ayY" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer/vehicle{
+/obj/structure/machinery/computer/cameras/almayer/vehicle{
 	dir = 1;
 	pixel_y = -11;
 	pixel_x = -7
@@ -2211,7 +2211,7 @@
 /area/westerneye/hallways/lowerdeck_port_hallway)
 "aMT" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	dir = 1
 	},
 /obj/structure/machinery/light{
@@ -3938,7 +3938,7 @@
 	},
 /area/westerneye/shipboard/weapon_room)
 "bpw" = (
-/obj/structure/machinery/computer/security/wooden_tv/prop{
+/obj/structure/machinery/computer/cameras/wooden_tv/prop{
 	pixel_x = -4;
 	pixel_y = 2;
 	dir = 1
@@ -9854,7 +9854,7 @@
 /area/westerneye/hull/lower_hull/l_f_s)
 "dbj" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer{
+/obj/structure/machinery/computer/cameras/almayer{
 	network = list("Cryogenics")
 	},
 /turf/open/floor/almayer{
@@ -10899,7 +10899,7 @@
 /area/westerneye/medical/aft_medical_lobby)
 "dpZ" = (
 /obj/structure/surface/table/woodentable/fancy,
-/obj/structure/machinery/computer/security/wooden_tv/almayer{
+/obj/structure/machinery/computer/cameras/wooden_tv/almayer{
 	dir = 1
 	},
 /turf/open/floor/carpet,
@@ -11860,7 +11860,7 @@
 	vector_x = -64;
 	vector_y = -115
 	},
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 4;
 	layer = 2.97;
 	pixel_y = 4;
@@ -14294,22 +14294,6 @@
 /obj/structure/machinery/door/firedoor/border_only/almayer,
 /turf/open/floor/plating,
 /area/westerneye/living/cryo_cells)
-"eln" = (
-/obj/effect/step_trigger/teleporter/random{
-	affect_ghosts = 1;
-	name = "tele_ground1";
-	teleport_x = 180;
-	teleport_x_offset = 200;
-	teleport_y = 50;
-	teleport_y_offset = 80;
-	teleport_z = 1;
-	teleport_z_offset = 1
-	},
-/obj/effect/landmark/shuttle_loc/marine_src/evacuation{
-	name = "18"
-	},
-/turf/open/floor/plating,
-/area/space)
 "elw" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/structure/machinery/door/window/eastleft{
@@ -19166,7 +19150,7 @@
 	},
 /area/westerneye/engineering/engine_core)
 "fCk" = (
-/obj/structure/machinery/computer/security/dropship/one,
+/obj/structure/machinery/computer/cameras/dropship/one,
 /obj/structure/prop/ice_colony/hula_girl{
 	pixel_x = -10;
 	pixel_y = 16
@@ -26703,7 +26687,7 @@
 /area/westerneye/hull/upper_hull)
 "hJI" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer/vehicle{
+/obj/structure/machinery/computer/cameras/almayer/vehicle{
 	dir = 1;
 	pixel_y = -11;
 	pixel_x = -7
@@ -27562,9 +27546,6 @@
 	tag = "icon-green (WEST)"
 	},
 /area/westerneye/living/grunt_rnr)
-"hXl" = (
-/turf/open/floor/plating,
-/area/westerneye/evacuation/pod18)
 "hXF" = (
 /obj/structure/pipes/standard/simple/hidden/supply{
 	dir = 4;
@@ -30840,7 +30821,7 @@
 	pixel_x = 8;
 	pixel_y = 32
 	},
-/obj/structure/machinery/computer/security/almayer/containment{
+/obj/structure/machinery/computer/cameras/almayer/containment{
 	pixel_x = -1
 	},
 /turf/open/floor/almayer{
@@ -33697,7 +33678,7 @@
 /area/westerneye/hull/lower_hull/l_a_s)
 "jLa" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer{
+/obj/structure/machinery/computer/cameras/almayer{
 	dir = 4
 	},
 /turf/open/floor/almayer{
@@ -34456,7 +34437,7 @@
 /area/westerneye/hull/starboard_warehouse)
 "jYi" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	dir = 8
 	},
 /turf/open/floor/almayer{
@@ -35155,7 +35136,7 @@
 /area/shuttle/drop1/sulaco)
 "kiq" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/wooden_tv/ot{
+/obj/structure/machinery/computer/cameras/wooden_tv/ot{
 	pixel_y = 4
 	},
 /turf/open/floor/almayer,
@@ -35959,7 +35940,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced/toughened,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 4;
 	layer = 2.99;
 	pixel_y = 4
@@ -37298,7 +37279,7 @@
 	icon_state = "pipe-j2"
 	},
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 8;
 	layer = 2.988;
 	pixel_y = 4
@@ -39885,7 +39866,7 @@
 /area/westerneye/medical/lockerroom)
 "lCG" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/hangar{
+/obj/structure/machinery/computer/cameras/hangar{
 	dir = 4;
 	pixel_y = 12
 	},
@@ -40394,7 +40375,7 @@
 /area/westerneye/living/commandbunks)
 "lLf" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/containment{
+/obj/structure/machinery/computer/cameras/containment{
 	layer = 2.99;
 	pixel_x = 15
 	},
@@ -41124,7 +41105,7 @@
 /area/westerneye/hallways/midship_aft_hallway)
 "lVp" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer/vehicle{
+/obj/structure/machinery/computer/cameras/almayer/vehicle{
 	dir = 1;
 	pixel_y = -11;
 	pixel_x = -7
@@ -44392,7 +44373,7 @@
 /area/westerneye/command/airoom)
 "mWE" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer{
+/obj/structure/machinery/computer/cameras/almayer{
 	dir = 8
 	},
 /turf/open/floor/almayer{
@@ -46931,7 +46912,7 @@
 /area/westerneye/hull/upper_hull/u_m_s)
 "nGY" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	dir = 8
 	},
 /turf/open/floor/almayer{
@@ -47731,7 +47712,7 @@
 /area/westerneye/medical/medical_science)
 "nSW" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	dir = 1
 	},
 /obj/effect/projector{
@@ -47995,8 +47976,7 @@
 /obj/structure/machinery/door/airlock/almayer/medical/glass{
 	name = "\improper Cryodorms";
 	dir = 2;
-	req_one_access = null;
-	req_one_access_txt = s
+	req_one_access = null
 	},
 /turf/open/floor/almayer{
 	icon_state = "test_floor4";
@@ -48056,7 +48036,7 @@
 /turf/open/floor/plating,
 /area/westerneye/medical/operating_room_two)
 "nYp" = (
-/obj/structure/machinery/computer/security/dropship/two,
+/obj/structure/machinery/computer/cameras/dropship/two,
 /obj/structure/blocker/invisible_wall,
 /turf/open/shuttle/dropship{
 	icon_state = "rasputin15";
@@ -50343,7 +50323,7 @@
 /area/westerneye/hallways/fore_port_escape_hallway)
 "oIA" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 8
 	},
 /turf/open/floor/almayer{
@@ -50492,7 +50472,7 @@
 /area/westerneye/hull/lower_hull/l_f_s)
 "oJO" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/containment/hidden{
+/obj/structure/machinery/computer/cameras/containment/hidden{
 	dir = 1
 	},
 /turf/open/floor/almayer,
@@ -53056,7 +53036,7 @@
 	req_one_access_txt = "19;14";
 	pixel_y = -20
 	},
-/obj/structure/machinery/computer/security/containment{
+/obj/structure/machinery/computer/cameras/containment{
 	dir = 4;
 	layer = 2.981;
 	pixel_y = 16
@@ -54027,7 +54007,7 @@
 /area/shuttle/drop2/sulaco)
 "pJv" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/wooden_tv/prop{
+/obj/structure/machinery/computer/cameras/wooden_tv/prop{
 	layer = 3.2;
 	pixel_x = -3;
 	pixel_y = 6;
@@ -55323,12 +55303,6 @@
 	tag = "icon-blue (NORTHEAST)"
 	},
 /area/westerneye/shipboard/brig/main_office)
-"qcB" = (
-/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod{
-	pixel_y = 30
-	},
-/turf/open/floor/plating,
-/area/westerneye/evacuation/pod18)
 "qcO" = (
 /turf/open/floor/almayer,
 /area/westerneye/living/chapel)
@@ -55624,7 +55598,7 @@
 /area/westerneye/hallways/lowerdeck_starboard_hallway)
 "qig" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network,
+/obj/structure/machinery/computer/cameras/almayer_network,
 /turf/open/floor/almayer,
 /area/westerneye/shipboard/brig/processing)
 "qiw" = (
@@ -56336,12 +56310,6 @@
 	tag = "icon-sterile"
 	},
 /area/westerneye/engineering/engine_core)
-"quM" = (
-/obj/structure/machinery/door/airlock/evacuation{
-	name = "\improper Evacuation Airlock PU-1"
-	},
-/turf/open/floor/plating,
-/area/westerneye/evacuation/pod18)
 "quT" = (
 /obj/structure/machinery/door/firedoor/border_only/almayer{
 	tag = "icon-door_open"
@@ -58006,7 +57974,7 @@
 /area/westerneye/command/docking_coordination)
 "qTS" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer/vehicle{
+/obj/structure/machinery/computer/cameras/almayer/vehicle{
 	dir = 1;
 	pixel_y = -11;
 	pixel_x = -7
@@ -59489,7 +59457,7 @@
 	dir = 8;
 	pixel_y = 12
 	},
-/obj/structure/machinery/computer/security/hangar{
+/obj/structure/machinery/computer/cameras/hangar{
 	dir = 8;
 	pixel_y = -12
 	},
@@ -61489,7 +61457,7 @@
 /area/westerneye/medical/morgue)
 "rWh" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 4;
 	layer = 2.97;
 	pixel_y = 4;
@@ -63225,7 +63193,7 @@
 /area/westerneye/hull/mid_hull)
 "svk" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/wooden_tv/prop{
+/obj/structure/machinery/computer/cameras/wooden_tv/prop{
 	layer = 3.2;
 	pixel_x = -3;
 	pixel_y = 6
@@ -72719,7 +72687,7 @@
 "von" = (
 /obj/structure/surface/table/reinforced/almayer_B,
 /obj/structure/pipes/standard/simple/hidden/supply,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 4;
 	layer = 2.99;
 	pixel_y = 4
@@ -72758,7 +72726,7 @@
 	dir = 4;
 	pixel_y = -12
 	},
-/obj/structure/machinery/computer/security/hangar{
+/obj/structure/machinery/computer/cameras/hangar{
 	dir = 4;
 	pixel_y = 12
 	},
@@ -76570,7 +76538,7 @@
 /area/westerneye/engineering/lower_engineering)
 "wtZ" = (
 /obj/structure/surface/table/reinforced/almayer_B,
-/obj/structure/machinery/computer/security/almayer_network/vehicle{
+/obj/structure/machinery/computer/cameras/almayer_network/vehicle{
 	dir = 8
 	},
 /turf/open/floor/almayer{
@@ -78257,11 +78225,11 @@
 /area/westerneye/hallways/midship_port_hallway)
 "wSI" = (
 /obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	network = list("Prison");
 	name = "Prison Cameras Console"
 	},
-/obj/structure/machinery/computer/security/almayer_network{
+/obj/structure/machinery/computer/cameras/almayer_network{
 	pixel_x = -17
 	},
 /turf/open/floor/almayer{
@@ -83008,7 +82976,7 @@
 	pixel_y = 5;
 	name = "Port Evacuation Shutters"
 	},
-/obj/structure/machinery/computer/security/almayer{
+/obj/structure/machinery/computer/cameras/almayer{
 	dir = 4;
 	pixel_y = 23;
 	pixel_x = -18;
@@ -142604,10 +142572,10 @@ mnD
 mnD
 mnD
 mnD
-evY
-evY
-evY
-eln
+mnD
+mnD
+mnD
+mnD
 mnD
 mnD
 mnD
@@ -142806,10 +142774,10 @@ mnD
 mnD
 mnD
 mnD
-hXl
-quM
-hXl
-mcB
+mnD
+mnD
+mnD
+mnD
 mnD
 mnD
 mnD
@@ -143008,10 +142976,10 @@ mnD
 mnD
 mnD
 mnD
-hXl
-hXl
-qcB
-mcB
+mnD
+mnD
+mnD
+mnD
 mnD
 mnD
 mnD
