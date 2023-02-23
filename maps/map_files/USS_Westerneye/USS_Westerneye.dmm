@@ -6328,6 +6328,12 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/hull/mid_hull/l_m_p)
+"bVh" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall9";
+	tag = "icon-wall9"
+	},
+/area/westerneye/evacuation/pod18)
 "bVj" = (
 /turf/closed/shuttle/escapepod{
 	icon_state = "wall13";
@@ -8290,6 +8296,12 @@
 	},
 /turf/open/floor/plating,
 /area/westerneye/hull/lower_hull/l_f_p)
+"cDe" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall6";
+	tag = "icon-wall6"
+	},
+/area/westerneye/evacuation/pod18)
 "cDi" = (
 /obj/structure/machinery/door/airlock/almayer/marine/charlie{
 	dir = 2
@@ -8304,6 +8316,12 @@
 	tag = "icon-sterile"
 	},
 /area/westerneye/squads/charlie_delta_shared)
+"cDA" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall7";
+	tag = "icon-wall7"
+	},
+/area/westerneye/evacuation/pod18)
 "cDG" = (
 /obj/structure/barricade/wooden{
 	dir = 8
@@ -11708,7 +11726,13 @@
 /obj/structure/machinery/door/airlock/almayer/generic{
 	name = "\improper Bathroom";
 	dir = 2;
-	id_tag = "Funny_bathroom"
+	id_tag = "Funny_bathroom";
+	req_access_txt = "31";
+	masterkey_resist = 1
+	},
+/obj/structure/machinery/door/poddoor/shutters/almayer{
+	id = "co_office";
+	name = "\improper CO office Shutters"
 	},
 /turf/open/floor/almayer{
 	icon_state = "test_floor4";
@@ -19774,6 +19798,15 @@
 	tag = "icon-sterile"
 	},
 /area/westerneye/engineering/lower_engineering)
+"fKw" = (
+/obj/structure/machinery/cm_vending/clothing/senior_officer{
+	density = 0;
+	pixel_y = 24
+	},
+/turf/open/floor/almayer{
+	icon_state = "mono"
+	},
+/area/westerneye/medical/cmo)
 "fKA" = (
 /obj/structure/surface/rack,
 /obj/item/device/flash,
@@ -20627,6 +20660,12 @@
 	tag = "icon-green (SOUTHEAST)"
 	},
 /area/westerneye/shipboard/brig/cells)
+"fYq" = (
+/turf/open/shuttle/escapepod{
+	icon_state = "floor10";
+	tag = "icon-floor10"
+	},
+/area/westerneye/evacuation/pod18)
 "fYv" = (
 /turf/closed/shuttle/escapepod{
 	icon_state = "wall11";
@@ -22943,6 +22982,13 @@
 	tag = "icon-wall2"
 	},
 /area/westerneye/evacuation/pod7)
+"gIJ" = (
+/obj/structure/machinery/cm_vending/clothing/senior_officer{
+	density = 0;
+	pixel_x = 24
+	},
+/turf/open/floor/almayer,
+/area/westerneye/living/numbertwobunks)
 "gIW" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "NW-out";
@@ -24381,6 +24427,12 @@
 	tag = "icon-test_floor4"
 	},
 /area/westerneye/hull/mid_hull)
+"hek" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall11";
+	tag = "icon-wall11"
+	},
+/area/westerneye/evacuation/pod18)
 "hes" = (
 /obj/item/clothing/mask/cigarette{
 	pixel_x = 6
@@ -25458,7 +25510,7 @@
 /obj/structure/machinery/door/airlock/almayer/medical/glass{
 	id = "medcryobeds";
 	id_tag = "medcryobeds";
-	name = "Medical Wheelchair Storage";
+	name = "\improper Medical Bay";
 	req_access = null;
 	req_one_access = null
 	},
@@ -28064,6 +28116,12 @@
 	},
 /turf/open/floor/plating,
 /area/westerneye/hull/mid_hull/l_m_s)
+"ifx" = (
+/obj/structure/machinery/cm_vending/clothing/commanding_officer{
+	pixel_x = -24
+	},
+/turf/open/floor/carpet,
+/area/westerneye/living/commandbunks)
 "ify" = (
 /obj/structure/pipes/standard/manifold/hidden/supply{
 	dir = 1
@@ -28664,7 +28722,9 @@
 	},
 /obj/structure/machinery/door_control{
 	id = "co_office";
-	pixel_x = 23
+	pixel_x = 23;
+	name = "Privacy Shutters";
+	req_one_access = "31"
 	},
 /turf/open/floor/wood/ship,
 /area/westerneye/living/commandbunks)
@@ -28918,6 +28978,15 @@
 	tag = "icon-wall2"
 	},
 /area/westerneye/evacuation/pod8)
+"irN" = (
+/obj/structure/machinery/door/airlock/evacuation{
+	name = "\improper Evacuation Airlock PU-2"
+	},
+/turf/open/floor/almayer{
+	icon_state = "test_floor4";
+	tag = "icon-test_floor4"
+	},
+/area/westerneye/evacuation/pod18)
 "irR" = (
 /obj/structure/toilet{
 	dir = 8;
@@ -30122,6 +30191,12 @@
 	},
 /turf/open/floor/plating,
 /area/almayer/living/grunt_rnr)
+"iLf" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall13";
+	tag = "icon-wall13"
+	},
+/area/westerneye/evacuation/pod18)
 "iLg" = (
 /turf/open/floor/almayer{
 	dir = 8;
@@ -30167,8 +30242,16 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/hull/upper_hull)
 "iLB" = (
-/obj/structure/closet/secure_closet/commander,
 /obj/structure/machinery/light,
+/obj/item/tool/kitchen/tray{
+	layer = 2.9
+	},
+/obj/item/reagent_container/food/snacks/carpmeat{
+	layer = 3.3
+	},
+/obj/item/reagent_container/food/snacks/carpmeat{
+	layer = 3.3
+	},
 /turf/open/floor/wood/ship,
 /area/westerneye/living/commandbunks)
 "iLX" = (
@@ -31555,6 +31638,14 @@
 /obj/item/tool/pen{
 	pixel_y = 7
 	},
+/obj/structure/machinery/door_control{
+	id = "CO-Office";
+	name = "Door Control";
+	normaldoorcontrol = 1;
+	req_access_txt = "31";
+	pixel_x = -5;
+	pixel_y = 14
+	},
 /turf/open/floor/carpet,
 /area/westerneye/living/commandbunks)
 "jgS" = (
@@ -32655,6 +32746,13 @@
 /obj/item/clothing/under/shorts/grey,
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/living/cryo_cell_showers)
+"jwV" = (
+/obj/structure/machinery/cryopod/evacuation,
+/obj/structure/sign/safety/cryo{
+	pixel_x = -18
+	},
+/turf/open/shuttle/escapepod,
+/area/westerneye/evacuation/pod18)
 "jwW" = (
 /obj/structure/machinery/door/firedoor/border_only/almayer{
 	tag = "icon-door_open"
@@ -34331,6 +34429,12 @@
 /obj/structure/pipes/standard/manifold/hidden/supply,
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/engineering/engine_core)
+"jWq" = (
+/obj/effect/landmark/shuttle_loc/marine_src/evacuation{
+	name = "18"
+	},
+/turf/open/space/basic,
+/area/space)
 "jWv" = (
 /turf/open/floor/almayer{
 	dir = 4;
@@ -35006,6 +35110,10 @@
 /obj/structure/pipes/standard/simple/hidden/supply,
 /obj/structure/machinery/door/firedoor/border_only/almayer{
 	dir = 1
+	},
+/obj/structure/machinery/door/poddoor/shutters/almayer{
+	id = "co_office";
+	name = "\improper CO office Shutters"
 	},
 /turf/open/floor/almayer{
 	icon_state = "test_floor4";
@@ -39359,6 +39467,9 @@
 /area/westerneye/command/docking_coordination)
 "lwa" = (
 /obj/structure/flora/pottedplant/random,
+/obj/structure/machinery/light{
+	dir = 1
+	},
 /turf/open/floor/almayer,
 /area/westerneye/living/bridgebunks)
 "lwf" = (
@@ -40019,6 +40130,13 @@
 	pixel_y = 3
 	},
 /obj/item/tool/lighter/zippo/gold,
+/obj/structure/machinery/door_control{
+	id = "co_office";
+	pixel_x = -5;
+	name = "Privacy Shutters";
+	req_one_access = "31";
+	pixel_y = -14
+	},
 /turf/open/floor/carpet,
 /area/westerneye/living/commandbunks)
 "lFa" = (
@@ -44971,7 +45089,7 @@
 	id = "cmp_armory";
 	name = "Armory Lockdown";
 	pixel_y = 24;
-	req_access_txt = "3"
+	req_access_txt = "4"
 	},
 /obj/structure/machinery/door_control{
 	id = "CMP Office Shutters";
@@ -45811,6 +45929,10 @@
 	tag = "icon-sterile"
 	},
 /area/westerneye/engineering/engineering_workshop)
+"noK" = (
+/obj/structure/machinery/cryopod/evacuation,
+/turf/open/shuttle/escapepod,
+/area/westerneye/evacuation/pod18)
 "noU" = (
 /obj/item/stack/tile/wood/fake,
 /obj/effect/decal/cleanable/ash,
@@ -49056,6 +49178,12 @@
 	},
 /turf/open/floor/almayer,
 /area/westerneye/hull/lower_hull)
+"oqb" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall12";
+	tag = "icon-wall12"
+	},
+/area/westerneye/evacuation/pod18)
 "oqo" = (
 /obj/structure/surface/table/reinforced/black,
 /obj/item/explosive/grenade/high_explosive/training,
@@ -49466,14 +49594,9 @@
 	},
 /area/westerneye/medical/operating_room_one)
 "ovT" = (
-/obj/item/tool/kitchen/tray{
-	layer = 2.9
-	},
-/obj/item/reagent_container/food/snacks/carpmeat{
-	layer = 3.3
-	},
-/obj/item/reagent_container/food/snacks/carpmeat{
-	layer = 3.3
+/obj/structure/machinery/cm_vending/clothing/dress{
+	req_access = list(1);
+	pixel_x = -24
 	},
 /turf/open/floor/wood/ship,
 /area/westerneye/living/commandbunks)
@@ -51355,6 +51478,12 @@
 "oWk" = (
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/living/cryo_cells)
+"oWu" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall1";
+	tag = "icon-wall1"
+	},
+/area/westerneye/evacuation/pod18)
 "oWW" = (
 /obj/structure/disposalpipe/segment{
 	dir = 8;
@@ -53462,6 +53591,12 @@
 	tag = "icon-test_floor4"
 	},
 /area/westerneye/command/cic)
+"pAA" = (
+/obj/structure/machinery/cm_vending/gear/commanding_officer{
+	pixel_x = -24
+	},
+/turf/open/floor/carpet,
+/area/westerneye/living/commandbunks)
 "pAT" = (
 /obj/structure/machinery/light/small{
 	dir = 4
@@ -58655,6 +58790,22 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/hull/port_warehouse)
+"rfG" = (
+/obj/structure/pipes/standard/manifold/hidden/supply{
+	dir = 8
+	},
+/obj/structure/machinery/door_control{
+	id = "co_office";
+	pixel_x = -23;
+	name = "CO Office Shutters";
+	req_one_access = "31"
+	},
+/turf/open/floor/almayer{
+	dir = 8;
+	icon_state = "silver";
+	tag = "icon-silver (WEST)"
+	},
+/area/westerneye/command/cichallway)
 "rfH" = (
 /obj/structure/pipes/standard/simple/hidden/supply{
 	dir = 4;
@@ -58831,6 +58982,15 @@
 	tag = "icon-bluefull"
 	},
 /area/westerneye/living/pilotbunks)
+"rhY" = (
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod{
+	pixel_y = 30
+	},
+/turf/open/shuttle/escapepod{
+	icon_state = "floor0";
+	tag = "icon-floor0"
+	},
+/area/westerneye/evacuation/pod18)
 "rie" = (
 /obj/structure/machinery/landinglight/escape_pods/delaythree{
 	dir = 8
@@ -59451,6 +59611,13 @@
 	},
 /turf/open/floor/almayer,
 /area/westerneye/squads/charlie_delta_shared)
+"rqH" = (
+/obj/structure/machinery/cm_vending/clothing/staff_officer{
+	density = 0;
+	pixel_y = 24
+	},
+/turf/open/floor/almayer,
+/area/westerneye/living/bridgebunks)
 "rqQ" = (
 /obj/structure/surface/table/almayer,
 /obj/structure/machinery/computer/shuttle_control/dropship1{
@@ -64993,6 +65160,12 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/westerneye/living/port_emb)
+"sXd" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall2";
+	tag = "icon-wall2"
+	},
+/area/westerneye/evacuation/pod18)
 "sXf" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/disposalpipe/segment{
@@ -74401,6 +74574,12 @@
 	tag = "icon-test_floor4"
 	},
 /area/westerneye/engineering/engine_core)
+"vNV" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall10";
+	tag = "icon-wall10"
+	},
+/area/westerneye/evacuation/pod18)
 "vOa" = (
 /obj/structure/sign/safety/maint{
 	pixel_x = 8;
@@ -77411,6 +77590,12 @@
 	tag = "icon-red (NORTH)"
 	},
 /area/westerneye/shipboard/weapon_room)
+"wFK" = (
+/turf/open/shuttle/escapepod{
+	icon_state = "floor1";
+	tag = "icon-floor1"
+	},
+/area/westerneye/evacuation/pod18)
 "wFM" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/pipes/standard/manifold/hidden/supply{
@@ -80884,6 +81069,12 @@
 /obj/item/newspaper,
 /turf/open/floor/wood/ship,
 /area/westerneye/living/guestdorms)
+"xAR" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall4";
+	tag = "icon-wall4"
+	},
+/area/westerneye/evacuation/pod18)
 "xBx" = (
 /obj/structure/disposalpipe/junction{
 	dir = 1
@@ -81819,6 +82010,12 @@
 	tag = "icon-sterile"
 	},
 /area/westerneye/hallways/hangar)
+"xOS" = (
+/turf/closed/shuttle/escapepod{
+	icon_state = "wall3";
+	tag = "icon-wall3"
+	},
+/area/westerneye/evacuation/pod18)
 "xPb" = (
 /obj/structure/pipes/standard/simple/hidden/supply{
 	dir = 4;
@@ -109946,7 +110143,7 @@ ykk
 ykk
 ykk
 abl
-dyb
+fKw
 dyb
 wGh
 abl
@@ -130386,8 +130583,8 @@ fAH
 fAH
 fAH
 sUY
-qRP
-qRP
+ifx
+pAA
 ovT
 bzP
 nTE
@@ -132190,7 +132387,7 @@ xXA
 svB
 fbd
 fTz
-vDN
+gIJ
 mXX
 dvU
 bII
@@ -132597,7 +132794,7 @@ ngo
 uVz
 uVz
 lvC
-vaJ
+rfG
 kga
 qpO
 guh
@@ -135625,7 +135822,7 @@ lwa
 sQW
 mHK
 nBw
-jGp
+rqH
 sQW
 tKN
 eIT
@@ -135823,7 +136020,7 @@ gaK
 xUv
 szT
 nBw
-gaK
+rqH
 xUv
 szT
 nBw
@@ -136017,11 +136214,11 @@ dqu
 glX
 xFw
 nBw
-jGp
+rqH
 xUv
 uOL
 nBw
-jGp
+rqH
 jGp
 uOL
 nBw
@@ -142363,7 +142560,7 @@ mnD
 mnD
 mnD
 mnD
-mnD
+jWq
 mnD
 mnD
 mnD
@@ -142560,11 +142757,11 @@ mnD
 mnD
 mnD
 rEG
-mnD
-mnD
-mnD
-mnD
-mnD
+iLf
+oqb
+hek
+vNV
+bVh
 mnD
 mnD
 mnD
@@ -142762,11 +142959,11 @@ mnD
 mnD
 mnD
 rEG
-mnD
-mnD
-mnD
-mnD
-mnD
+oWu
+noK
+jwV
+noK
+cDA
 mnD
 mnD
 mnD
@@ -142964,11 +143161,11 @@ mnD
 mnD
 mnD
 rEG
-mnD
-mnD
-mnD
-mnD
-mnD
+sXd
+rhY
+wFK
+fYq
+cDA
 mnD
 mnD
 mnD
@@ -143166,11 +143363,11 @@ mnD
 mnD
 mnD
 rEG
-mnD
-mnD
-mnD
-mnD
-mnD
+xOS
+xAR
+irN
+xAR
+cDe
 mnD
 mnD
 mnD
