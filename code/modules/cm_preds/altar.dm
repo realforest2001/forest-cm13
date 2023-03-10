@@ -1,3 +1,4 @@
+// A large amount of this file is placeholder stuff to test the concept.
 /obj/structure/yautja_altar
 	name = "Altar Root"
 	desc = "Placeholder"//placeholder
