@@ -195,7 +195,7 @@ CULT
 		to_chat(H, SPAN_WARNING("The droppod cannot land here!"))
 		return
 
-	if(protected_by_pylon(TURF_PROTECTION_CAS, T))
+	if(protected_by_structure(TURF_PROTECTION_CAS, T))
 		to_chat(H, SPAN_WARNING("The droppod cannot punch through an organic ceiling!"))
 		return
 

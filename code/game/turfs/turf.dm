@@ -31,7 +31,7 @@
 	var/can_bloody = TRUE //Can blood spawn on this turf?
 	var/list/linked_pylons
 	var/obj/effect/alien/weeds/weeds
-
+	var/list/linked_altars
 	var/list/datum/automata_cell/autocells
 	/**
 	 * Associative list of cleanable types (strings) mapped to
@@ -354,7 +354,8 @@
 	//if(src.type == new_turf_path) // Put this back if shit starts breaking
 	// return src
 
-	var/pylons = linked_pylons
+	var/list/pylons = linked_pylons
+	var/list/altars = linked_altars
 
 	var/list/old_baseturfs = baseturfs
 
@@ -372,6 +373,7 @@
 		W.baseturfs = old_baseturfs
 
 	W.linked_pylons = pylons
+	W.linked_altars = altars
 
 	W.lighting_lumcount += old_lumcount
 	if(old_lumcount != W.lighting_lumcount)
@@ -486,15 +488,24 @@
 	ceiling_debrised = TRUE
 
 /turf/proc/ceiling_desc(mob/user)
+	var/protection = get_structure_protection_level()
 
 	if(LAZYLEN(linked_pylons))
-		switch(get_pylon_protection_level())
+		switch(protection)
 			if(TURF_PROTECTION_MORTAR)
 				return "The ceiling above is made of light resin. Doesn't look like it's going to stop much."
 			if(TURF_PROTECTION_CAS)
 				return "The ceiling above is made of resin. Seems about as strong as a cavern roof."
 			if(TURF_PROTECTION_OB)
 				return "The ceiling above is made of thick resin. Nothing is getting through that."
+	else if(LAZYLEN(linked_altars))
+		switch(protection)
+			if(TURF_PROTECTION_MORTAR)
+				return "The ceiling above is made of sandstone blocks. Doesn't look like it's going to stop much."
+			if(TURF_PROTECTION_CAS)
+				return "The ceiling above is made of heavy sandstone blocks. Seems about as strong as a cavern roof."
+			if(TURF_PROTECTION_OB)
+				return "The ceiling above is made of heavy sandstone blocks set with strange runes. Nothing is getting through that."
 
 	var/area/A = get_area(src)
 	switch(A.ceiling)
@@ -645,10 +656,10 @@
 /turf/proc/stop_crusher_charge()
 	return FALSE
 
-/turf/proc/get_pylon_protection_level()
+/turf/proc/get_structure_protection_level()
 	var/protection_level = TURF_PROTECTION_NONE
-	for (var/atom/pylon in linked_pylons)
-		if (pylon.loc != null)
+	for(var/atom/pylon in linked_pylons)
+		if(pylon.loc != null)
 			var/obj/effect/alien/resin/special/pylon/P = pylon
 
 			if(!istype(P))
@@ -658,6 +669,17 @@
 				protection_level = P.protection_level
 		else
 			LAZYREMOVE(linked_pylons, pylon)
+	for(var/atom/altar in linked_altars)
+		if(altar.loc != null)
+			var/obj/structure/yautja_altar/built/A = altar
+
+			if(!istype(A))
+				continue
+
+			if(A.cover_strength > protection_level)
+				protection_level = A.cover_strength
+		else
+			LAZYREMOVE(linked_altars, altar)
 
 	return protection_level
 

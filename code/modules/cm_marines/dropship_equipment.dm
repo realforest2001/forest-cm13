@@ -1175,7 +1175,7 @@
 				break
 		if(found_dense)
 			continue
-		if(protected_by_pylon(TURF_PROTECTION_MORTAR, T))
+		if(protected_by_structure(TURF_PROTECTION_MORTAR, T))
 			continue
 		valid_turfs += T
 
@@ -1192,7 +1192,7 @@
 	user.client?.perspective = EYE_PERSPECTIVE
 	user.client?.eye = deploy_turf
 
-	if(!do_after(user, 4 SECONDS, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, user, INTERRUPT_MOVED) || !can_use(user) || protected_by_pylon(TURF_PROTECTION_MORTAR, deploy_turf))
+	if(!do_after(user, 4 SECONDS, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, user, INTERRUPT_MOVED) || !can_use(user) || protected_by_structure(TURF_PROTECTION_MORTAR, deploy_turf))
 		qdel(warning_zone)
 		flick("rappel_hatch_closing", src)
 		icon_state = "rappel_hatch_closed"

@@ -739,7 +739,7 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 		if(!T) //prevents trying to spread into "null" (edge of the map?)
 			continue
 
-		if(aerial_flame_level && (T.get_pylon_protection_level() >= aerial_flame_level))
+		if(aerial_flame_level && (T.get_structure_protection_level() >= aerial_flame_level))
 			break
 
 		spawn(0)
@@ -761,6 +761,6 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 			else
 				spread_power -= 1.414 //diagonal spreading
 		var/turf/T = get_step(target, direction)
-		if(aerial_flame_level && (T.get_pylon_protection_level() >= aerial_flame_level))
+		if(aerial_flame_level && (T.get_structure_protection_level() >= aerial_flame_level))
 			continue
 		fire_spread_recur(T, cause_data, spread_power, direction, fire_lvl, burn_lvl, f_color, burn_sprite, aerial_flame_level)

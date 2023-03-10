@@ -149,6 +149,7 @@
 #define NODE_HEALTH_STANDARD 11
 #define NODE_HEALTH_HIVE  30
 
+/// Multiplier for turf protection. Also used for Yautja Altar.
 #define PYLON_COVERAGE_MULT 1.5
 
 #define WEED_BASE_GROW_SPEED (5 SECONDS)

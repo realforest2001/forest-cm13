@@ -193,3 +193,13 @@
 
 /obj/structure/barricade/handrail/sandstone/b
 	icon_state = "hr_sandstone_b"
+
+/obj/structure/barricade/handrail/sandstone/runed
+	name = "sandstone handrail"
+	icon_state = "hr_stone"
+	color = "#b29082"
+	stack_type = /obj/item/stack/sheet/mineral/sandstone/runed
+	debris = list(/obj/item/stack/sheet/mineral/sandstone/runed)
+
+/obj/structure/barricade/handrail/sandstone/runed/b
+	icon_state = "hr_stone_b"

@@ -697,6 +697,7 @@
 /obj/item/prop/torch_frame
 	name = "unlit torch"
 	desc = "It's a torch, but it's not lit or placed down. Click on a wall to place it."
+	icon = 'icons/obj/structures/structures.dmi'
 	icon_state = "torch_frame"
 	luminosity = 0
 

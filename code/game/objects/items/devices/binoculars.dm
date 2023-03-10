@@ -301,7 +301,7 @@
 		if(CEILING_GLASS)
 			is_outside = TRUE
 
-	if (protected_by_pylon(TURF_PROTECTION_CAS, TU))
+	if (protected_by_structure(TURF_PROTECTION_CAS, TU))
 		is_outside = FALSE
 
 	if(!is_outside && !range_mode) //rangefinding works regardless of ceiling

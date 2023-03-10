@@ -105,7 +105,7 @@ GLOBAL_DATUM(railgun_eye_location, /datum/coords)
 	if(istype(T, /turf/open/space)) // No firing into space
 		return FALSE
 
-	if(protected_by_pylon(TURF_PROTECTION_OB, T))
+	if(protected_by_structure(TURF_PROTECTION_OB, T))
 		to_chat(H, SPAN_WARNING("[icon2html(src)] This area is too reinforced to fire into."))
 		return FALSE
 
@@ -251,7 +251,7 @@ GLOBAL_DATUM(railgun_eye_location, /datum/coords)
 /mob/hologram/railgun/proc/allow_turf_entry(mob/self, turf/to_enter)
 	SIGNAL_HANDLER
 
-	if(protected_by_pylon(TURF_PROTECTION_OB, to_enter))
+	if(protected_by_structure(TURF_PROTECTION_OB, to_enter))
 		to_chat(linked_mob, SPAN_WARNING("[icon2html(src)] This area is too reinforced to enter."))
 		return COMPONENT_TURF_DENY_MOVEMENT
 

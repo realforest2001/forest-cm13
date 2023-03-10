@@ -229,7 +229,7 @@
 		if(!istype(A))
 			to_chat(user, SPAN_WARNING("This area is out of bounds!"))
 			return
-		if(CEILING_IS_PROTECTED(A.ceiling, CEILING_PROTECTION_TIER_2) || protected_by_pylon(TURF_PROTECTION_MORTAR, T))
+		if(CEILING_IS_PROTECTED(A.ceiling, CEILING_PROTECTION_TIER_2) || protected_by_structure(TURF_PROTECTION_MORTAR, T))
 			to_chat(user, SPAN_WARNING("You cannot hit the target. It is probably underground."))
 			return
 		if(SSticker.mode && MODE_HAS_TOGGLEABLE_FLAG(MODE_LZ_PROTECTION) && A.is_landing_zone)
@@ -304,7 +304,7 @@
 			qdel(src)
 
 /obj/structure/mortar/proc/handle_shell(turf/target, obj/item/mortar_shell/shell)
-	if(protected_by_pylon(TURF_PROTECTION_MORTAR, target))
+	if(protected_by_structure(TURF_PROTECTION_MORTAR, target))
 		firing = FALSE
 		return
 
@@ -331,7 +331,7 @@
 		)
 	sleep(2 SECONDS) // Wait out the rest of the landing time
 	target.ceiling_debris_check(2)
-	if(!protected_by_pylon(TURF_PROTECTION_MORTAR, target))
+	if(!protected_by_structure(TURF_PROTECTION_MORTAR, target))
 		shell.detonate(target)
 	qdel(shell)
 	firing = FALSE

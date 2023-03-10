@@ -325,6 +325,7 @@
 	unacidable = TRUE
 	ignore_z = TRUE
 	black_market_value = 100
+	serialed = FALSE
 
 /obj/item/device/radio/headset/yautja/talk_into(mob/living/M as mob, message, channel, verb = "commands", datum/language/speaking)
 	if(!isyautja(M)) //Nope.
@@ -348,6 +349,7 @@
 	desc = "A complicated encryption device."
 	icon_state = "cypherkey"
 	channels = list(RADIO_CHANNEL_YAUTJA = 1)
+	serialed = FALSE
 
 //Yes, it's a backpack that goes on the belt. I want the backpack noises. Deal with it (tm)
 /obj/item/storage/backpack/yautja
@@ -383,6 +385,7 @@
 	throwforce = 1
 	unacidable = TRUE
 	black_market_value = 100
+	serialed = FALSE
 	var/timer = 0
 
 /obj/item/device/yautja_teleporter/attack_self(mob/user)

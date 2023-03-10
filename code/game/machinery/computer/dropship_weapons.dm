@@ -312,8 +312,8 @@
 				if(!is_outside && !cavebreaker) //cavebreaker doesn't care
 					to_chat(usr, SPAN_WARNING("INVALID TARGET: target must be visible from high altitude."))
 					return
-				if (protected_by_pylon(TURF_PROTECTION_CAS, TU))
-					to_chat(usr, SPAN_WARNING("INVALID TARGET: biological-pattern interference with signal."))
+				if (protected_by_structure(TURF_PROTECTION_CAS, TU))
+					to_chat(usr, SPAN_WARNING("INVALID TARGET: abnormal surface features causing interference with signal."))
 					return
 				if(!DEW.ammo_equipped.can_fire_at(TU, usr))
 					return

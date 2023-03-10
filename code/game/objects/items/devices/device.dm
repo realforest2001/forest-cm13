@@ -4,10 +4,12 @@
 /obj/item/device
 	icon = 'icons/obj/items/devices.dmi'
 	var/serial_number
+	var/serialed = TRUE
 
 /obj/item/device/Initialize()
 	. = ..()
-	serial_number = "[rand(0,9)][pick(alphabet_uppercase)][rand(0,9)][rand(0,9)][rand(0,9)][rand(0,9)][pick(alphabet_uppercase)]"
+	if(serialed)
+		serial_number = "[rand(0,9)][pick(alphabet_uppercase)][rand(0,9)][rand(0,9)][rand(0,9)][rand(0,9)][pick(alphabet_uppercase)]"
 
 /obj/item/device/get_examine_text(mob/user)
 	. = ..()
