@@ -197,6 +197,10 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	var/webhook_sent = WEBHOOK_NONE
 	/// List of player interactions
 	var/list/player_interactions
+	/// List of admin ckeys that are involved, like through responding
+	var/list/admins_involved = list()
+	/// Has the player replied to this ticket yet?
+	var/player_replied = FALSE
 
 /**
  * Call this on its own to create a ticket, don't manually assign current_ticket
@@ -340,8 +344,10 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	return ..()
 
 /datum/admin_help/proc/AddInteraction(formatted_message, player_message)
-	if(heard_by_no_admins && usr && usr.ckey != initiator_ckey)
-		heard_by_no_admins = FALSE
+	if (!isnull(usr) && usr.ckey != initiator_ckey)
+		admins_involved |= usr.ckey
+		if(heard_by_no_admins)
+			heard_by_no_admins = FALSE
 	ticket_interactions += "[time_stamp()]: [formatted_message]"
 	if (!isnull(player_message))
 		player_interactions += "[time_stamp()]: [player_message]"
@@ -366,7 +372,7 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	if(!ref_src)
 		ref_src = "[REF(src)]"
 	. = " (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ahelp=[ref_src];ahelp_action=reject'>REJT</A>)"
-	. += " (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ahelp=[ref_src];ahelp_action=icissue'>IC</A>)"
+	. += " (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ahelp=[ref_src];ahelp_action=autoreply'>AUTO</A>)"
 	. += " (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ahelp=[ref_src];ahelp_action=close'>CLOSE</A>)"
 	. += " (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ahelp=[ref_src];ahelp_action=resolve'>RSLVE</A>)"
 
@@ -501,23 +507,32 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	log_ahelp(id, "Rejected", "Rejected by [usr.key]", null, usr.ckey)
 	Close(silent = TRUE)
 
-//Resolve ticket with IC Issue message
-/datum/admin_help/proc/ICIssue(key_name = key_name_admin(usr))
+/// Resolve ticket with a premade message
+/datum/admin_help/proc/AutoReply()
+	var/key_name = key_name_admin(usr)
 	if(state != AHELP_ACTIVE)
+		to_chat(usr, SPAN_WARNING("This ticket is already closed!"))
 		return
 
-	var/msg = "<font color='red' size='4'><b>- AdminHelp marked as IC issue! -</b></font><br>"
-	msg += "<font color='red'>Your issue has been determined by an administrator to be an in character issue and does NOT require administrator intervention at this time. For further resolution you should pursue options that are in character.</font>"
+	var/chosen = tgui_input_list(usr, "Which auto response do you wish to send?", "AutoReply", GLOB.adminreplies)
+	var/datum/autoreply/admin/response = GLOB.adminreplies[chosen]
+
+	if(!response || !istype(response))
+		return
+
+	var/msg = "<font color='red' size='4'><b>- AdminHelp marked as [response.title]! -</b></font><br>"
+	msg += "<font color='red'>[response.message]</font>"
 
 	if(initiator)
 		to_chat(initiator, msg, confidential = TRUE)
 
-	msg = "Ticket [TicketHref("#[id]")] marked as IC by [key_name]"
+	msg = "Ticket [TicketHref("#[id]")] marked as [response.title] by [key_name]"
 	message_admins(msg)
 	log_admin_private(msg)
-	AddInteraction("Marked as IC issue by [key_name]", player_message = "Marked as IC issue!")
-	log_ahelp(id, "IC Issue", "Marked as IC issue by [usr.key]", null,  usr.ckey)
-	Resolve(silent = TRUE)
+	AddInteraction("Marked as [response.title] by [key_name]", player_message = "Marked as [response.title]!")
+	log_ahelp(id, "Autoreply", "Marked as [response.title] by [usr.key]", null,  usr.ckey)
+	if(response.closer)
+		Resolve(silent = TRUE)
 
 //Show the ticket panel
 /datum/admin_help/proc/TicketPanel()
@@ -600,8 +615,8 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 			Reject()
 		if("reply")
 			usr.client.cmd_ahelp_reply(initiator)
-		if("icissue")
-			ICIssue()
+		if("autoreply")
+			AutoReply()
 		if("close")
 			Close()
 		if("resolve")
@@ -762,8 +777,12 @@ GLOBAL_DATUM_INIT(admin_help_ui_handler, /datum/admin_help_ui_handler, new)
 /client/verb/mentorhelp()
 	set category = "Admin"
 	set name = "Mentorhelp"
+
+	execute_mentorhelp()
+
+/client/proc/execute_mentorhelp()
 	if(current_mhelp && current_mhelp.open)
-		if(alert("You already have a mentorhelp thread open, would you like to close it?", "Mentor Help", "Yes", "No") == "Yes")
+		if(tgui_alert(src, "You already have a mentorhelp thread open, would you like to close it?", "Mentor Help", list("Yes", "No")) == "Yes")
 			current_mhelp.close(src)
 		return
 	current_mhelp = new(src)

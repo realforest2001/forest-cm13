@@ -317,7 +317,7 @@
 		if(5)
 			. = injectors_internal(caller, TRUE)
 		if(6)
-			. = call_disk_internal(caller, TRUE)
+			. = call_disc_internal(caller, TRUE)
 		if(7)
 			. = translate_internal(caller, TRUE)
 		if(8)
@@ -429,7 +429,7 @@
 			continue
 		if(istype(get_area(I), /area/yautja))
 			continue
-		if(is_loworbit_level(loc.z))
+		if(is_reserved_level(loc.z))
 			gear_low_orbit++
 		else if(is_mainship_level(loc.z))
 			gear_on_almayer++
@@ -446,7 +446,7 @@
 			continue
 		if(istype(get_area(Y), /area/yautja))
 			continue
-		if(is_loworbit_level(Y.z))
+		if(is_reserved_level(Y.z))
 			dead_low_orbit++
 		else if(is_mainship_level(Y.z))
 			dead_on_almayer++
@@ -685,10 +685,13 @@
 	var/obj/item/grab/G = M.get_active_hand()
 	if(istype(G))
 		var/mob/living/carbon/human/victim = G.grabbed_thing
-		if(isyautja(victim) && victim.stat == DEAD)
+		if(victim.stat == DEAD)
 			var/obj/item/clothing/gloves/yautja/hunter/bracer = victim.gloves
+			var/message = "Are you sure you want to detonate this [victim.species]'s bracer?"
+			if(isspeciesyautja(victim))
+				message = "Are you sure you want to send this [victim.species] into the great hunting grounds?"
 			if(istype(bracer))
-				if(forced || alert("Are you sure you want to send this [victim.species] into the great hunting grounds?","Explosive Bracers", "Yes", "No") == "Yes")
+				if(forced || alert(message,"Explosive Bracers", "Yes", "No") == "Yes")
 					if(M.get_active_hand() == G && victim && victim.gloves == bracer && !bracer.exploding)
 						var/area/A = get_area(M)
 						var/turf/T = get_turf(M)
@@ -827,15 +830,15 @@
 		to_chat(loc, SPAN_NOTICE("Your bracers beep faintly and inform you that a new healing capsule is ready to be created."))
 	healing_capsule_timer = FALSE
 
-/obj/item/clothing/gloves/yautja/hunter/verb/call_disk()
+/obj/item/clothing/gloves/yautja/hunter/verb/call_disc()
 	set name = "Call Smart-Disc"
 	set category = "Yautja.Weapons"
 	set desc = "Call back your smart-disc, if it's in range. If not you'll have to go retrieve it."
 	set src in usr
-	. = call_disk_internal(usr, FALSE)
+	. = call_disc_internal(usr, FALSE)
 
 
-/obj/item/clothing/gloves/yautja/hunter/proc/call_disk_internal(mob/caller, forced = FALSE)
+/obj/item/clothing/gloves/yautja/hunter/proc/call_disc_internal(mob/caller, forced = FALSE)
 	if(caller.is_mob_incapacitated())
 		return FALSE
 
