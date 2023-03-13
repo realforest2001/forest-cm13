@@ -369,6 +369,7 @@
 	var/mutable_appearance/fruit_sac_overlay_icon
 
 /datum/behavior_delegate/drone_gardener/add_to_xeno()
+	..()
 	on_update_icons()
 
 /datum/behavior_delegate/drone_gardener/on_update_icons()

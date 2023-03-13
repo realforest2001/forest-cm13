@@ -4,6 +4,9 @@
 //All castes need an evolves_to() list in their defines
 //Such as evolves_to = list(XENO_CASTE_WARRIOR, XENO_CASTE_SENTINEL, XENO_CASTE_RUNNER, "Badass") etc
 
+// Contains castes built during runtime, contains both the mob and the caste
+GLOBAL_LIST_EMPTY(custom_evolutions)
+
 /mob/living/carbon/xenomorph/verb/Evolve()
 	set name = "Evolve"
 	set desc = "Evolve into a higher form."
@@ -61,26 +64,28 @@
 			return
 
 	// Used for restricting benos to evolve to drone/queen when they're the only potential queen
-	for(var/mob/living/carbon/xenomorph/M in GLOB.living_xeno_list)
-		if(hivenumber != M.hivenumber)
+	for(var/mob/living/carbon/xenomorph/xeno in GLOB.living_xeno_list)
+		if(hivenumber != xeno.hivenumber)
 			continue
 
-		switch(M.tier)
+		switch(xeno.tier)
 			if(0)
-				if(islarva(M) && !ispredalienlarva(M))
-					if(M.client && M.ckey)
+				if(islarva(xeno) && !ispredalienlarva(xeno))
+					if(xeno.client && xeno.ckey)
 						potential_queens++
 				continue
 			if(1)
-				if(isdrone(M))
-					if(M.client && M.ckey)
+				if(isdrone(xeno))
+					if(xeno.client && xeno.ckey)
 						potential_queens++
 
-	var/mob/living/carbon/xenomorph/M = null
+	var/mob/living/carbon/xenomorph/xeno = null
+	if(castepick in GLOB.custom_evolutions)
+		xeno = GLOB.custom_evolutions[castepick]["mob_type"]
+	else
+		xeno = RoleAuthority.get_caste_by_text(castepick)
 
-	M = RoleAuthority.get_caste_by_text(castepick)
-
-	if(isnull(M))
+	if(isnull(xeno))
 		to_chat(usr, SPAN_WARNING("[castepick] is not a valid caste! If you're seeing this message, tell a coder!"))
 		return
 
@@ -288,27 +293,8 @@
 		to_chat(src, SPAN_WARNING("You are banished and cannot reach the hivemind."))
 		return FALSE
 
-	var/xeno_type
 	var/level_to_switch_to = get_vision_level()
-	switch(newcaste)
-		if("Larva")
-			xeno_type = /mob/living/carbon/xenomorph/larva
-		if(XENO_CASTE_RUNNER)
-			xeno_type = /mob/living/carbon/xenomorph/runner
-		if(XENO_CASTE_DRONE)
-			xeno_type = /mob/living/carbon/xenomorph/drone
-		if(XENO_CASTE_SENTINEL)
-			xeno_type = /mob/living/carbon/xenomorph/sentinel
-		if(XENO_CASTE_SPITTER)
-			xeno_type = /mob/living/carbon/xenomorph/spitter
-		if(XENO_CASTE_LURKER)
-			xeno_type = /mob/living/carbon/xenomorph/lurker
-		if(XENO_CASTE_WARRIOR)
-			xeno_type = /mob/living/carbon/xenomorph/warrior
-		if(XENO_CASTE_DEFENDER)
-			xeno_type = /mob/living/carbon/xenomorph/defender
-		if(XENO_CASTE_BURROWER)
-			xeno_type = /mob/living/carbon/xenomorph/burrower
+	var/xeno_type = RoleAuthority.get_caste_by_text(newcaste)
 
 	var/mob/living/carbon/xenomorph/new_xeno = new xeno_type(get_turf(src), src)
 

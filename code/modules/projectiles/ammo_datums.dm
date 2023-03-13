@@ -2881,6 +2881,12 @@
 	smoke_system.start()
 	turf.visible_message(SPAN_DANGER("A glob of acid lands with a splat and explodes into noxious fumes!"))
 
+/datum/ammo/xeno/acid_shotgun
+	name = "acid ball"
+	ping = null
+	flags_ammo_behavior = AMMO_SKIPS_ALIENS|AMMO_STOPPED_BY_COVER|AMMO_IGNORE_ARMOR|AMMO_ACIDIC
+	bonus_projectiles_type = /datum/ammo/xeno/acid_shotgun/spread
+	hit_effect_color = "#FF0000"
 
 /datum/ammo/xeno/boiler_gas/acid
 	name = "glob of acid gas"

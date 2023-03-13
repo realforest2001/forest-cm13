@@ -19,9 +19,6 @@
 		to_chat(src, SPAN_XENOWARNING("You can't burrow here!"))
 		return
 
-	if(caste_type && GLOB.xeno_datum_list[caste_type])
-		caste = GLOB.xeno_datum_list[caste_type]
-
 	used_burrow = TRUE
 
 	to_chat(src, SPAN_XENOWARNING("You begin burrowing yourself into the ground."))
@@ -55,8 +52,6 @@
 		addtimer(CALLBACK(src, PROC_REF(process_burrow)), 1 SECONDS)
 
 /mob/living/carbon/xenomorph/proc/burrow_off()
-	if(caste_type && GLOB.xeno_datum_list[caste_type])
-		caste = GLOB.xeno_datum_list[caste_type]
 	to_chat(src, SPAN_NOTICE("You resurface."))
 	burrow = FALSE
 	if(caste.fire_immunity == FIRE_IMMUNITY_NONE)

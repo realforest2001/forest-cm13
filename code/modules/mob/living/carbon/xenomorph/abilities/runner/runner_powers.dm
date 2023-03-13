@@ -6,22 +6,22 @@
 	if (!action_cooldown_check())
 		return
 
-	if(!A || A.layer >= FLY_LAYER || !isturf(X.loc) || !X.check_state())
+	if(!target || target.layer >= FLY_LAYER || !isturf(xeno_owner.loc) || !xeno_owner.check_state())
 		return
 
 	if (!check_and_use_plasma_owner())
 		return
 
-	X.visible_message(SPAN_XENOWARNING("[X] fires a burst of bone chips at [A]!"), SPAN_XENOWARNING("You fire a burst of bone chips at [A]!"))
+	xeno_owner.visible_message(SPAN_XENOWARNING("[xeno_owner] fires a burst of bone chips at [target]!"), SPAN_XENOWARNING("You fire a burst of bone chips at [target]!"))
 
-	var/turf/target = locate(A.x, A.y, A.z)
-	var/obj/item/projectile/P = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
+	var/turf/target_turf = locate(target.x, target.y, target.z)
+	var/obj/item/projectile/bone_chip = new /obj/item/projectile(xeno_owner.loc, create_cause_data(initial(xeno_owner.caste_type), xeno_owner))
 
-	var/datum/ammo/ammoDatum = GLOB.ammo_list[ammo_type]
+	var/datum/ammo/chip_ammo = GLOB.ammo_list[ammo_type]
 
-	P.generate_bullet(ammoDatum)
+	bone_chip.generate_bullet(chip_ammo)
 
-	P.fire_at(target, X, X, ammoDatum.max_range, ammoDatum.shell_speed)
+	bone_chip.fire_at(target_turf, xeno_owner, xeno_owner, chip_ammo.max_range, chip_ammo.shell_speed)
 
 	apply_cooldown()
 	..()
@@ -33,16 +33,14 @@
 	if(!istype(A, /obj/item) && !istype(A, /obj/structure/) && !istype(A, /obj/vehicle/multitile))
 		to_chat(X, SPAN_XENOHIGHDANGER("Can only melt barricades and items!"))
 		return
-	var/datum/behavior_delegate/runner_acider/BD = X.behavior_delegate
-	if (!istype(BD))
-		return
-	if(BD.acid_amount < acid_cost)
-		to_chat(X, SPAN_XENOHIGHDANGER("Not enough acid stored!"))
+
+	if(acid_stored < acid_cost)
+		to_chat(src, SPAN_XENOHIGHDANGER("Not enough acid stored!"))
 		return
 
-	X.corrosive_acid(A, acid_type, 0)
-	for(var/obj/item/explosive/plastic/E in A.contents)
-		X.corrosive_acid(E,acid_type,0)
+	. = xeno_owner.corrosive_acid(target, acid_type, 0)
+	for(var/obj/item/explosive/plastic/E in target.contents)
+		xeno_owner.corrosive_acid(E, acid_type,0)
 	..()
 
 /mob/living/carbon/xenomorph/runner/corrosive_acid(atom/O, acid_type, plasma_cost)
@@ -149,61 +147,87 @@
 /datum/action/xeno_action/activable/acider_for_the_hive/use_ability(atom/A)
 	var/mob/living/carbon/xenomorph/X = owner
 
-	if(!istype(X))
+	if(!istype(xeno_owner))
 		return
 
-	if(!isturf(X.loc))
-		to_chat(X, SPAN_XENOWARNING("It is too cramped in here to activate this!"))
+	if(!isturf(xeno_owner.loc))
+		to_chat(xeno_owner, SPAN_XENOWARNING("It is too cramped in here to activate this!"))
 		return
 
-	var/area/xeno_area = get_area(X)
+	var/area/xeno_area = get_area(xeno_owner)
 	if(xeno_area.flags_area & AREA_CONTAINMENT)
-		to_chat(X, SPAN_XENOWARNING("You can't activate this here!"))
+		to_chat(xeno_owner, SPAN_XENOWARNING("You can't activate this here!"))
 		return
 
-	if(!X.check_state())
+	if(!xeno_owner.check_state())
 		return
 
 	if(!action_cooldown_check())
 		return
 
-	if(X.mutation_type != RUNNER_ACIDER)
-		return
-
-	var/datum/behavior_delegate/runner_acider/BD = X.behavior_delegate
-	if(!istype(BD))
-		return
-
-	if(BD.caboom_trigger)
+	if(caboom_trigger)
 		cancel_ability()
+		return "cancelled"
+
+	if(acid_stored < minimal_acid)
+		to_chat(xeno_owner, SPAN_XENOWARNING("Not enough acid built up for an explosion."))
 		return
 
-	if(BD.acid_amount < minimal_acid)
-		to_chat(X, SPAN_XENOWARNING("Not enough acid built up for an explosion."))
-		return
+	to_chat(xeno_owner, SPAN_XENOWARNING("Your stomach starts turning and twisting, getting ready to compress the built up acid."))
+	xeno_owner.color = "#22FF22"
+	xeno_owner.SetLuminosity(3)
 
-	to_chat(X, SPAN_XENOWARNING("Your stomach starts turning and twisting, getting ready to compress the built up acid."))
-	X.color = "#22FF22"
-	X.SetLuminosity(3)
+	//Prevents ventcrawling among other things
+	xeno_owner.mob_size = MOB_SIZE_BIG
+	caboom_trigger = TRUE
+	caboom_left = caboom_timer
+	caboom_last_proc = 0
+	xeno_owner.set_effect(caboom_timer * 2, SUPERSLOW)
 
-	BD.caboom_trigger = TRUE
-	BD.caboom_left = BD.caboom_timer
-	BD.caboom_last_proc = 0
-	X.set_effect(BD.caboom_timer*2, SUPERSLOW)
-
-	X.say(";FOR THE HIVE!!!")
+	xeno_owner.say(";FOR THE HIVE!!!")
+	return "triggered"
 
 /datum/action/xeno_action/activable/acider_for_the_hive/proc/cancel_ability()
 	var/mob/living/carbon/xenomorph/X = owner
 
-	if(!istype(X))
-		return
-	var/datum/behavior_delegate/runner_acider/BD = X.behavior_delegate
-	if(!istype(BD))
+	for(var/barricades in view(xeno_owner, acid_range))
+		if(istype(barricades, /obj/structure/barricade))
+			new caboom_struct_acid_type(get_turf(barricades), barricades)
+			continue
+		if(istype(barricades, /mob))
+			new /datum/effects/acid(barricades, xeno_owner, initial(xeno_owner.caste_type))
+			continue
+	var/x = xeno_owner.x
+	var/y = xeno_owner.y
+	for(var/mob/living/target_living in view(xeno_owner, burn_range))
+		if (!isxeno_human(target_living) || xeno_owner.can_not_harm(target_living))
+			continue
+		var/dist = 0
+		// such cheap, much fast
+		var/dx = abs(target_living.x - x)
+		var/dy = abs(target_living.y - y)
+		if(dx>=dy)
+			dist = (0.934*dx) + (0.427*dy)
+		else
+			dist = (0.427*dx) + (0.934*dy)
+		var/damage = round((burn_range - dist) * max_burn_damage / burn_range)
+		if(isxeno(target_living))
+			damage *= XVX_ACID_DAMAGEMULT
+
+		target_living.apply_damage(damage, BURN)
+	playsound(xeno_owner, 'sound/effects/blobattack.ogg', 75)
+	if(xeno_owner.client && xeno_owner.hive)
+		addtimer(CALLBACK(xeno_owner.hive, TYPE_PROC_REF(/datum/hive_status, free_respawn), xeno_owner.client), 5 SECONDS)
+	xeno_owner.mob_size = initial(xeno_owner.mob_size)
+	xeno_owner.gib()
+
+/datum/action/xeno_action/activable/acider_for_the_hive/proc/cancel_ability()
+	var/mob/living/carbon/xenomorph/xeno_owner = owner
+	if(!istype(xeno_owner))
 		return
 
-	BD.caboom_trigger = FALSE
-	X.color = null
-	X.SetLuminosity(0)
-	BD.modify_acid(-BD.max_acid / 4)
-	to_chat(X, SPAN_XENOWARNING("You remove all your explosive acid before it combusted."))
+	xeno_owner.mob_size = initial(xeno_owner.mob_size)
+	caboom_trigger = FALSE
+	xeno_owner.color = null
+	xeno_owner.SetLuminosity(0)
+	to_chat(xeno_owner, SPAN_XENOWARNING("You remove all your explosive acid before it combusted."))

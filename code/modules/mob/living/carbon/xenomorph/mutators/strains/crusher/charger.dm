@@ -37,7 +37,7 @@
 
 /datum/xeno_mutator/charger/apply_mutator(datum/mutator_set/individual_mutators/mutator_set)
 	. = ..()
-	if (. == 0)
+	if (!.)
 		return
 
 	var/mob/living/carbon/xenomorph/crusher/crusher = mutator_set.xeno
@@ -62,6 +62,7 @@
 	var/side_armor = 15
 
 /datum/behavior_delegate/crusher_charger/add_to_xeno()
+	..()
 	RegisterSignal(bound_xeno, COMSIG_MOB_SET_FACE_DIR, PROC_REF(cancel_dir_lock))
 	RegisterSignal(bound_xeno, COMSIG_XENO_PRE_CALCULATE_ARMOURED_DAMAGE_PROJECTILE, PROC_REF(apply_directional_armor))
 
@@ -82,8 +83,9 @@
 				return
 
 /datum/behavior_delegate/crusher_charger/on_update_icons()
-	if(HAS_TRAIT(bound_xeno, TRAIT_CHARGING) && !bound_xeno.lying)
-		bound_xeno.icon_state = "[bound_xeno.mutation_icon_state || bound_xeno.mutation_type] Crusher Charging"
+	var/charging_icon_state = "[bound_xeno.mutation_icon_state || bound_xeno.mutation_type] Crusher Charging"
+	if(HAS_TRAIT(bound_xeno, TRAIT_CHARGING) && !bound_xeno.lying && (charging_icon_state in icon_states(bound_xeno.icon)))
+		bound_xeno.icon_state = charging_icon_state
 		return TRUE
 
 // Fallback proc for shit that doesn't have a collision def

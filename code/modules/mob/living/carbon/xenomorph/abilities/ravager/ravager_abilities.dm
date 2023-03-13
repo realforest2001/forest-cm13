@@ -16,6 +16,10 @@
 	slash = FALSE // Do we slash upon reception?
 	freeze_self = FALSE // Should we freeze ourselves after the lunge?
 	should_destroy_objects = TRUE   // Only used for ravager charge
+	/// Knockout value if the owner is currently super-empowered
+	var/knockdown_amount = 2
+	/// Fling disstance if the owner is currently super-empowered
+	var/fling_distance = 3
 
 // Base ravager shield ability
 /datum/action/xeno_action/onclick/empower
@@ -31,11 +35,13 @@
 	// Config values (mutable)
 	var/empower_range = 3
 	var/max_targets = 5
+	var/current_targets = 0
 	var/main_empower_base_shield = 0
 	var/initial_activation_shield = 75
 	var/shield_per_human = 80
 	var/time_until_timeout = 15 SECONDS
-
+	var/super_empower_threshold = 3
+	var/super_empower_duration = 5 SECONDS
 	// State
 	var/activated_once = FALSE
 
@@ -82,12 +88,15 @@
 	plasma_cost = 0
 	xeno_cooldown = 16 SECONDS
 
-	// Config values
-	var/base_heal = 100
+	// Config values, The values are actively changed by the delegate during runtime depending on the state of the passive
+	var/heal = 100
 	var/additional_healing_enraged = 100
 	var/damage = 20
-	var/fling_dist_base = 4
+	var/fling_dist = 3
+	var/additional_fling_enraged = 1
 	var/daze_amount = 2
+	/// Do we apply extra debuffs to the victim
+	var/debilitating = FALSE
 
 /datum/action/xeno_action/activable/eviscerate
 	name = "Eviscerate"
@@ -99,13 +108,14 @@
 	plasma_cost = 0
 	xeno_cooldown = 23 SECONDS
 
+	/// Pipe between the action and berserker delegate, the delegate actively tells the ability how much rage is stored since this ability only makes sense with rage
+	var/rage = 0
 	// Config values
 	var/activation_delay = 20
-
 	var/base_damage = 25
-	var/damage_at_rage_levels = list(5, 10, 25, 45, 70)
-	var/range_at_rage_levels = list(1, 1, 1, 2, 2)
-	var/windup_reduction_at_rage_levels = list(0, 2, 4, 6, 10)
+	var/list/damage_at_rage_levels = list(5, 10, 25, 45, 70)
+	var/list/range_at_rage_levels = list(1, 1, 1, 2, 2)
+	var/list/windup_reduction_at_rage_levels = list(0, 2, 4, 6, 10)
 
 
 ////// HEDGEHOG ABILITIES
@@ -120,6 +130,8 @@
 	plasma_cost = 0
 	xeno_cooldown = 9 SECONDS + 2 SECONDS // Left operand is the actual CD, right operand is the buffer for the shield duration
 
+	/// Pipe value updated by the delegate, will not work without it
+	var/shard_amount
 	// Config values
 	var/shield_duration = 20 // Shield lasts 2 seconds by default.
 	var/shield_amount = 500 // Shield HP amount
@@ -138,6 +150,8 @@
 	plasma_cost = 0
 	xeno_cooldown = 100
 
+	/// Pipe value updated by the delegate, will not work without it
+	var/shard_amount
 	// Config
 	var/shard_cost = 75
 	var/ammo_type = /datum/ammo/xeno/bone_chips
@@ -152,6 +166,8 @@
 	plasma_cost = 0
 	xeno_cooldown = 300
 
+	/// Pipe value updated by the delegate, will not work without it
+	var/shard_amount
 	// Config values
 	var/shard_cost = 50
 	var/ammo_type = /datum/ammo/xeno/bone_chips/spread

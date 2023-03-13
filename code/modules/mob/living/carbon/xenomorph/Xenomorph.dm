@@ -117,7 +117,6 @@
 	var/crystal_max = 0
 
 	var/evasion = 0   // RNG "Armor"
-
 	// Armor
 	var/armor_deflection = 10 // Most important: "max armor"
 	var/armor_deflection_buff = 0 // temp buffs to armor
@@ -176,7 +175,7 @@
 
 	/// List of actions (typepaths) that a
 	/// xenomorph type is given upon spawn
-	var/base_actions
+	var/list/base_actions
 
 	/// this is the resin mark that is currently being tracked by the xeno
 	var/obj/effect/alien/resin/marker/tracked_marker
@@ -339,6 +338,8 @@
 	var/eggs_max = 0
 	var/laid_egg = 0
 
+	//Healer vars
+	var/salve_applied_recently = FALSE
 	//Taken from update_icon for all xeno's
 	var/list/overlays_standing[X_TOTAL_LAYERS]
 
@@ -363,13 +364,13 @@
 		if(oldXeno.iff_tag)
 			iff_tag = oldXeno.iff_tag
 			iff_tag.forceMove(src)
-			oldXeno.iff_tag = null
+			old_xeno.iff_tag = null
 	else if (h_number)
 		hivenumber = h_number
 
 	set_languages(list(LANGUAGE_XENOMORPH, LANGUAGE_HIVEMIND))
-	if(oldXeno)
-		for(var/datum/language/L in oldXeno.languages)
+	if(old_xeno)
+		for(var/datum/language/L in old_xeno.languages)
 			add_language(L.name)//Make sure to keep languages (mostly for event Queens that know English)
 
 	// Well, not yet, technically
@@ -383,12 +384,14 @@
 
 	mutators.xeno = src
 
-	if(caste_type && GLOB.xeno_datum_list[caste_type])
+	if(pre_made_caste)
+		caste = pre_made_caste
+
+	else if(caste_type && GLOB.xeno_datum_list[caste_type])
 		caste = GLOB.xeno_datum_list[caste_type]
 	else
 		to_world("something went very wrong")
 		return
-
 	update_icon_source()
 
 	acid_splash_cooldown = caste.acid_splash_cooldown
@@ -464,23 +467,23 @@
 	toggle_xeno_mobhud() //This is a verb, but fuck it, it just werks
 	toggle_xeno_hostilehud()
 
-	if(oldXeno)
-		a_intent_change(oldXeno.a_intent)//Keep intent
+	if(old_xeno)
+		a_intent_change(old_xeno.a_intent)//Keep intent
 
-		if(oldXeno.layer == XENO_HIDING_LAYER)
+		if(old_xeno.layer == XENO_HIDING_LAYER)
 			//We are hiding, let's keep hiding if we can!
 			for(var/datum/action/xeno_action/onclick/xenohide/hide in actions)
 				if(istype(hide))
 					layer = XENO_HIDING_LAYER
 					hide.button.icon_state = "template_active"
 
-		for(var/obj/item/W in oldXeno.contents) //Drop stuff
-			oldXeno.drop_inv_item_on_ground(W)
+		for(var/obj/item/W in old_xeno.contents) //Drop stuff
+			old_xeno.drop_inv_item_on_ground(W)
 
-		oldXeno.empty_gut()
+		old_xeno.empty_gut()
 
-		if(IS_XENO_LEADER(oldXeno))
-			hive.replace_hive_leader(oldXeno, src)
+		if(IS_XENO_LEADER(old_xeno))
+			hive.replace_hive_leader(old_xeno, src)
 
 	// Only handle free slots if the xeno is not in tdome
 	if(!is_admin_level(z))
@@ -682,6 +685,9 @@
 	GLOB.living_xeno_list -= src
 	GLOB.xeno_mob_list -= src
 
+	if(!(caste.display_name in GLOB.custom_evolutions))
+		QDEL_NULL(caste)
+
 	if(tracked_marker)
 		tracked_marker.xenos_tracking -= src
 		tracked_marker = null
@@ -743,7 +749,7 @@
 
 /mob/living/carbon/xenomorph/start_pulling(atom/movable/AM, lunge, no_msg)
 	if(SEND_SIGNAL(AM, COMSIG_MOVABLE_XENO_START_PULLING, src) & COMPONENT_ALLOW_PULL)
-		return do_pull(AM, lunge, no_msg)
+		return do_pull(AM, no_msg)
 
 	if(!isliving(AM))
 		return FALSE

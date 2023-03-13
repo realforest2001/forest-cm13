@@ -41,9 +41,9 @@
 	boiler.speed_modifier += XENO_SPEED_SLOWMOD_TIER_5 // compensating for base buffs
 	boiler.recalculate_everything()
 
-	apply_behavior_holder(boiler)
-
 	mutator_update_actions(boiler)
+
+	apply_behavior_holder(boiler)
 	mutator_set.recalculate_actions(description, flavor_description)
 
 

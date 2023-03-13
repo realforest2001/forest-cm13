@@ -22,7 +22,7 @@
 
 /datum/xeno_mutator/praetorian_dancer/apply_mutator(datum/mutator_set/individual_mutators/mutator_set)
 	. = ..()
-	if (. == 0)
+	if (!.)
 		return
 
 	var/mob/living/carbon/xenomorph/praetorian/praetorian = mutator_set.xeno
@@ -50,7 +50,6 @@
 	var/next_slash_buffed = FALSE
 	var/slash_evasion_buffed = FALSE
 	var/slash_evasion_timer = TIMER_ID_NULL
-	var/dodge_activated = FALSE
 
 
 /datum/behavior_delegate/praetorian_dancer/melee_attack_additional_effects_target(mob/living/carbon/target_carbon)
@@ -64,8 +63,22 @@
 	for (var/datum/effects/dancer_tag/target_tag in target_carbon.effects_list)
 		qdel(target_tag)
 
-	new /datum/effects/dancer_tag(target_carbon, bound_xeno, , , 35)
+	new /datum/effects/dancer_tag(target_carbon, bound_xeno, ttl = 3.5 SECONDS)
 
 	if(ishuman(target_carbon))
 		var/mob/living/carbon/human/target_human = target_carbon
 		target_human.update_xeno_hostile_hud()
+
+/datum/behavior_delegate/praetorian_dancer/proc/remove_evasion_buff()
+	if (slash_evasion_timer == TIMER_ID_NULL || !slash_evasion_buffed)
+		return
+	if (!istype(bound_xeno, /mob/living/carbon/xenomorph))
+		return
+
+	slash_evasion_timer = TIMER_ID_NULL
+	slash_evasion_buffed = FALSE
+
+	var/mob/living/carbon/xenomorph/praetorian = bound_xeno
+	praetorian.evasion_modifier -= evasion_buff_amount
+	praetorian.recalculate_evasion()
+	to_chat(praetorian, SPAN_XENODANGER("You feel your increased evasion from slashing end!"))
