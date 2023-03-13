@@ -10,7 +10,7 @@
 //
 // Addendum
 //
-// This datum is meant to be M.O.D.U.L.A.R, you should NOT assume your delegate will be held by any specific xenomoprh.
+// This datum is meant to be M.O.D.U.L.A.R, you should NOT assume your delegate will be held by any specific xenomorph.
 // This also means xenomorphs should NOT assume they have any delegate in particular, if your strain/caste needs to call a specific proc from their
 // specific delegate, reconsider its necessity, this is for shared behaviors, not a proc holder for snowflake procs.
 //

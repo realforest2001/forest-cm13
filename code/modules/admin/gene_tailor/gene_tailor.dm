@@ -109,7 +109,7 @@ GLOBAL_LIST_INIT(gt_evolutions, list(
 				devolves_into += params["key"]
 		if("apply_genome")
 			var/choice = tgui_alert(usr, "Xenomorphs will be able to evolve into a [xeno_name] without your intervention.\n This is irreversible, are you sure it is playable ?", "WARNING", list("Yes", "No"), timeout = FALSE)
-			if(!choice || choice == "No")
+			if(choice != "Yes")
 				return
 			sanitize_input(params["caste_stats"], params["xeno_stats"])
 			apply_genome(params["caste_stats"], params["xeno_stats"])
