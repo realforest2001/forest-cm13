@@ -9743,7 +9743,7 @@
 /obj/structure/bookcase,
 /obj/item/bananapeel,
 /obj/item/book/manual/research_and_development,
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /turf/open/floor{
 	icon_state = "wood"
 	},
@@ -13482,7 +13482,7 @@
 /obj/structure/bookcase,
 /obj/item/book/manual/research_and_development,
 /obj/item/book/manual/medical_diagnostics_manual,
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /obj/effect/landmark/objective_landmark/close,
 /turf/open/floor{
 	dir = 5;

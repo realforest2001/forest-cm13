@@ -4070,7 +4070,7 @@
 /area/varadero/interior/hall_SE)
 "dEl" = (
 /obj/structure/surface/table/reinforced/prison,
-/obj/item/book/manual/security_space_law{
+/obj/item/book/manual/uscm_sop{
 	pixel_x = 3;
 	pixel_y = 5
 	},

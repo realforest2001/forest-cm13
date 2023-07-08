@@ -698,7 +698,7 @@
 		"}
 
 
-/obj/item/book/manual/security_space_law
+/obj/item/book/manual/uscm_sop
 	name = "Standard Operating Procedure"
 	desc = "A set of USCM guidelines for keeping law and order on their vessels."
 	icon_state = "bookSpaceLaw"
@@ -711,7 +711,7 @@
 		</head>
 
 		<body>
-		<iframe width='100%' height='97%' src="[URL_WIKI_SOP]" frameborder="0" id="main_frame"></iframe>
+		<iframe width='100%' height='97%' src="https://cm-ss13.com/wiki/Standard_Operating_Procedure" frameborder="0" id="main_frame"></iframe>
 		</body>
 
 		</html>
@@ -731,7 +731,7 @@
 		</head>
 
 		<body>
-		<iframe width='100%' height='97%' src="[URL_WIKI_LAW]" frameborder="0" id="main_frame"></iframe>
+		<iframe width='100%' height='97%' src="https://cm-ss13.com/wiki/Marine_Law" frameborder="0" id="main_frame"></iframe>
 		</body>
 
 		</html>

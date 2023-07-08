@@ -8,11 +8,11 @@
 #define URL_WIKI_RULES "https://cm-ss13.com/wiki/Rules"
 #define URL_WIKI_LANDING "https://cm-ss13.com/wiki/Main_Page"
 #define URL_WIKI_COC "https://cm-ss13.com/wiki/Rank"
-#define URL_WIKI_LAW "https://cm-ss13.com/wiki/Marine_Law"
+#define URL_WIKI_LAW "https://cm-ss13.com/wiki/Marine_Law"//also update /obj/item/book/manual/marine_law
 #define URL_WIKI_XENO_QUICKSTART "https://cm-ss13.com/wiki/Xeno_Quickstart_Guide"
 #define URL_WIKI_MARINE_QUICKSTART "https://cm-ss13.com/wiki/Marine_Quickstart_Guide"
 #define URL_WIKI_MACROS "https://cm-ss13.com/wiki/Macros"
-#define URL_WIKI_SOP "https://cm-ss13.com/wiki/Standard_Operating_Procedure"
+#define URL_WIKI_SOP "https://cm-ss13.com/wiki/Standard_Operating_Procedure"//also update /obj/item/book/manual/uscm_sop
 #define URL_WIKI_CO_RULES "https://cm-ss13.com/wiki/CO_Council_Rulings"
 #define URL_WIKI_CONSTRUCTION "https://cm-ss13.com/wiki/Guide_to_construction"
 #define URL_WIKI_ENGINEERING "https://cm-ss13.com/wiki/Guide_to_Engineering"

@@ -16393,7 +16393,7 @@
 "aZy" = (
 /obj/structure/surface/rack,
 /obj/item/book/manual/research_and_development,
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /obj/structure/machinery/light/small{
 	dir = 4
 	},
@@ -17623,7 +17623,7 @@
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/exterior/marsh/river)
 "bdU" = (
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},

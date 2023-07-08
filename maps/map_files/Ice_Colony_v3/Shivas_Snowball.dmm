@@ -10803,7 +10803,7 @@
 /area/shiva/exterior/lz2_fortress)
 "ftr" = (
 /obj/structure/closet/secure_closet/security_empty,
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /turf/open/floor/wood,
 /area/shiva/interior/aerodrome)
 "fuj" = (
@@ -26553,7 +26553,7 @@
 	},
 /area/shiva/interior/garage)
 "wfB" = (
-/obj/item/book/manual/security_space_law,
+/obj/item/book/manual/uscm_sop,
 /turf/open/floor/shiva{
 	dir = 1
 	},
