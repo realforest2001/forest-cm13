@@ -107,6 +107,12 @@
 	var/heal_interval = 10 SECONDS
 	var/last_healed = 0
 	var/last_attempt = 0 // logs time of last attempt to prevent spam. if you want to destroy it, you must commit.
+	var/last_larva_time = 0
+	var/last_larva_queue_time = 0
+	var/last_surge_time = 0
+	var/spawn_cooldown = 30 SECONDS
+	var/surge_cooldown = 90 SECONDS
+	var/surge_incremental_reduction = 3 SECONDS
 
 	protection_level = TURF_PROTECTION_OB
 
@@ -127,11 +133,121 @@
 
 /obj/effect/alien/resin/special/pylon/core/process()
 	update_minimap_icon()
-	if(health >= maxhealth || last_healed > world.time) return
 
-	health += min(heal_amount, maxhealth)
-	last_healed = world.time + heal_interval
+	// Handle spawning larva if core is connected to a hive
+	if(linked_hive)
+		for(var/mob/living/carbon/xenomorph/larva/worm in range(2, src))
+			if((!worm.ckey || worm.stat == DEAD) && worm.burrowable && (worm.hivenumber == linked_hive.hivenumber) && !QDELETED(worm))
+				visible_message(SPAN_XENODANGER("[worm] quickly burrows into \the [src]."))
+				if(!worm.banished)
+					// Goob job bringing her back home, but no doubling please
+					linked_hive.stored_larva++
+					linked_hive.hive_ui.update_burrowed_larva()
+				qdel(worm)
 
+		var/spawning_larva = can_spawn_larva() && (last_larva_time + spawn_cooldown) < world.time
+		if(spawning_larva)
+			last_larva_time = world.time
+		if(spawning_larva || (last_larva_queue_time + spawn_cooldown * 4) < world.time)
+			last_larva_queue_time = world.time
+			var/list/players_with_xeno_pref = get_alien_candidates(linked_hive)
+			if(players_with_xeno_pref && players_with_xeno_pref.len)
+				if(spawning_larva && spawn_burrowed_larva(players_with_xeno_pref[1]))
+					// We were in spawning_larva mode and successfully spawned someone
+					message_alien_candidates(players_with_xeno_pref, dequeued = 1)
+				else
+					// Just time to update everyone their queue status (or the spawn failed)
+					message_alien_candidates(players_with_xeno_pref, dequeued = 0)
+
+		if(linked_hive.hijack_burrowed_surge && (last_surge_time + surge_cooldown) < world.time)
+			last_surge_time = world.time
+			linked_hive.stored_larva++
+			linked_hive.hijack_burrowed_left--
+			announce_dchat("The hive has gained another burrowed larva! Use the Join As Xeno verb to take it.", src)
+			if(surge_cooldown > 30 SECONDS) //mostly for sanity purposes
+				surge_cooldown = surge_cooldown - surge_incremental_reduction //ramps up over time
+			if(linked_hive.hijack_burrowed_left < 1)
+				linked_hive.hijack_burrowed_surge = FALSE
+				xeno_message(SPAN_XENOANNOUNCE("The hive's power wanes. You will no longer gain pooled larva over time."), 3, linked_hive.hivenumber)
+
+
+	// Hive core can repair itself over time
+	if(health < maxhealth && last_healed <= world.time)
+		health += min(heal_amount, maxhealth-health)
+		last_healed = world.time + heal_interval
+
+/obj/effect/alien/resin/special/pylon/core/proc/can_spawn_larva()
+	if(linked_hive.hardcore)
+		return FALSE
+
+	return linked_hive.stored_larva
+
+/obj/effect/alien/resin/special/pylon/core/proc/spawn_burrowed_larva(mob/xeno_candidate)
+	if(can_spawn_larva() && xeno_candidate)
+		var/mob/living/carbon/xenomorph/larva/new_xeno = spawn_hivenumber_larva(loc, linked_hive.hivenumber)
+		if(isnull(new_xeno))
+			return FALSE
+
+		new_xeno.visible_message(SPAN_XENODANGER("A larva suddenly emerges from [src]!"),
+		SPAN_XENODANGER("You emerge from [src] and awaken from your slumber. For the Hive!"))
+		msg_admin_niche("[key_name(new_xeno)] emerged from \a [src]. [ADMIN_JMP(src)]")
+		playsound(new_xeno, 'sound/effects/xeno_newlarva.ogg', 50, 1)
+		if(!SSticker.mode.transfer_xeno(xeno_candidate, new_xeno))
+			qdel(new_xeno)
+			return FALSE
+		to_chat(new_xeno, SPAN_XENOANNOUNCE("You are a xenomorph larva awakened from slumber!"))
+		playsound(new_xeno, 'sound/effects/xeno_newlarva.ogg', 50, 1)
+		if(new_xeno.client)
+			if(new_xeno.client?.prefs.toggles_flashing & FLASH_POOLSPAWN)
+				window_flash(new_xeno.client)
+
+		linked_hive.stored_larva--
+		linked_hive.hive_ui.update_burrowed_larva()
+
+		return TRUE
+	return FALSE
+
+/obj/effect/alien/resin/special/pylon/core/attackby(obj/item/attack_item, mob/user)
+	if(!istype(attack_item, /obj/item/grab) || !isxeno(user))
+		return ..(attack_item, user)
+
+	var/larva_amount = 0 // The amount of larva they get
+
+	var/obj/item/grab/grab = attack_item
+	if(!isxeno(grab.grabbed_thing))
+		return
+	var/mob/living/carbon/carbon_mob = grab.grabbed_thing
+	if(carbon_mob.buckled)
+		to_chat(user, SPAN_XENOWARNING("Unbuckle first!"))
+		return
+	if(!linked_hive || carbon_mob.stat != DEAD)
+		return
+
+	if(SSticker.mode && !(SSticker.mode.flags_round_type & MODE_XVX))
+		return // For now, disabled on gamemodes that don't support it (primarily distress signal)
+
+	// Will probably allow for hives to slowly gain larva by killing hostile xenos and taking them to the hive core
+	// A self sustaining cycle until one hive kills more of the other hive to tip the balance
+
+	// Makes attacking hives very profitable if they can successfully wipe them out without suffering any significant losses
+	var/mob/living/carbon/xenomorph/xeno = carbon_mob
+	if(xeno.hivenumber != linked_hive.hivenumber)
+		if(isqueen(xeno))
+			larva_amount = 5
+		else
+			larva_amount += max(xeno.tier, 1) // Now you always gain larva.
+	else
+		return
+
+	if(!do_after(user, 10, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_GENERIC))
+		return
+
+	visible_message(SPAN_DANGER("[src] engulfs [xeno] in resin!"))
+	playsound(src, "alien_resin_build", 25, 1)
+	qdel(xeno)
+
+	linked_hive.stored_larva += larva_amount
+	linked_hive.hive_ui.update_burrowed_larva()
 
 /obj/effect/alien/resin/special/pylon/core/attack_alien(mob/living/carbon/xenomorph/M)
 	if(M.a_intent != INTENT_HELP && M.can_destroy_special() && M.hivenumber == linked_hive.hivenumber)
@@ -162,12 +278,10 @@
 		if(hardcore && last_attacked_message < world.time && current_health > health)
 			xeno_message(SPAN_XENOANNOUNCE("The hive core is under attack!"), 2, linked_hive.hivenumber)
 			last_attacked_message = world.time + next_attacked_message
-
 	else
 		. = ..()
 
 /obj/effect/alien/resin/special/pylon/core/Destroy()
-
 	if(linked_hive)
 		visible_message(SPAN_XENOHIGHDANGER("The resin roof withers away as \the [src] dies!"), max_distance = WEED_RANGE_CORE)
 		linked_hive.hive_location = null
@@ -184,8 +298,11 @@
 			linked_hive.hive_structures_limit[XENO_STRUCTURE_POOL] = 0
 			xeno_announcement("\The [linked_hive.name] has lost their hive core!", "everything", HIGHER_FORCE_ANNOUNCE)
 
-			if(linked_hive.spawn_pool)
-				qdel(linked_hive.spawn_pool)
+		if(linked_hive.hijack_burrowed_surge)
+			visible_message(SPAN_XENODANGER("You hear something resembling a scream from [src] as it's destroyed!"))
+			xeno_message(SPAN_XENOANNOUNCE("Psychic pain storms throughout the hive as [src] is destroyed! You will no longer gain burrowed larva over time."), 3, linked_hive.hivenumber)
+			linked_hive.hijack_burrowed_surge = FALSE
+
 	SSminimaps.remove_marker(src)
 	. = ..()
 
@@ -200,8 +317,6 @@
 		return XENO_NO_DELAY_ACTION
 	qdel(src)
 
-
-
 /obj/effect/alien/resin/special/pylon/core/proc/cooldownFinish(datum/hive_status/linked_hive)
 	sleep(HIVECORE_COOLDOWN)
 	if(linked_hive.hivecore_cooldown) // check if its true so we don't double set it.
@@ -211,6 +326,23 @@
 		log_admin("Hivecore cooldown reset proc aborted due to hivecore cooldown var being set to false before the cooldown has finished!")
 		// Tell admins that this condition is reached so they know what has happened if it fails somehow
 		return
+
+/obj/effect/alien/resin/special/pylon/core/proc/spawn_lesser_drone(mob/xeno_candidate)
+	if(!linked_hive.can_spawn_as_lesser_drone(xeno_candidate))
+		return FALSE
+
+	var/mob/living/carbon/xenomorph/lesser_drone/new_drone = new /mob/living/carbon/xenomorph/lesser_drone(loc, null, linked_hive.hivenumber)
+	xeno_candidate.mind.transfer_to(new_drone, TRUE)
+	new_drone.visible_message(SPAN_XENODANGER("A lesser drone emerges out of [src]!"), SPAN_XENODANGER("You emerge out of [src] and awaken from your slumber. For the Hive!"))
+	playsound(new_drone, 'sound/effects/xeno_newlarva.ogg', 25, TRUE)
+	new_drone.generate_name()
+
+	return TRUE
+
+/obj/effect/alien/resin/special/pylon/core/attack_ghost(mob/dead/observer/user)
+	. = ..()
+	if(SSticker.mode.check_xeno_late_join(user))
+		SSticker.mode.attempt_to_join_as_lesser_drone(user)
 
 #undef PYLON_REPAIR_TIME
 #undef PYLON_WEEDS_REGROWTH_TIME

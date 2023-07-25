@@ -80,7 +80,7 @@
 		var/mob/living/carbon/xenomorph/M = O
 		if(!M.stat) //No dead xenos jumpin on the bed~
 			visible_message(SPAN_DANGER("[O] plows straight through [src]!"))
-			deconstruct()
+			deconstruct(FALSE)
 
 /obj/structure/surface/table/Destroy()
 	var/tableloc = loc
@@ -307,7 +307,7 @@
 			playsound(src.loc, 'sound/weapons/wristblades_hit.ogg', 25, 1)
 			user.visible_message(SPAN_DANGER("[user] slices [src] apart!"),
 				SPAN_DANGER("You slice [src] apart!"))
-			deconstruct()
+			deconstruct(FALSE)
 		else
 			to_chat(user, SPAN_WARNING("You slice at the table, but only claw it up a little."))
 		return
@@ -326,11 +326,13 @@
 /// Checks whether a table is a straight line along a given axis
 /obj/structure/surface/table/proc/straight_table_check(direction)
 	var/obj/structure/surface/table/table = src
-	while(table)
+	var/obj/structure/surface/table/side_table
+	var/tables_count = 7 // Lazy extra safety against infinite loops. If table big, can't flip, i guess.
+	while(--tables_count)
 		// Check whether there are connected tables perpendicular to the axis
 		for(var/angle in list(-90, 90))
-			table = locate() in get_step(loc, turn(direction, angle))
-			if(table && !table.flipped)
+			side_table = locate() in get_step(table, turn(direction, angle))
+			if(side_table && !side_table.flipped)
 				return FALSE
 		table = locate() in get_step(table, direction)
 		if(!table || table.flipped)
@@ -339,6 +341,8 @@
 			var/obj/structure/surface/table/reinforced/reinforced_table = table
 			if(reinforced_table.status == RTABLE_NORMAL)
 				return FALSE
+	if(!tables_count)
+		return FALSE
 	return TRUE
 
 /obj/structure/surface/table/verb/do_flip()
@@ -421,7 +425,7 @@
 		to_chat(usr, SPAN_WARNING("You have moved a table too recently."))
 		return FALSE
 
-	if(!skip_straight_check && (!straight_table_check(turn(direction, 90)) || !straight_table_check(turn(direction, -90))))
+	if(!skip_straight_check && !(straight_table_check(turn(direction, 90)) && straight_table_check(turn(direction, -90))))
 		to_chat(usr, SPAN_WARNING("[src] is too wide to be flipped."))
 		return FALSE
 
@@ -618,7 +622,7 @@
 /obj/structure/surface/table/reinforced/cloth
 	name = "cloth table"
 	desc = "A fancy cloth-topped wooden table, bolted to the floor. Fit for formal occasions."
-	icon_state = "cloth"
+	icon_state = "clothtable"
 	table_prefix = "cloth"
 
 /*
@@ -675,7 +679,7 @@
 		var/mob/living/carbon/xenomorph/M = O
 		if(!M.stat) //No dead xenos jumpin on the bed~
 			visible_message(SPAN_DANGER("[O] plows straight through [src]!"))
-			deconstruct()
+			deconstruct(FALSE)
 
 /obj/structure/surface/rack/deconstruct(disassembled = TRUE)
 	if(disassembled)

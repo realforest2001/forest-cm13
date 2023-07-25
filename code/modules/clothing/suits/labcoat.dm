@@ -19,7 +19,7 @@
 
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/tool/lighter,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
@@ -170,7 +170,7 @@
 /obj/item/clothing/suit/storage/snow_suit/synth
 	name = "synthetic's snow suit"
 	desc = "A snow suit designed for keeping synthetic units within acceptable temperature ranges in extremely cold environments to prevent power supply inefficiency. Due to advancements made in synthetic insulation, they are not required for most cold environments."
-	armor_melee = CLOTHING_ARMOR_NONE //no free armour for synths
+	armor_melee = CLOTHING_ARMOR_NONE //no free armor for synths
 	armor_bullet = CLOTHING_ARMOR_NONE
 	armor_laser = CLOTHING_ARMOR_NONE
 	armor_energy = CLOTHING_ARMOR_NONE
@@ -180,7 +180,7 @@
 		/obj/item/weapon/gun/,
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/tool/lighter,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
@@ -221,10 +221,9 @@
 		/obj/item/explosive/grenade,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
-		/obj/item/storage/backpack/general_belt,
 		/obj/item/storage/large_holster/machete,
-		/obj/item/weapon/melee/baseballbat,
-		/obj/item/weapon/melee/baseballbat/metal,
+		/obj/item/weapon/baseballbat,
+		/obj/item/weapon/baseballbat/metal,
 		/obj/item/device/motiondetector,
 		/obj/item/device/walkman,
 	)
@@ -289,11 +288,14 @@
 		/obj/item/explosive/grenade,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
-		/obj/item/storage/backpack/general_belt,
 		/obj/item/storage/large_holster/machete,
-		/obj/item/weapon/melee/baseballbat,
-		/obj/item/weapon/melee/baseballbat/metal,
+		/obj/item/weapon/baseballbat,
+		/obj/item/weapon/baseballbat/metal,
 		/obj/item/device/motiondetector,
 		/obj/item/device/walkman,
 	)
 
+/obj/item/clothing/suit/storage/snow_suit/liaison
+	name = "liaison's winter coat"
+	desc = "A Weyland-Yutani winter coat. Only the best comfort for the liaison in a cold environment."
+	icon_state = "snowsuit_liaison"

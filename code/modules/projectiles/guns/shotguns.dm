@@ -35,7 +35,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_5
+	set_fire_delay(FIRE_DELAY_TIER_5)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -199,9 +199,9 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/merc/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_6*2
-	burst_amount = BURST_AMOUNT_TIER_2
-	burst_delay = FIRE_DELAY_TIER_9
+	set_fire_delay(FIRE_DELAY_TIER_6*2)
+	set_burst_amount(BURST_AMOUNT_TIER_2)
+	set_burst_delay(FIRE_DELAY_TIER_9)
 	accuracy_mult = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_4
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -222,8 +222,8 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/merc/damaged/set_gun_config_values()
 	..()
-	fire_delay = 1.5 SECONDS
-	burst_amount = BURST_AMOUNT_TIER_1
+	set_fire_delay(1.5 SECONDS)
+	set_burst_amount(BURST_AMOUNT_TIER_1)
 	accuracy_mult = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_6
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_5
@@ -249,7 +249,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	attachable_allowed = list(
 		/obj/item/attachable/bayonet,
 		/obj/item/attachable/bayonet/upp,
-		/obj/item/attachable/bayonet/c02,
+		/obj/item/attachable/bayonet/co2,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/reflex,
 		/obj/item/attachable/flashlight,
@@ -279,7 +279,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/combat/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_5*2
+	set_fire_delay(FIRE_DELAY_TIER_5*2)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -324,9 +324,9 @@ can cause issues with ammo types getting mixed up during the burst.
 	current_mag = /obj/item/ammo_magazine/internal/shotgun/buckshot
 
 	flags_equip_slot = SLOT_WAIST|SLOT_BACK
-	flags_gun_features = GUN_CAN_POINTBLANK|GUN_INTERNAL_MAG|GUN_HAS_FULL_AUTO|GUN_FULL_AUTO_ON
-	fa_delay = FIRE_DELAY_TIER_6
+	flags_gun_features = GUN_CAN_POINTBLANK|GUN_INTERNAL_MAG
 	auto_retrieval_slot = WEAR_J_STORE
+	start_automatic = TRUE
 
 /obj/item/weapon/gun/shotgun/combat/marsoc/Initialize(mapload, spawn_empty)
 	. = ..()
@@ -347,7 +347,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/combat/marsoc/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_5*2
+	set_fire_delay(FIRE_DELAY_TIER_6)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3 - HIT_ACCURACY_MULT_TIER_5
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -395,7 +395,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/type23/set_gun_config_values()
 	..()
-	fire_delay = 2.5 SECONDS
+	set_fire_delay(2.5 SECONDS)
 	accuracy_mult = BASE_ACCURACY_MULT
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_4
@@ -514,14 +514,15 @@ can cause issues with ammo types getting mixed up during the burst.
 	flags_gun_features = GUN_CAN_POINTBLANK|GUN_INTERNAL_MAG
 	burst_delay = 0 //So doubleshotty can doubleshot
 	has_open_icon = TRUE
+	civilian_usable_override = TRUE // Come on. It's THE survivor shotgun.
 
 /obj/item/weapon/gun/shotgun/double/set_gun_attachment_offsets()
 	attachable_offset = list("muzzle_x" = 32, "muzzle_y" = 19,"rail_x" = 11, "rail_y" = 20, "under_x" = 15, "under_y" = 14, "stock_x" = 13, "stock_y" = 14)
 
 /obj/item/weapon/gun/shotgun/double/set_gun_config_values()
 	..()
-	burst_amount = BURST_AMOUNT_TIER_2
-	fire_delay = FIRE_DELAY_TIER_9
+	set_burst_amount(BURST_AMOUNT_TIER_2)
+	set_fire_delay(FIRE_DELAY_TIER_9)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -604,7 +605,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	current_mag.chamber_position--
 	return 1
 
-/obj/item/weapon/gun/shotgun/double/proc/open_chamber(mob/user)
+/obj/item/weapon/gun/shotgun/double/proc/open_chamber(mob/user, override)
 	if(!current_mag)
 		return
 	current_mag.chamber_closed = !current_mag.chamber_closed
@@ -631,8 +632,8 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/double/damaged/set_gun_config_values()
 	..()
-	burst_amount = BURST_AMOUNT_TIER_1
-	fire_delay = 0.9 SECONDS
+	set_burst_amount(BURST_AMOUNT_TIER_1)
+	set_fire_delay(0.9 SECONDS)
 	accuracy_mult = BASE_ACCURACY_MULT
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_7
@@ -654,7 +655,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/double/sawn/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_9
+	set_fire_delay(FIRE_DELAY_TIER_9)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3 - HIT_ACCURACY_MULT_TIER_5
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -663,6 +664,89 @@ can cause issues with ammo types getting mixed up during the burst.
 	damage_mult = BASE_BULLET_DAMAGE_MULT + BULLET_DAMAGE_MULT_TIER_7
 	recoil = RECOIL_AMOUNT_TIER_3
 	recoil_unwielded = RECOIL_AMOUNT_TIER_1
+
+// COULDN'T THINK OF ANOTHER WAY SORRY!!!! SOMEONE ADD A GUN COMPONENT!!
+
+/obj/item/weapon/gun/shotgun/double/cane
+	name = "fancy cane"
+	desc = "An ebony cane with a fancy, seemingly-golden tip. Feels hollow to the touch."
+	icon = 'icons/obj/items/weapons/weapons.dmi'
+	icon_state = "fancy_cane"
+	item_state = "fancy_cane"
+	pickup_sound = null
+	drop_sound = null
+	item_icons = list(
+		WEAR_L_HAND = 'icons/mob/humans/onmob/items_lefthand_0.dmi',
+		WEAR_R_HAND = 'icons/mob/humans/onmob/items_righthand_0.dmi'
+		)
+	caliber = ".44"
+	gauge = ".44" // misery
+	force = 15 // hollow. also too hollow to support one's weight like normal canes
+	attack_speed = 1.5 SECONDS
+	current_mag = /obj/item/ammo_magazine/internal/shotgun/double/cane
+	fire_sound = null
+	fire_sounds = list('sound/weapons/gun_silenced_oldshot1.ogg', 'sound/weapons/gun_silenced_oldshot2.ogg') // Uses the old sounds because they're more 'James Bond'-y
+	break_sound = 'sound/weapons/handling/pkd_open_chamber.ogg'
+	seal_sound = 'sound/weapons/handling/pkd_close_chamber.ogg'
+	attachable_allowed = list()
+
+	flags_gun_features = GUN_CAN_POINTBLANK|GUN_INTERNAL_MAG|GUN_TRIGGER_SAFETY|GUN_ONE_HAND_WIELDED|GUN_ANTIQUE|GUN_NO_DESCRIPTION|GUN_UNUSUAL_DESIGN
+	flags_item = NO_FLAGS
+
+	inherent_traits = list(TRAIT_GUN_SILENCED)
+
+/obj/item/weapon/gun/shotgun/double/cane/Initialize(mapload, spawn_empty)
+	. = ..()
+	AddElement(/datum/element/traitbound/gun_silenced)
+
+/obj/item/weapon/gun/shotgun/double/cane/set_gun_config_values()
+	..()
+	set_burst_amount(BURST_AMOUNT_TIER_1)
+	set_fire_delay(FIRE_DELAY_TIER_7)
+	accuracy_mult_unwielded = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_10
+	scatter_unwielded = SCATTER_AMOUNT_TIER_7
+	damage_mult = BASE_BULLET_DAMAGE_MULT + BULLET_DAMAGE_MULT_TIER_5
+	recoil = RECOIL_AMOUNT_TIER_2
+	recoil_unwielded = RECOIL_AMOUNT_TIER_3
+
+/obj/item/weapon/gun/shotgun/double/cane/gun_safety_handle(mob/user)
+	if(flags_gun_features & GUN_TRIGGER_SAFETY)
+		to_chat(user, SPAN_NOTICE("You turn [src] back into its normal cane stance."))
+		playsound(user, 'sound/weapons/handling/nsg23_unload.ogg', 25, 1)
+	else
+		to_chat(user, SPAN_DANGER("You unlock the safety and change [src] into its gun stance!"))
+		playsound(user, 'sound/weapons/handling/smg_reload.ogg', 25, 1)
+
+	if(current_mag.chamber_closed == FALSE) // close the chamber
+		open_chamber(user, TRUE)
+
+	update_desc()
+	update_icon()
+
+	playsound(user, 'sound/weapons/handling/safety_toggle.ogg', 25, 1)
+
+/obj/item/weapon/gun/shotgun/double/cane/proc/update_desc()
+	if(flags_gun_features & GUN_TRIGGER_SAFETY)
+		name = initial(name)
+		desc = initial(desc)
+	else
+		name = "cane revolver"
+		desc = initial(desc) + " Apparently, because it's a large revolver. Who'da thunk it?"
+
+/obj/item/weapon/gun/shotgun/double/cane/open_chamber(mob/user, override)
+	if(flags_gun_features & GUN_TRIGGER_SAFETY && !override)
+		to_chat(user, SPAN_WARNING("Not with the safety on!"))
+		return
+	return ..()
+
+/obj/item/weapon/gun/shotgun/double/cane/update_icon()
+	if(flags_gun_features & GUN_TRIGGER_SAFETY)
+		icon_state = initial(icon_state)
+
+	else if(current_mag.chamber_closed == FALSE)
+		icon_state = initial(icon_state) + "_gun_open"
+	else
+		icon_state = initial(icon_state) + "_gun"
 
 //M-OU53 SHOTGUN | Marine mid-range slug/flechette only coach gun (except its an over-under). Support weapon for slug stuns / flechette DOTS (when implemented). Buckshot in this thing is just stupidly strong, hence the denial.
 
@@ -682,7 +766,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	attachable_allowed = list(
 		/obj/item/attachable/bayonet,
 		/obj/item/attachable/bayonet/upp,
-		/obj/item/attachable/bayonet/c02,
+		/obj/item/attachable/bayonet/co2,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/reflex,
 		/obj/item/attachable/magnetic_harness,
@@ -696,6 +780,7 @@ can cause issues with ammo types getting mixed up during the burst.
 		/obj/item/attachable/stock/mou53,
 	)
 	map_specific_decoration = TRUE
+	civilian_usable_override = FALSE
 
 /obj/item/weapon/gun/shotgun/double/mou53/set_gun_attachment_offsets()
 	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 18,"rail_x" = 11, "rail_y" = 21, "under_x" = 17, "under_y" = 15, "stock_x" = 10, "stock_y" = 9) //Weird stock values, make sure any new stock matches the old sprite placement in the .dmi
@@ -703,8 +788,8 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/double/mou53/set_gun_config_values()
 	..()
-	burst_amount = BURST_AMOUNT_TIER_1
-	fire_delay = FIRE_DELAY_TIER_8
+	set_burst_amount(BURST_AMOUNT_TIER_1)
+	set_fire_delay(FIRE_DELAY_TIER_8)
 	accuracy_mult = BASE_ACCURACY_MULT
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_10
@@ -781,7 +866,8 @@ can cause issues with ammo types getting mixed up during the burst.
 	flags_equip_slot = SLOT_BACK
 	actions_types = list(/datum/action/item_action/specialist/twobore_brace)
 	starting_attachment_types = list(/obj/item/attachable/stock/twobore)
-	aim_slowdown = SLOWDOWN_ADS_LMG //Quite slow, but VB has light-armour slowdown and doesn't feel pain.
+	aim_slowdown = SLOWDOWN_ADS_LMG //Quite slow, but VB has light-armor slowdown and doesn't feel pain.
+	civilian_usable_override = FALSE
 	var/braced = FALSE
 	var/fired_shots = 0 //How many shots were fired since it was last closed, for casing ejection purposes.
 	var/image/fired_casing
@@ -793,8 +879,8 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/double/twobore/set_gun_config_values()
 	..()
-	burst_amount = BURST_AMOUNT_TIER_1
-	fire_delay = 2 SECONDS //Less than the stun time, but you still have to brace to fire safely.
+	set_burst_amount(BURST_AMOUNT_TIER_1)
+	set_fire_delay(2 SECONDS )//Less than the stun time, but you still have to brace to fire safely.
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_5
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_8
@@ -849,9 +935,9 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/double/twobore/Fire(atom/target, mob/living/carbon/human/user, params, reflex = 0, dual_wield) //Using this instead of apply_bullet_effects() as RPG does so I get more granular angles than just user direction.
 	var/prefire_rounds = current_mag.current_rounds //How many rounds do we have before we fire?
-	..()
+	. = ..()
 	if(current_mag.current_rounds == prefire_rounds) //We didn't fire a shot.
-		return
+		return NONE
 	var/target_angle = Get_Compass_Dir(user, target) //More precise than get_dir().
 	fired_shots++
 	twobore_recoil(user, target_angle)
@@ -993,7 +1079,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	attachable_allowed = list(
 		/obj/item/attachable/bayonet,
 		/obj/item/attachable/bayonet/upp,
-		/obj/item/attachable/bayonet/c02,
+		/obj/item/attachable/bayonet/co2,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/reflex,
 		/obj/item/attachable/verticalgrip,
@@ -1025,8 +1111,8 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/pump/set_gun_config_values()
 	..()
-	burst_amount = BURST_AMOUNT_TIER_1
-	fire_delay = FIRE_DELAY_TIER_7 * 5
+	set_burst_amount(BURST_AMOUNT_TIER_1)
+	set_fire_delay(FIRE_DELAY_TIER_7 * 5)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6
@@ -1134,7 +1220,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	playsound(src, 'sound/machines/switch.ogg', 15, TRUE)
 	return TRUE
 
-/obj/item/weapon/gun/shotgun/pump/dual_tube/toggle_burst()
+/obj/item/weapon/gun/shotgun/pump/dual_tube/set_bursting()
 	var/obj/item/weapon/gun/shotgun/pump/dual_tube/shotgun = get_active_firearm(usr)
 	if(shotgun == src)
 		swap_tube(usr)
@@ -1162,6 +1248,7 @@ can cause issues with ammo types getting mixed up during the burst.
 	)
 	starting_attachment_types = list(/obj/item/attachable/stock/hg3712)
 	map_specific_decoration = FALSE
+	civilian_usable_override = TRUE // Come on. It's THE, er, other, survivor shotgun.
 
 
 /obj/item/weapon/gun/shotgun/pump/dual_tube/cmb/set_gun_attachment_offsets()
@@ -1170,7 +1257,7 @@ can cause issues with ammo types getting mixed up during the burst.
 
 /obj/item/weapon/gun/shotgun/pump/dual_tube/cmb/set_gun_config_values()
 	..()
-	fire_delay = 1.6 SECONDS
+	set_fire_delay(1.6 SECONDS)
 	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_10
 	scatter = SCATTER_AMOUNT_TIER_6

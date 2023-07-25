@@ -231,14 +231,19 @@
 	var/datum/action/xeno_action/activable/selected_ability // Our currently selected ability
 	var/datum/action/xeno_action/activable/queued_action // Action to perform on the next click.
 	var/is_zoomed = FALSE
-	var/tileoffset = 0 // Zooming-out related vars
-	var/viewsize = 0
+	var/list/spit_types
+	/// Caste-based spit windup
+	var/spit_windup = FALSE
+	/// Caste-based spit windup duration (if applicable)
+	var/spit_delay = 0
+	var/tileoffset = 0 	// How much your view will be offset in the direction that you zoom?
+	var/viewsize = 0	//What size your view will be changed to when you zoom?
 	var/banished = FALSE // Banished xenos can be attacked by all other xenos
 	var/lock_evolve = FALSE //Prevents evolve/devolve (used when banished)
 	var/list/tackle_counter
 	var/evolving = FALSE // Whether the xeno is in the process of evolving
 	/// The damage dealt by a xeno whenever they take damage near someone
-	var/acid_blood_damage = 12
+	var/acid_blood_damage = 25
 	var/nocrit = FALSE
 	var/deselect_timer = 0 // Much like Carbon.last_special is a short tick record to prevent accidental deselects of abilities
 	var/got_evolution_message = FALSE
@@ -740,6 +745,8 @@
 	if(SEND_SIGNAL(AM, COMSIG_MOVABLE_XENO_START_PULLING, src) & COMPONENT_ALLOW_PULL)
 		return do_pull(AM, lunge, no_msg)
 
+	if(burrow)
+		return
 	if(!isliving(AM))
 		return FALSE
 	var/mob/living/L = AM
@@ -1069,9 +1076,39 @@
 	announce_dchat("[src] ([mutation_type] [caste_type])</b> has ghosted and their body is up for grabs!", src)
 
 /mob/living/carbon/xenomorph/larva/handle_ghost_message()
-	if(locate(/obj/effect/alien/resin/special/pool) in range(2, get_turf(src)))
+	if(locate(/obj/effect/alien/resin/special/pylon/core) in range(2, get_turf(src)))
 		return
 	return ..()
 
 /mob/living/carbon/xenomorph/handle_blood_splatter(splatter_dir, duration)
-	new /obj/effect/temp_visual/dir_setting/bloodsplatter/xenosplatter(loc, splatter_dir, duration)
+	var/color_override
+	if(special_blood)
+		var/datum/reagent/D = chemical_reagents_list[special_blood]
+		if(D)
+			color_override = D.color
+	new /obj/effect/temp_visual/dir_setting/bloodsplatter/xenosplatter(loc, splatter_dir, duration, color_override)
+
+/mob/living/carbon/xenomorph/Collide(atom/movable/movable_atom)
+	. = ..()
+	if(behavior_delegate)
+		behavior_delegate.on_collide(movable_atom)
+
+/mob/living/carbon/xenomorph/proc/scuttle(obj/structure/current_structure)
+	if (mob_size != MOB_SIZE_SMALL)
+		return FALSE
+
+	var/move_dir = get_dir(src, loc)
+	for(var/atom/movable/atom in get_turf(current_structure))
+		if(atom != current_structure && atom.density && atom.BlockedPassDirs(src, move_dir))
+			to_chat(src, SPAN_WARNING("[atom] prevents you from squeezing under [current_structure]!"))
+			return FALSE
+	// Is it an airlock?
+	if(istype(current_structure, /obj/structure/machinery/door/airlock))
+		var/obj/structure/machinery/door/airlock/current_airlock = current_structure
+		if(current_airlock.locked || current_airlock.welded) //Can't pass through airlocks that have been bolted down or welded
+			to_chat(src, SPAN_WARNING("[current_airlock] is locked down tight. You can't squeeze underneath!"))
+			return FALSE
+	visible_message(SPAN_WARNING("[src] scuttles underneath [current_structure]!"), \
+	SPAN_WARNING("You squeeze and scuttle underneath [current_structure]."), max_distance = 5)
+	forceMove(current_structure.loc)
+	return TRUE

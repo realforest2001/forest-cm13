@@ -170,12 +170,19 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	damtype = "brute"
 	icon_state = "[initial(icon_state)]_burnt"
 	item_state = "cigoff"
-	if(user && loc != user)
-		user.SetLuminosity(0, FALSE, src)
 	SetLuminosity(0)
 	name = burnt_name
 	desc = "A match. This one has seen better days."
 	STOP_PROCESSING(SSobj, src)
+
+	if(user)
+		user.SetLuminosity(0, FALSE, src)
+		return
+
+	if(ismob(loc))
+		user = loc
+		user.SetLuminosity(0, FALSE, src)
+		return
 
 /obj/item/tool/match/paper
 	name = "paper match"
@@ -247,8 +254,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		if(M.heat_source)
 			light(SPAN_NOTICE("[user] lights their [name] with their [W]."))
 
-	else if(istype(W, /obj/item/weapon/melee/energy/sword))
-		var/obj/item/weapon/melee/energy/sword/S = W
+	else if(istype(W, /obj/item/weapon/energy/sword))
+		var/obj/item/weapon/energy/sword/S = W
 		if(S.active)
 			light(SPAN_WARNING("[user] swings their [W], barely missing their nose. They light their [name] in the process."))
 
@@ -539,8 +546,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		if(M.heat_source)
 			light(SPAN_NOTICE("[user] lights their [name] with their [W]."))
 
-	else if(istype(W, /obj/item/weapon/melee/energy/sword))
-		var/obj/item/weapon/melee/energy/sword/S = W
+	else if(istype(W, /obj/item/weapon/energy/sword))
+		var/obj/item/weapon/energy/sword/S = W
 		if(S.active)
 			light(SPAN_WARNING("[user] swings their [W], barely missing their nose. They light their [name] in the process."))
 

@@ -31,7 +31,7 @@
 /mob/living/carbon/xenomorph/crusher
 	caste_type = XENO_CASTE_CRUSHER
 	name = XENO_CASTE_CRUSHER
-	desc = "A huge alien with an enormous armored head crest."
+	desc = "A huge alien with an enormous armored crest."
 	icon_size = 64
 	icon_state = "Crusher Walking"
 	plasma_types = list(PLASMA_CHITIN)
@@ -59,6 +59,7 @@
 		/datum/action/xeno_action/activable/pounce/crusher_charge,
 		/datum/action/xeno_action/onclick/crusher_stomp,
 		/datum/action/xeno_action/onclick/crusher_shield,
+		/datum/action/xeno_action/onclick/tacmap,
 	)
 
 	claw_type = CLAW_TYPE_VERY_SHARP
