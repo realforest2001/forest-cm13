@@ -1447,7 +1447,7 @@
 	icon_state = "type73"
 	item_state = "type73"
 	wield_delay = 0 //Ends up being .5 seconds due to scope
-	current_mag = /obj/item/ammo_magazine/rifle/type71/heap
+	current_mag = /obj/item/ammo_magazine/rifle/type71/ap
 	attachable_allowed = list(
 		/obj/item/attachable/lasersight,
 		/obj/item/attachable/verticalgrip,

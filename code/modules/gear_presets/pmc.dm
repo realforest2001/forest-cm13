@@ -167,10 +167,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Entrenching Tool", 2, /obj/item/tool/shovel/etool, null, VENDOR_ITEM_RECOMMENDED),
 		list("Sandbags x25", 5, /obj/item/stack/sandbags_empty/half, null, VENDOR_ITEM_RECOMMENDED),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -296,10 +296,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Entrenching Tool", 2, /obj/item/tool/shovel/etool, null, VENDOR_ITEM_RECOMMENDED),
 		list("Sandbags x25", 5, /obj/item/stack/sandbags_empty/half, null, VENDOR_ITEM_RECOMMENDED),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -472,10 +472,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Roller Bed", 4, /obj/item/roller, null, VENDOR_ITEM_REGULAR),
 		list("Stasis Bag", 6, /obj/item/bodybag/cryobag, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -650,10 +650,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Roller Bed", 4, /obj/item/roller, null, VENDOR_ITEM_REGULAR),
 		list("Stasis Bag", 6, /obj/item/bodybag/cryobag, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -801,10 +801,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Tools Pouch (Full)", 5, /obj/item/storage/pouch/tools/full, null, VENDOR_ITEM_REGULAR),
 		list("Welding Goggles", 5, /obj/item/clothing/glasses/welding, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -940,10 +940,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Tools Pouch (Full)", 5, /obj/item/storage/pouch/tools/full, null, VENDOR_ITEM_REGULAR),
 		list("Welding Goggles", 5, /obj/item/clothing/glasses/welding, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -1293,10 +1293,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Tools Pouch (Full)", 5, /obj/item/storage/pouch/tools/full, null, VENDOR_ITEM_REGULAR),
 		list("Welding Goggles", 5, /obj/item/clothing/glasses/welding, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -1441,10 +1441,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Tools Pouch (Full)", 5, /obj/item/storage/pouch/tools/full, null, VENDOR_ITEM_REGULAR),
 		list("Welding Goggles", 5, /obj/item/clothing/glasses/welding, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -1616,10 +1616,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Roller Bed", 4, /obj/item/roller, null, VENDOR_ITEM_REGULAR),
 		list("Stasis Bag", 6, /obj/item/bodybag/cryobag, null, VENDOR_ITEM_REGULAR),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),
@@ -1762,10 +1762,10 @@ list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("Range Finder", 10, /obj/item/device/binoculars/range, null, VENDOR_ITEM_REGULAR),
 		list("Sandbags x25", 10, /obj/item/stack/sandbags_empty/half, null, VENDOR_ITEM_RECOMMENDED),
 
-		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get TWO HEAP magazines, maximum.
-		list("M41A HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
-		list("M39 HEAP magazine (10x20mm)", 20, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
-		list("NSG23 HEAP magazine (10x24mm)", 20, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
+		list("SPECIAL AMMUNITION", 0, null, null, null), //pmcs can get ONE HEAP magazine, maximum.
+		list("M41A HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/heap, null, VENDOR_ITEM_REGULAR),
+		list("M39 HEAP magazine (10x20mm)", 25, /obj/item/ammo_magazine/smg/m39/heap, null, VENDOR_ITEM_REGULAR),
+		list("NSG23 HEAP magazine (10x24mm)", 25, /obj/item/ammo_magazine/rifle/nsg23/heap, null, VENDOR_ITEM_REGULAR),
 
 		list("ATTACHMENTS", 0, null, null, null),
 		list("Angled Grip", 10, /obj/item/attachable/angledgrip, null, VENDOR_ITEM_REGULAR),

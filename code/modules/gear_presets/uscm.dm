@@ -816,7 +816,7 @@
 	var/obj/item/clothing/suit/storage/marine/sof/armor = new()
 	new_human.equip_to_slot_or_del(armor, WEAR_JACKET)
 	for(var/i in 1 to armor.storage_slots)
-		new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/xm40/heap, WEAR_IN_JACKET)
+		new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/xm40, WEAR_IN_JACKET)
 	new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m41a/elite/xm40, WEAR_J_STORE)
 	//waist
 	new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/shotgun/combat/marsoc, WEAR_WAIST)
