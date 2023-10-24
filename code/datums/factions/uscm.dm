@@ -7,12 +7,14 @@
 	if(istype(squad))
 		var/squad_clr = current_human.assigned_squad.equipment_color
 		var/marine_rk
-		var/obj/item/card/id/I = current_human.get_idcard()
+		var/obj/item/card/id/id_card = current_human.get_idcard()
 		var/_role
 		if(current_human.job)
 			_role = current_human.job
-		else if(I)
-			_role = I.rank
+		else if(id_card)
+			_role = id_card.rank
+		if((_role == JOB_SURVIVOR) && id_card)
+			_role = id_card.assignment
 		switch(GET_DEFAULT_ROLE(_role))
 			if(JOB_SQUAD_ENGI) marine_rk = "engi"
 			if(JOB_SQUAD_SPECIALIST) marine_rk = "spec"
@@ -29,6 +31,13 @@
 			if(JOB_MARINE_RAIDER) marine_rk = "soc"
 			if(JOB_MARINE_RAIDER_SL) marine_rk = "soctl"
 			if(JOB_MARINE_RAIDER_CMD) marine_rk = "soccmd"
+			if(JOB_FORECON_CO) marine_rk = "frcn_co"
+			if(JOB_FORECON_SL) marine_rk = "frcn_sl"
+			if(JOB_FORECON_SYN) marine_rk = "frcn_syn"
+			if(JOB_FORECON_SNIPER, JOB_FORECON_MARKSMAN) marine_rk = "frcn_spc"
+			if(JOB_FORECON_SMARTGUNNER) marine_rk = "frcn_sg"
+			if(JOB_FORECON_SUPPORT) marine_rk = "frcn_med"
+			if(JOB_FORECON_RIFLEMAN) marine_rk = "frcn_rfn"
 		if(squad.squad_leader == current_human)
 			switch(squad.squad_type)
 				if("Squad") marine_rk = "leader_a"
@@ -67,6 +76,8 @@
 			_role = current_human.job
 		else if(ID)
 			_role = ID.rank
+		if((_role == JOB_SURVIVOR) && ID)
+			_role = ID.assignment
 		switch(_role)
 			if(JOB_XO)
 				marine_rk = "xo"
@@ -173,6 +184,20 @@
 				marine_rk = "wo_ro"
 			if(JOB_WO_PILOT)
 				marine_rk = "wo_mcrew"
+			if(JOB_FORECON_CO)
+				marine_rk = "frcn_co"
+			if(JOB_FORECON_SL)
+				marine_rk = "frcn_sl"
+			if(JOB_FORECON_SYN)
+				marine_rk = "frcn_syn"
+			if(JOB_FORECON_SNIPER, JOB_FORECON_MARKSMAN)
+				marine_rk = "frcn_spc"
+			if(JOB_FORECON_SMARTGUNNER)
+				marine_rk = "frcn_sg"
+			if(JOB_FORECON_SUPPORT)
+				marine_rk = "frcn_med"
+			if(JOB_FORECON_RIFLEMAN)
+				marine_rk = "frcn_rfn"
 			// Colonial Marshals
 			if(JOB_CMB_TL)
 				marine_rk = "mar"
