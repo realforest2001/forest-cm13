@@ -10,6 +10,12 @@ const KEY_MODS = {
   'CONTROL': true,
 };
 
+const getAllKeybinds = (glob_keybinds) => {
+  const all_keybinds = new Array();
+  Object.keys(glob_keybinds).map((x) => all_keybinds.push(...glob_keybinds[x]));
+  return all_keybinds;
+};
+
 export const KeyBinds = (props, context) => {
   const { act, data } = useBackend(context);
   const { glob_keybinds } = data;
@@ -17,12 +23,17 @@ export const KeyBinds = (props, context) => {
   const [selectedTab, setSelectedTab] = useLocalState(
     context,
     'progress',
-    'COMMUNICATION'
+    'ALL'
   );
 
   const [searchTerm, setSearchTerm] = useLocalState(context, 'searchTerm', '');
 
-  const filteredKeybinds = glob_keybinds[selectedTab].filter((val) =>
+  const keybinds_to_use =
+    searchTerm.length || selectedTab === 'ALL'
+      ? getAllKeybinds(glob_keybinds)
+      : glob_keybinds[selectedTab];
+
+  const filteredKeybinds = keybinds_to_use.filter((val) =>
     val.full_name.toLowerCase().match(searchTerm)
   );
 
@@ -31,26 +42,19 @@ export const KeyBinds = (props, context) => {
       <Window.Content scrollable>
         <Flex direction="column">
           <Flex.Item>
-            <Section title="Settings">
+            <Section
+              title="Settings"
+              buttons={
+                <Flex.Item>
+                  <Button
+                    color="red"
+                    icon="undo"
+                    onClick={() => act('clear_all_keybinds')}>
+                    Reset to Default
+                  </Button>
+                </Flex.Item>
+              }>
               <Flex direction="column">
-                <Flex.Item>
-                  <Flex>
-                    <Flex.Item grow={1}>
-                      <Box color="label">Reset to default:</Box>
-                    </Flex.Item>
-                    <Flex.Item>
-                      <Button
-                        color="red"
-                        icon="undo"
-                        onClick={() => act('clear_all_keybinds')}
-                      />
-                    </Flex.Item>
-                  </Flex>
-                </Flex.Item>
-                <Flex.Item>
-                  <Box height="5px" />
-                  <KeybindsDropdown />
-                </Flex.Item>
                 <Flex.Item>
                   <Box height="5px" />
                   <Input
@@ -60,21 +64,45 @@ export const KeyBinds = (props, context) => {
                     fluid
                   />
                 </Flex.Item>
+                <Flex.Item>
+                  <Box height="5px" />
+                  <KeybindsDropdown />
+                </Flex.Item>
               </Flex>
             </Section>
           </Flex.Item>
           <Flex direction="column">
-            {filteredKeybinds.map((keybind) => (
-              <Flex.Item key={keybind.full_name}>
-                <KeybindElement keybind={keybind} />
-                <Box
-                  backgroundColor="rgba(40, 40, 40, 255)"
-                  width="100%"
-                  height="2px"
-                  mt="2px"
-                />
-              </Flex.Item>
-            ))}
+            {selectedTab === 'ALL' && !searchTerm.length
+              ? Object.keys(glob_keybinds).map((category) => (
+                <Flex.Item key={category}>
+                  <Section title={category}>
+                    <Flex direction="column">
+                      {glob_keybinds[category].map((keybind) => (
+                        <Flex.Item key={keybind}>
+                          <KeybindElement keybind={keybind} />
+                          <Box
+                            backgroundColor="rgba(40, 40, 40, 255)"
+                            width="100%"
+                            height="2px"
+                            mt="2px"
+                          />
+                        </Flex.Item>
+                      ))}
+                    </Flex>
+                  </Section>
+                </Flex.Item>
+              ))
+              : filteredKeybinds.map((keybind) => (
+                <Flex.Item key={keybind.full_name}>
+                  <KeybindElement keybind={keybind} />
+                  <Box
+                    backgroundColor="rgba(40, 40, 40, 255)"
+                    width="100%"
+                    height="2px"
+                    mt="2px"
+                  />
+                </Flex.Item>
+              ))}
           </Flex>
         </Flex>
       </Window.Content>
@@ -88,15 +116,19 @@ const KeybindsDropdown = (props, context) => {
   const [selectedTab, setSelectedTab] = useLocalState(
     context,
     'progress',
-    'COMMUNICATION'
+    'ALL'
   );
-  const DropdownOptions = Object.keys(glob_keybinds);
+
+  const [searchTerm, setSearchTerm] = useLocalState(context, 'searchTerm', '');
+
+  const dropdownOptions = ['ALL', ...Object.keys(glob_keybinds)];
 
   return (
     <Dropdown
       width="360px"
       selected={selectedTab}
-      options={DropdownOptions}
+      options={dropdownOptions}
+      disabled={searchTerm.length}
       onSelected={(value) => setSelectedTab(value)}
     />
   );
@@ -208,6 +240,7 @@ export class ButtonKeybind extends Component {
 
     onFinish(listOfKeys);
     document.activeElement.blur();
+    clearInterval(this.timer);
   }
 
   handleKeyPress(e) {
@@ -215,12 +248,10 @@ export class ButtonKeybind extends Component {
 
     e.preventDefault();
 
-    if (e.key === 'Esc') {
-      this.doFinish();
-      return;
-    }
-
     let pressedKey = e.key.toUpperCase();
+
+    this.finishTimerStart(600);
+
     // Prevents repeating
     if (keysDown[pressedKey] && e.type === 'keydown') {
       return;
@@ -236,12 +267,20 @@ export class ButtonKeybind extends Component {
     });
   }
 
+  finishTimerStart(time) {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.doFinish(), time);
+  }
+
   doFocus() {
     this.setState({
       focused: true,
       keysDown: {},
     });
+    this.finishTimerStart(2000);
     globalEvents.on('keydown', this.preventPassthrough);
+    globalEvents.on('key', this.preventPassthrough);
+    globalEvents.on('keyup', this.preventPassthrough);
   }
 
   doBlur() {
@@ -250,6 +289,8 @@ export class ButtonKeybind extends Component {
       keysDown: {},
     });
     globalEvents.off('keydown', this.preventPassthrough);
+    globalEvents.off('key', this.preventPassthrough);
+    globalEvents.off('keyup', this.preventPassthrough);
   }
 
   render() {
@@ -267,6 +308,7 @@ export class ButtonKeybind extends Component {
             : content
         }
         selected={focused}
+        inline
         onClick={(e) => {
           if (focused && Object.keys(keysDown).length) {
             this.doFinish();
@@ -276,7 +318,6 @@ export class ButtonKeybind extends Component {
         onFocus={() => this.doFocus()}
         onBlur={() => this.doBlur()}
         onKeyDown={(e) => this.handleKeyPress(e)}
-        onKeyUp={(e) => this.handleKeyPress(e)}
       />
     );
   }

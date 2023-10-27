@@ -27,6 +27,8 @@
 	tacklestrength_min = 4
 	tacklestrength_max = 5
 
+	minimum_evolve_time = 9 MINUTES
+
 	minimap_icon = "spitter"
 
 /mob/living/carbon/xenomorph/spitter
@@ -49,6 +51,7 @@
 		/datum/action/xeno_action/activable/xeno_spit,
 		/datum/action/xeno_action/onclick/charge_spit,
 		/datum/action/xeno_action/activable/spray_acid/spitter,
+		/datum/action/xeno_action/onclick/tacmap,
 	)
 	inherent_verbs = list(
 		/mob/living/carbon/xenomorph/proc/vent_crawl,

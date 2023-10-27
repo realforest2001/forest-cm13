@@ -5,7 +5,6 @@
 	density = TRUE
 	anchored = TRUE
 	animate_movement = 1
-	luminosity = 2
 	can_buckle = TRUE
 
 	// The mobs that are in each position/seat of the vehicle
@@ -99,7 +98,7 @@
 		new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	healthcheck()
 
-/obj/vehicle/bullet_act(obj/item/projectile/P)
+/obj/vehicle/bullet_act(obj/projectile/P)
 	var/damage = P.damage
 	health -= damage
 	..()
@@ -126,6 +125,27 @@
 /obj/vehicle/attack_remote(mob/user as mob)
 	return
 
+/obj/vehicle/attack_alien(mob/living/carbon/xenomorph/attacking_xeno)
+	if(attacking_xeno.a_intent == INTENT_HELP)
+		return XENO_NO_DELAY_ACTION
+
+	if(attacking_xeno.mob_size < MOB_SIZE_XENO)
+		to_chat(attacking_xeno, SPAN_XENOWARNING("You're too small to do any significant damage to this vehicle!"))
+		return XENO_NO_DELAY_ACTION
+
+	attacking_xeno.animation_attack_on(src)
+
+	attacking_xeno.visible_message(SPAN_DANGER("[attacking_xeno] slashes [src]!"), SPAN_DANGER("You slash [src]!"))
+	playsound(attacking_xeno, pick('sound/effects/metalhit.ogg', 'sound/weapons/alien_claw_metal1.ogg', 'sound/weapons/alien_claw_metal2.ogg', 'sound/weapons/alien_claw_metal3.ogg'), 25, 1)
+
+	var/damage = (attacking_xeno.melee_vehicle_damage + rand(-5,5)) * brute_dam_coeff
+
+	health -= damage
+
+	healthcheck()
+
+	return XENO_NONCOMBAT_ACTION
+
 //-------------------------------------------
 // Vehicle procs
 //-------------------------------------------
@@ -145,13 +165,13 @@
 	if(powered && cell.charge < charge_use)
 		return 0
 	on = 1
-	SetLuminosity(initial(luminosity))
+	set_light(initial(light_range))
 	update_icon()
 	return 1
 
 /obj/vehicle/proc/turn_off()
 	on = 0
-	SetLuminosity(0)
+	set_light(0)
 	update_icon()
 
 /obj/vehicle/proc/explode()
@@ -241,10 +261,6 @@
 	. = ..()
 	seats[VEHICLE_DRIVER] = null
 
-/obj/vehicle/Destroy()
-	SetLuminosity(0)
-	. = ..()
-
 //-------------------------------------------------------
 // Stat update procs
 //-------------------------------------------------------
@@ -255,7 +271,7 @@
 	name = "\improper Soutomobile"
 	icon_state = "soutomobile"
 	desc = "Almost, but not quite, the best ride in the universe."
-	move_delay = 3 //The speed of a fed but shoeless pajamarine, or a bit slower than a heavy-armour marine.
+	move_delay = 3 //The speed of a fed but shoeless pajamarine, or a bit slower than a heavy-armor marine.
 	buckling_y = 4
 	layer = ABOVE_LYING_MOB_LAYER //Allows it to drive over people, but is below the driver.
 

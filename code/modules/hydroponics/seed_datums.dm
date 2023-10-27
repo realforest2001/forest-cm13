@@ -111,7 +111,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	// Cosmetics.
 	var/plant_icon   // Icon to use for the plant growing in the tray.
 	var/product_icon // Base to use for fruit coming from this plant (if a vine).
-	var/product_colour   // Colour to apply to product base (if a vine).
+	var/product_colour   // Color to apply to product base (if a vine).
 	var/packet_icon = "seed" // Icon to use for physical seed packet item.
 	var/biolum   // Plant is bioluminescent.
 	var/biolum_colour    // The color of the plant's radiance.
@@ -608,7 +608,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				product.desc += " On second thought, something about this one looks strange."
 
 			if(biolum)
-				product.SetLuminosity(biolum)
+				product.set_light(biolum)
 
 			//Handle spawning in living, mobile products (like dionaea).
 			if(istype(product,/mob/living))

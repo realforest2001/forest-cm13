@@ -13,20 +13,20 @@
 	var/isGlass = TRUE
 	black_market_value = 25
 
-/obj/item/reagent_container/food/drinks/bottle/bullet_act(obj/item/projectile/P)
+/obj/item/reagent_container/food/drinks/bottle/bullet_act(obj/projectile/P)
 	. = ..()
 	if(isGlass)
 		smash()
 
 ///Audio/visual bottle breaking effects start here
 /obj/item/reagent_container/food/drinks/bottle/proc/smash(mob/living/target, mob/living/user)
-	var/obj/item/weapon/melee/broken_bottle/B
+	var/obj/item/weapon/broken_bottle/B
 	if(user)
 		user.temp_drop_inv_item(src)
-		B = new /obj/item/weapon/melee/broken_bottle(user.loc)
+		B = new /obj/item/weapon/broken_bottle(user.loc)
 		user.put_in_active_hand(B)
 	else
-		B = new /obj/item/weapon/melee/broken_bottle(src.loc)
+		B = new /obj/item/weapon/broken_bottle(src.loc)
 	if(prob(33))
 		if(target)
 			new/obj/item/shard(target.loc) // Create a glass shard at the target's location!
@@ -341,6 +341,16 @@
 /obj/item/reagent_container/food/drinks/bottle/absinthe/Initialize()
 	. = ..()
 	reagents.add_reagent("absinthe", 100)
+
+/obj/item/reagent_container/food/drinks/bottle/blackout //used for testing alcohol code
+	name = "Blackout Stout"
+	desc = "Renowned through space and time, a bottle of Blackout is enough to knock out almost anyone. A true test for the true drunkard."
+	icon_state = "pwineglass"
+	center_of_mass = "x=16;y=6"
+
+/obj/item/reagent_container/food/drinks/bottle/blackout/Initialize()
+	. = ..()
+	reagents.add_reagent("blackout", 100)
 
 /obj/item/reagent_container/food/drinks/bottle/melonliquor
 	name = "Emeraldine Melon Liquor"

@@ -24,9 +24,19 @@
 	else
 		..()
 
-/obj/item/reagent_container/food/snacks/meat/syntiflesh
+/obj/item/reagent_container/food/snacks/meat/synthmeat
 	name = "synthetic meat"
 	desc = "A synthetic slab of flesh."
+
+/obj/item/reagent_container/food/snacks/meat/synthmeat/synthflesh //meat made from synthetics. Slightly toxic
+	name = "synthetic flesh"
+	desc = "A slab of artificial, inorganic 'flesh' that resembles human meat. Probably came from a synth."
+	icon_state = "synthmeat"
+	filling_color = "#ffffff"
+
+/obj/item/reagent_container/food/snacks/meat/synthmeat/synthetic/Initialize()
+	. = ..()
+	reagents.add_reagent("pacid", 1.5)
 
 /obj/item/reagent_container/food/snacks/meat/human
 	name = "human meat"
@@ -68,13 +78,13 @@
 	desc = "Delicious crab meat still attached to bits of shell."
 	icon_state = "crab_meat_2"
 
-/obj/item/reagent_container/food/snack/meat/fish/squid
+/obj/item/reagent_container/food/snacks/meat/fish/squid
 	name = "squid meat"
 	desc = "Mmm, calimari."
 	icon_state = "squid_meat"
 
 
-/obj/item/reagent_container/food/snack/meat/fish/squid/alt
+/obj/item/reagent_container/food/snacks/meat/fish/squid/alt
 	name = "sock squid meat"
 	desc = "Pink squishy meat from a squid or squid like creature. You're no marine biologist."
 	icon_state = "squid_meat_2"

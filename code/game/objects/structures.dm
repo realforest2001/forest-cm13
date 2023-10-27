@@ -15,7 +15,7 @@
 	projectile_coverage = PROJECTILE_COVERAGE_MEDIUM
 	can_block_movement = TRUE
 
-/obj/structure/Initialize()
+/obj/structure/Initialize(mapload, ...)
 	. = ..()
 	if(climbable)
 		verbs += /obj/structure/proc/climb_on
@@ -138,7 +138,13 @@
 			climb_string = "[user] tactically vaults over \the [src]!"
 	user.visible_message(SPAN_WARNING(climb_string))
 
+	var/list/grabbed_things = list()
+	for(var/obj/item/grab/grabbing in list(user.l_hand, user.r_hand))
+		grabbed_things += grabbing.grabbed_thing
+		grabbing.grabbed_thing.forceMove(user.loc)
 	user.forceMove(TT)
+	for(var/atom/movable/thing as anything in grabbed_things) // grabbed things aren't moved to the tile immediately to: make the animation better, preserve the grab
+		thing.forceMove(TT)
 
 /obj/structure/proc/structure_shaken()
 

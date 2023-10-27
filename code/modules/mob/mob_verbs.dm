@@ -99,7 +99,7 @@
 			mind.store_memory(msg)
 		else
 			src.sleeping = 9999999
-			message_admins("[key_name(usr)] auto-slept for attempting to exceed mob memory limit. (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservecoodjump=1;X=[src.loc.x];Y=[src.loc.y];Z=[src.loc.z]'>JMP</a>)")
+			message_admins("[key_name(usr)] auto-slept for attempting to exceed mob memory limit. [ADMIN_JMP(src.loc)]")
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
 
@@ -159,7 +159,7 @@
 // M.Login() //wat
 	return
 
-/*/mob/dead/observer/verb/observe()
+/mob/dead/observer/verb/observe()
 	set name = "Observe"
 	set category = "Ghost"
 
@@ -169,7 +169,7 @@
 	if(!target)
 		return
 
-	do_observe(target) */ //disabled thanks to le exploiterinos
+	do_observe(target)
 
 /mob/verb/cancel_camera()
 	set name = "Cancel Camera View"

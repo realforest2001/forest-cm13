@@ -180,6 +180,8 @@
 			remembered_dropped_objects -= weak_ref
 			break
 		if(previously_held_object.in_contents_of(check_turf))
+			if(previously_held_object.anchored)
+				return FALSE
 			put_in_hands(previously_held_object, drop_on_fail = FALSE)
 			return TRUE
 	return FALSE
@@ -209,7 +211,8 @@
 		update_inv_l_hand()
 
 	if (client)
-		client.screen -= I
+		client.remove_from_screen(I)
+
 	I.layer = initial(I.layer)
 	I.plane = initial(I.plane)
 	if(newloc)

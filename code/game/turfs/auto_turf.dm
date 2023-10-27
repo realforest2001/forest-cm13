@@ -4,7 +4,7 @@
 	icon_state = "sand_1"//editor icon
 	is_groundmap_turf = TRUE
 	var/icon_prefix = "sand"
-	var/layer_name = new/list("layer 1", "layer2", "layer 3", "layer 4", "layer 5")
+	var/layer_name = list("layer 1", "layer2", "layer 3", "layer 4", "layer 5")
 	var/variant = 0
 	var/variant_prefix_name = ""
 
@@ -183,7 +183,7 @@
 		L.forceMove(src)
 		L.pixel_x += rand(-5,5)
 		L.pixel_y += rand(-5,5)
-		L.SetLuminosity(2)
+		L.set_light(2)
 		playsound(user, 'sound/weapons/Genhit.ogg', 25, 1)
 
 //Digging up snow

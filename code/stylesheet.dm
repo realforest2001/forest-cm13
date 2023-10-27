@@ -27,7 +27,10 @@ em {font-style: normal; font-weight: bold;}
 .mod {color: #735638; font-weight: bold;}
 .adminmod {color: #402A14; font-weight: bold;}
 .mentorsay {color: #d4af57; font-weight: bold;}
+.mentorhelp {color: #009900; font-weight: bold;}
+.mentorstaff {color: #b5850d; font-weight: bold;}
 .staffsay {color: #b5850d; font-weight: bold;}
+.staff_ic {color: #000099;}
 
 .name { font-weight: bold;}
 
@@ -60,6 +63,7 @@ em {font-style: normal; font-weight: bold;}
 .echoradio {color: #3EB489;}
 .cryoradio {color: #4a4740;}
 .hcradio {color: #318779;}
+.pvstradio {color: #9b0612;}
 
 .medium { font-size: 2}
 .big { font-size: 2}

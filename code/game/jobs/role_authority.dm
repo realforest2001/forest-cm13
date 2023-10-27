@@ -23,7 +23,7 @@ var/global/datum/authority/branch/role/RoleAuthority
 #define MED_PRIORITY 2
 #define LOW_PRIORITY 3
 
-#define SHIPSIDE_ROLE_WEIGHT 0.5
+#define SHIPSIDE_ROLE_WEIGHT 0.25
 
 var/global/players_preassigned = 0
 
@@ -58,7 +58,12 @@ var/global/players_preassigned = 0
 											/datum/job/logistics,
 											/datum/job/marine,
 											/datum/job/antag,
-											/datum/job/special
+											/datum/job/special,
+											/datum/job/special/provost,
+											/datum/job/special/uaac,
+											/datum/job/special/uaac/tis,
+											/datum/job/special/uscm,
+											/datum/job/command/tank_crew //Rip VC
 											)
 	var/squads_all[] = typesof(/datum/squad) - /datum/squad
 	var/castes_all[] = subtypesof(/datum/caste_datum)
@@ -465,9 +470,9 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 				else
 					to_chat(user, "There are no [J.title] slots occupied in [sq.name] Squad.")
 					return
-			if(JOB_SQUAD_RTO)
-				if(sq.num_rto > 0)
-					sq.num_rto--
+			if(JOB_SQUAD_TEAM_LEADER)
+				if(sq.num_tl > 0)
+					sq.num_tl--
 				else
 					to_chat(user, "There are no [J.title] slots occupied in [sq.name] Squad.")
 					return
@@ -507,6 +512,9 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 
 	var/mob/living/carbon/human/H = M
 
+	if(J.job_options && H?.client?.prefs?.pref_special_job_options[J.title])
+		J.handle_job_options(H.client.prefs.pref_special_job_options[J.title])
+
 	var/job_whitelist = J.title
 	var/whitelist_status = J.get_whitelist_status(roles_whitelist, H.client)
 
@@ -545,6 +553,8 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 		var/turf/late_join_turf
 		if(GLOB.latejoin_by_squad[assigned_squad])
 			late_join_turf = get_turf(pick(GLOB.latejoin_by_squad[assigned_squad]))
+		else if(GLOB.latejoin_by_job[J.title])
+			late_join_turf = get_turf(pick(GLOB.latejoin_by_job[J.title]))
 		else
 			late_join_turf = get_turf(pick(GLOB.latejoin))
 		H.forceMove(late_join_turf)
@@ -642,6 +652,15 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 		if (S.roundstart && S.usable && S.faction == H.faction && S.name != "Root")
 			mixed_squads += S
 
+	//Deal with IOs first
+	if(H.job == JOB_INTEL)
+		var/datum/squad/intel_squad = get_squad_by_name(SQUAD_MARINE_INTEL)
+		if(!intel_squad || !istype(intel_squad)) //Something went horribly wrong!
+			to_chat(H, "Something went wrong with randomize_squad()! Tell a coder!")
+			return
+		intel_squad.put_marine_in_squad(H) //Found one, finish up
+		return
+
 	//Deal with non-standards first.
 	//Non-standards are distributed regardless of squad population.
 	//If the number of available positions for the job are more than max_whatever, it will break.
@@ -706,17 +725,17 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 						else if(S.num_specialists < lowest.num_specialists)
 							lowest = S
 
-			if(JOB_SQUAD_RTO)
+			if(JOB_SQUAD_TEAM_LEADER)
 				for(var/datum/squad/S in mixed_squads)
 					if(S.usable && S.roundstart)
-						if(!skip_limit && S.num_rto >= S.max_rto) continue
+						if(!skip_limit && S.num_tl >= S.max_tl) continue
 						if(pref_squad_name && S.name == pref_squad_name)
 							S.put_marine_in_squad(H) //fav squad has a spot for us.
 							return
 
 						if(!lowest)
 							lowest = S
-						else if(S.num_rto < lowest.num_rto)
+						else if(S.num_tl < lowest.num_tl)
 							lowest = S
 
 			if(JOB_SQUAD_SMARTGUN)
@@ -754,6 +773,8 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 			M = /mob/living/carbon/xenomorph/larva/predalien
 		if(XENO_CASTE_FACEHUGGER)
 			M = /mob/living/carbon/xenomorph/facehugger
+		if(XENO_CASTE_LESSER_DRONE)
+			M = /mob/living/carbon/xenomorph/lesser_drone
 		if(XENO_CASTE_RUNNER)
 			M = /mob/living/carbon/xenomorph/runner
 		if(XENO_CASTE_DRONE)
@@ -848,7 +869,7 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 		if(JOB_SQUAD_SMARTGUN)
 			if(new_squad.num_smartgun >= new_squad.max_smartgun)
 				return TRUE
-		if(JOB_SQUAD_RTO)
-			if(new_squad.num_rto >= new_squad.max_rto)
+		if(JOB_SQUAD_TEAM_LEADER)
+			if(new_squad.num_tl >= new_squad.max_tl)
 				return TRUE
 	return FALSE

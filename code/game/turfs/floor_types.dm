@@ -334,7 +334,9 @@
 /turf/open/floor/almayer/uscm/directional
 	icon_state = "logo_directional"
 
-
+/turf/open/floor/almayer/no_build
+	allow_construction = FALSE
+	hull_floor = TRUE
 
 // RESEARCH STUFF
 /turf/open/floor/almayer/research/containment/entrance
@@ -603,6 +605,9 @@
 			var/turf/open/floor/FF = get_step(src,direction)
 			FF.update_icon() // So siding get updated properly
 	return ..()
+
+/turf/open/floor/carpet/edge
+	icon_state = "carpetside"
 
 // Start Prison tiles
 

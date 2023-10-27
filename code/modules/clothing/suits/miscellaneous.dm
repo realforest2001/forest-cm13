@@ -9,7 +9,7 @@
  * Lasertag
  */
 /obj/item/clothing/suit/bluetag
-	name = "blue laser tag armour"
+	name = "blue laser tag armor"
 	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
@@ -28,7 +28,7 @@
 	siemens_coefficient = 3
 
 /obj/item/clothing/suit/redtag
-	name = "red laser tag armour"
+	name = "red laser tag armor"
 	desc = "Reputed to go faster."
 	icon_state = "redtag"
 	item_state = "redtag"
@@ -127,7 +127,7 @@
 		/obj/item/weapon/gun,
 		/obj/item/ammo_magazine,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/tool/lighter,
@@ -152,7 +152,7 @@
 		/obj/item/weapon/gun,
 		/obj/item/ammo_magazine,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/tool/lighter,
@@ -272,26 +272,57 @@
 	flags_armor_protection = BODY_FLAG_CHEST|BODY_FLAG_ARMS
 
 /obj/item/clothing/suit/storage/webbing
-	name = "External webbing"
+	name = "external webbing"
 	desc = "Designed to be worn over a jumpsuit rather than clipped on."
 	icon_state = "webbing"
 	item_state = "webbing"
 	allowed = list(
-		/obj/item/storage/fancy/cigarettes,
-		/obj/item/tool/lighter,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
 
+		/obj/item/storage/belt/gun/m4a3,
+		/obj/item/storage/belt/gun/m44,
+		/obj/item/storage/belt/gun/mateba,
+		/obj/item/storage/belt/gun/smartpistol,
+		/obj/item/weapon/gun,
+
 		/obj/item/device/flashlight,
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/radio,
-		/obj/item/tank/emergency_oxygen,
 		/obj/item/tool/crowbar,
 		/obj/item/tool/crew_monitor,
 		/obj/item/tool/pen,
 		/obj/item/storage/large_holster/machete,
+		/obj/item/storage/large_holster/katana,
+		/obj/item/device/motiondetector,
+	)
+
+/obj/item/clothing/suit/storage/utility_vest
+	name = "utility vest"
+	desc = "A utility vest to hold tools in."
+	icon_state = "synth_utility_vest"
+	item_state = "synth_utility_vest"
+	allowed = list(
+		/obj/item/weapon/baton,
+		/obj/item/handcuffs,
+		/obj/item/device/binoculars,
+		/obj/item/attachable/bayonet,
+
+		/obj/item/storage/belt/gun/m4a3,
+		/obj/item/storage/belt/gun/m44,
+		/obj/item/storage/belt/gun/mateba,
+		/obj/item/storage/belt/gun/smartpistol,
+		/obj/item/weapon/gun,
+
+		/obj/item/device/flashlight,
+		/obj/item/device/healthanalyzer,
+		/obj/item/device/radio,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/crew_monitor,
+		/obj/item/storage/large_holster/machete,
+		/obj/item/storage/large_holster/katana,
 		/obj/item/device/motiondetector,
 	)
 
@@ -333,26 +364,6 @@
 	icon_state = "red_pyjamas"
 	item_state = "red_pyjamas"
 	flags_armor_protection = BODY_FLAG_CHEST|BODY_FLAG_GROIN|BODY_FLAG_ARMS|BODY_FLAG_LEGS
-
-//coats
-
-/obj/item/clothing/suit/leathercoat
-	name = "leather coat"
-	desc = "A long, thick black leather coat."
-	icon_state = "leathercoat"
-	item_state = "leathercoat"
-
-/obj/item/clothing/suit/browncoat
-	name = "brown leather coat"
-	desc = "A long, brown leather coat."
-	icon_state = "browncoat"
-	item_state = "browncoat"
-
-/obj/item/clothing/suit/neocoat
-	name = "black coat"
-	desc = "A flowing, black coat."
-	icon_state = "neocoat"
-	item_state = "neocoat"
 
 //stripper
 /obj/item/clothing/under/stripper
@@ -431,11 +442,16 @@
 	allowed = list (
 		/obj/item/storage/fancy/cigarettes,
 		/obj/item/tool/lighter,
-		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/baton,
 		/obj/item/handcuffs,
 		/obj/item/device/binoculars,
 		/obj/item/attachable/bayonet,
 
+		/obj/item/storage/belt/gun/m4a3,
+		/obj/item/storage/belt/gun/m44,
+		/obj/item/storage/belt/gun/mateba,
+		/obj/item/storage/belt/gun/smartpistol,
+		/obj/item/weapon/gun,
 
 		/obj/item/device/flashlight,
 		/obj/item/device/healthanalyzer,
@@ -445,6 +461,7 @@
 		/obj/item/tool/crew_monitor,
 		/obj/item/tool/pen,
 		/obj/item/storage/large_holster/machete,
+		/obj/item/storage/large_holster/katana,
 		/obj/item/device/motiondetector,
 	)
 	min_cold_protection_temperature = T0C

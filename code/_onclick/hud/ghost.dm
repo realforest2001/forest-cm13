@@ -4,7 +4,7 @@
 /atom/movable/screen/ghost/MouseEntered()
 	flick(icon_state + "_anim", src)
 
-/atom/movable/screen/ghost/attack_ghost(mob/dead/observer/user)
+/atom/movable/screen/attack_ghost(mob/dead/observer/user)
 	Click()
 
 /atom/movable/screen/ghost/follow_ghosts
@@ -72,7 +72,7 @@
 /datum/hud/ghost/show_hud(version = 0, mob/viewmob)
 	// don't show this HUD if observing; show the HUD of the observee
 	var/mob/dead/observer/O = mymob
-	if (istype(O) && O.observetarget)
+	if (istype(O) && O.observe_target_mob)
 		plane_masters_update()
 		return FALSE
 
@@ -80,7 +80,8 @@
 	if(!.)
 		return
 	var/mob/screenmob = viewmob || mymob
-/* if(!screenmob.client.prefs.ghost_hud)
-		screenmob.client.screen -= static_inventory
-	else*/
-	screenmob.client.screen += static_inventory
+
+	if(!hud_shown)
+		screenmob.client.remove_from_screen(static_inventory)
+	else
+		screenmob.client.add_to_screen(static_inventory)

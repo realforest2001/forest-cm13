@@ -31,6 +31,10 @@
 		RegisterSignal(SSdcs, COMSIG_GLOB_MODE_PRESETUP, PROC_REF(disable_pmc))
 	return ..()
 
+/obj/item/device/cotablet/Destroy()
+	QDEL_NULL(tacmap)
+	return ..()
+
 /obj/item/device/cotablet/proc/disable_pmc()
 	if(MODE_HAS_FLAG(MODE_FACTION_CLASH))
 		add_pmcs = FALSE
@@ -49,6 +53,7 @@
 
 	data["faction"] = announcement_faction
 	data["cooldown_message"] = cooldown_between_messages
+	data["distresstimelock"] = DISTRESS_TIME_LOCK
 
 	return data
 
@@ -59,7 +64,6 @@
 	data["evac_status"] = EvacuationAuthority.evac_status
 	data["endtime"] = announcement_cooldown
 	data["distresstime"] = distress_cooldown
-	data["distresstimelock"] = DISTRESS_TIME_LOCK
 	data["worldtime"] = world.time
 
 	return data
@@ -87,6 +91,10 @@
 
 	switch(action)
 		if("announce")
+			if(usr.client.prefs.muted & MUTE_IC)
+				to_chat(usr, SPAN_DANGER("You cannot send Announcements (muted)."))
+				return
+
 			if(!COOLDOWN_FINISHED(src, announcement_cooldown))
 				to_chat(usr, SPAN_WARNING("Please wait [COOLDOWN_TIMELEFT(src, announcement_cooldown)/10] second\s before making your next announcement."))
 				return FALSE
@@ -137,6 +145,7 @@
 
 			log_game("[key_name(usr)] has called for an emergency evacuation.")
 			message_admins("[key_name_admin(usr)] has called for an emergency evacuation.")
+			log_ares_security("Initiate Evacuation", "[usr] has called for an emergency evacuation.")
 			. = TRUE
 
 		if("distress")
@@ -150,7 +159,7 @@
 			for(var/client/C in GLOB.admins)
 				if((R_ADMIN|R_MOD) & C.admin_holder.rights)
 					playsound_client(C,'sound/effects/sos-morse-code.ogg',10)
-			message_admins("[key_name(usr)] has requested a Distress Beacon! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];distress=\ref[usr]'>SEND</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccdeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
+			SSticker.mode.request_ert(usr)
 			to_chat(usr, SPAN_NOTICE("A distress beacon request has been sent to USCM Central Command."))
 			COOLDOWN_START(src, distress_cooldown, COOLDOWN_COMM_REQUEST)
 			return TRUE

@@ -13,7 +13,7 @@
 	throw_range = 2
 	w_class = SIZE_TINY
 	var/worth = 15
-	/// 'Counterfeit' bills cannot be inserted into the black market for dosh.
+	/// 'Counterfeit' bills cannot be inserted into the black market for dosh. Their worth is also quartered when entered into an ATM.
 	var/counterfeit = FALSE
 
 /obj/item/spacecash/Initialize(mapload, ...)
@@ -87,7 +87,7 @@
 /obj/item/spacecash/bundle/attack_self(mob/user)
 	..()
 	var/oldloc = loc
-	var/amount = tgui_input_number(user, "How many dollars do you want to take? (0 to [src.worth])", "Take Money", 20, src.worth, 0)
+	var/amount = tgui_input_number(user, "How many dollars do you want to take? (0 to [src.worth])", "Take Money", 0, src.worth, 0)
 	amount = round(Clamp(amount, 0, src.worth))
 	if(amount == 0)
 		return

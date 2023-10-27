@@ -23,8 +23,8 @@
 	add_language(LANGUAGE_ENGLISH)
 
 /mob/living/silicon/Destroy()
-	..()
 	SSmob.living_misc_mobs -= src
+	return ..()
 
 /mob/living/silicon/proc/show_laws()
 	return
@@ -101,7 +101,7 @@
 //can't inject synths
 /mob/living/silicon/can_inject(mob/user, error_msg)
 	if(error_msg)
-		to_chat(user, SPAN_WARNING("The armoured plating is too tough."))
+		to_chat(user, SPAN_WARNING("The armored plating is too tough."))
 	return 0
 
 
@@ -160,11 +160,11 @@
 
 	if(HUD_toggled[HUD_nbr])
 		HUD_toggled[HUD_nbr] = 0
-		H.remove_hud_from(src)
+		H.remove_hud_from(src, src)
 		to_chat(src, SPAN_NOTICE(" <B>[hud_choice] Disabled</B>"))
 	else
 		HUD_toggled[HUD_nbr] = 1
-		H.add_hud_to(src)
+		H.add_hud_to(src, src)
 		to_chat(src, SPAN_NOTICE(" <B>[hud_choice] Enabled</B>"))
 
 /mob/living/silicon/verb/pose()

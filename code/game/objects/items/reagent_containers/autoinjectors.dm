@@ -90,15 +90,6 @@
 	item_state = "emptyskill"
 	skilllock = SKILL_MEDICAL_DEFAULT
 
-/obj/item/reagent_container/hypospray/autoinjector/quickclot
-	name = "quick clot autoinjector"
-	chemname = "quickclot"
-	desc = "An autoinjector loaded with 3 uses of Quick Clot, a chemical designed to pause all bleeding. Renew doses as needed."
-	amount_per_transfer_from_this = LOWH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD
-	volume = (LOWH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD) * INJECTOR_USES
-	display_maptext = TRUE
-	maptext_label = "Qc"
-
 /obj/item/reagent_container/hypospray/autoinjector/adrenaline
 	name = "epinephrine autoinjector"
 	chemname = "adrenaline"
@@ -200,8 +191,10 @@
 
 /obj/item/reagent_container/hypospray/autoinjector/emergency
 	name = "emergency autoinjector (CAUTION)"
+	desc = "An auto-injector loaded with a special cocktail of chemicals, to be used in life-threatening situations. Doesn't require any training to use."
+	icon_state = "emptyskill"
+	item_state = "emptyskill"
 	chemname = "emergency"
-	desc = "An auto-injector loaded with a special cocktail of chemicals, to be used in life-threatening situations."
 	amount_per_transfer_from_this = (REAGENTS_OVERDOSE-1)*2 + (MED_REAGENTS_OVERDOSE-1)
 	volume = (REAGENTS_OVERDOSE-1)*2 + (MED_REAGENTS_OVERDOSE-1)
 	mixed_chem = TRUE
@@ -210,12 +203,6 @@
 	injectVOL = 70//limited-supply emergency injector with v.large injection of drugs. Variable sfx freq sometimes rolls too quiet.
 	display_maptext = TRUE //see anaesthetic injector
 	maptext_label = "!!"
-
-/obj/item/reagent_container/hypospray/autoinjector/emergency/skillless
-	name = "EZ emergency autoinjector (CAUTION)"
-	desc = "An auto-injector loaded with a special cocktail of chemicals, to be used in life-threatening situations. Doesn't require any training to use."
-	icon_state = "emptyskill"
-	item_state = "emptyskill"
 	skilllock = SKILL_MEDICAL_DEFAULT
 
 /obj/item/reagent_container/hypospray/autoinjector/emergency/Initialize()

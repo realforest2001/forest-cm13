@@ -24,8 +24,8 @@
 		/obj/structure/girder,
 		/obj/structure/machinery/door,
 		/obj/structure/machinery/cm_vending/sorted/attachments/blend,
-		/obj/structure/machinery/cm_vending/sorted/cargo_ammo/blend,
-		/obj/structure/machinery/cm_vending/sorted/cargo_guns/blend,
+		/obj/structure/machinery/cm_vending/sorted/cargo_ammo/cargo/blend,
+		/obj/structure/machinery/cm_vending/sorted/cargo_guns/cargo/blend,
 	)
 
 /turf/closed/wall/almayer/update_icon()
@@ -172,7 +172,7 @@
 	operating = TRUE
 	flick("containment_wall_divide_lowering", src)
 	icon_state = "containment_wall_divide_lowered"
-	SetOpacity(0)
+	set_opacity(0)
 	density = FALSE
 	operating = FALSE
 	change_weeds()
@@ -183,7 +183,7 @@
 	operating = TRUE
 	flick("containment_wall_divide_rising", src)
 	icon_state = "containment_wall_divide"
-	SetOpacity(1)
+	set_opacity(1)
 	density = TRUE
 	operating = FALSE
 
@@ -285,6 +285,8 @@
 	name = "window"
 	icon_state = "fakewindows"
 	opacity = FALSE
+
+INITIALIZE_IMMEDIATE(/turf/closed/wall/indestructible/splashscreen)
 
 /turf/closed/wall/indestructible/splashscreen
 	name = "Lobby Art"
@@ -459,6 +461,8 @@
 	walltype = WALL_CULT
 	color = "#3c3434"
 
+/turf/closed/wall/cult/make_girder(destroyed_girder)
+	return
 
 /turf/closed/wall/vault
 	icon_state = "rockvault"
@@ -592,19 +596,21 @@
 //SOLARIS RIDGE TILESET//
 
 /turf/closed/wall/solaris
-	name = "solaris ridge colony wall"
+	name = "colony wall"
 	icon = 'icons/turf/walls/solaris/solaris.dmi'
 	icon_state = "solaris_interior"
 	desc = "Tough looking walls that have been blasted by sand since the day they were erected. A testament to human willpower."
 	walltype = WALL_SOLARIS
 
 /turf/closed/wall/solaris/reinforced
+	name = "reinforced colony wall"
 	icon_state = "solaris_interior_r"
 	walltype = WALL_SOLARISR
 	damage_cap = HEALTH_WALL_REINFORCED
 	max_temperature = 28000
 
 /turf/closed/wall/solaris/reinforced/hull
+	name = "heavy reinforced colony wall"
 	icon_state = "solaris_interior_h"
 	hull = 1
 
@@ -612,7 +618,7 @@
 	name = "Colony Windbreaker"
 
 /turf/closed/wall/solaris/rock
-	name = "solaris ridge rock wall"
+	name = "rock wall"
 	icon_state = "solaris_rock"
 	walltype = WALL_SOLARIS_ROCK
 	hull = 1
@@ -746,6 +752,23 @@
 	var/should_track_build = FALSE
 	var/datum/cause_data/construction_data
 	flags_turf = TURF_ORGANIC
+
+/turf/closed/wall/resin/Initialize(mapload)
+	. = ..()
+
+	for(var/obj/effect/alien/weeds/node/weed_node in contents)
+		qdel(weed_node)
+
+	if(hivenumber == XENO_HIVE_NORMAL)
+		RegisterSignal(SSdcs, COMSIG_GLOB_GROUNDSIDE_FORSAKEN_HANDLING, PROC_REF(forsaken_handling))
+
+/turf/closed/wall/resin/proc/forsaken_handling()
+	SIGNAL_HANDLER
+	if(is_ground_level(z))
+		hivenumber = XENO_HIVE_FORSAKEN
+		set_hive_data(src, XENO_HIVE_FORSAKEN)
+
+	UnregisterSignal(SSdcs, COMSIG_GLOB_GROUNDSIDE_FORSAKEN_HANDLING)
 
 /turf/closed/wall/resin/pillar
 	name = "resin pillar segment"
@@ -1017,10 +1040,10 @@
 	else
 		return attack_hand(user)
 
-/obj/structure/alien/movable_wall/get_projectile_hit_boolean(obj/item/projectile/P)
+/obj/structure/alien/movable_wall/get_projectile_hit_boolean(obj/projectile/P)
 	return TRUE
 
-/obj/structure/alien/movable_wall/bullet_act(obj/item/projectile/P)
+/obj/structure/alien/movable_wall/bullet_act(obj/projectile/P)
 	. = ..()
 	take_damage(P.damage)
 
@@ -1134,9 +1157,13 @@
 	var/explosive_multiplier = 0.3
 	var/reflection_multiplier = 0.5
 
-/turf/closed/wall/resin/reflective/bullet_act(obj/item/projectile/P)
+/turf/closed/wall/resin/reflective/bullet_act(obj/projectile/P)
 	if(src in P.permutated)
 		return
+
+	//Ineffective if someone is sitting on the wall
+	if(locate(/mob) in contents)
+		return ..()
 
 	if(!prob(chance_to_reflect))
 		if(P.ammo.damage_type == BRUTE)
@@ -1146,7 +1173,7 @@
 		// Bullet gets absorbed if it has IFF or can't be reflected.
 		return
 
-	var/obj/item/projectile/new_proj = new(src, construction_data ? construction_data : create_cause_data(initial(name)))
+	var/obj/projectile/new_proj = new(src, construction_data ? construction_data : create_cause_data(initial(name)))
 	new_proj.generate_bullet(P.ammo)
 	new_proj.damage = P.damage * reflection_multiplier // don't make it too punishing
 	new_proj.accuracy = HIT_ACCURACY_TIER_7 // 35% chance to hit something
@@ -1162,7 +1189,7 @@
 
 	return TRUE
 
-/turf/closed/wall/resin/reflective/proc/bullet_ignore_turf(obj/item/projectile/P, turf/T)
+/turf/closed/wall/resin/reflective/proc/bullet_ignore_turf(obj/projectile/P, turf/T)
 	SIGNAL_HANDLER
 	if(T == src)
 		return COMPONENT_BULLET_PASS_THROUGH
@@ -1231,6 +1258,11 @@
 
 
 /turf/closed/wall/resin/attack_hand(mob/user)
+	if(isxeno(user) && istype(user.get_active_hand(), /obj/item/grab))
+		var/obj/item/grab/grab_item_dummy = user.get_active_hand()
+		var/mob/living/carbon/xenomorph/user_as_xenomorph = user
+		user_as_xenomorph.do_nesting_host(grab_item_dummy.grabbed_thing, src)
+
 	to_chat(user, SPAN_WARNING("You scrape ineffectively at \the [src]."))
 
 /turf/closed/wall/resin/attackby(obj/item/W, mob/living/user)

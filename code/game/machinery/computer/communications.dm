@@ -113,6 +113,10 @@
 
 		if("announce")
 			if(authenticated == 2)
+				if(usr.client.prefs.muted & MUTE_IC)
+					to_chat(usr, SPAN_DANGER("You cannot send Announcements (muted)."))
+					return
+
 				if(world.time < cooldown_message + COOLDOWN_COMM_MESSAGE_LONG)
 					to_chat(usr, SPAN_WARNING("Please allow at least [COOLDOWN_COMM_MESSAGE_LONG*0.1] second\s to pass between announcements."))
 					return FALSE
@@ -144,6 +148,7 @@
 
 				log_game("[key_name(usr)] has called for an emergency evacuation.")
 				message_admins("[key_name_admin(usr)] has called for an emergency evacuation.")
+				log_ares_security("Initiate Evacuation", "[usr] has called for an emergency evacuation.")
 				return TRUE
 
 			state = STATE_EVACUATION
@@ -163,6 +168,7 @@
 
 				log_game("[key_name(usr)] has canceled the emergency evacuation.")
 				message_admins("[key_name_admin(usr)] has canceled the emergency evacuation.")
+				log_ares_security("Cancel Evacuation", "[usr] has cancelled the emergency evacuation.")
 				return TRUE
 
 			state = STATE_EVACUATION_CANCEL
@@ -193,7 +199,7 @@
 				for(var/client/C in GLOB.admins)
 					if((R_ADMIN|R_MOD) & C.admin_holder.rights)
 						C << 'sound/effects/sos-morse-code.ogg'
-				message_admins("[key_name(usr)] has requested a Distress Beacon! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];distress=\ref[usr]'>SEND</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccdeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
+				SSticker.mode.request_ert(usr)
 				to_chat(usr, SPAN_NOTICE("A distress beacon request has been sent to USCM Central Command."))
 
 				cooldown_request = world.time
@@ -227,7 +233,7 @@
 				for(var/client/C in GLOB.admins)
 					if((R_ADMIN|R_MOD) & C.admin_holder.rights)
 						C << 'sound/effects/sos-morse-code.ogg'
-				message_admins("[key_name(usr)] has requested Self-Destruct! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
+				message_admins("[key_name(usr)] has requested Self-Destruct! [CC_MARK(usr)] (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) [ADMIN_JMP_USER(usr)] [CC_REPLY(usr)]")
 				to_chat(usr, SPAN_NOTICE("A self-destruct request has been sent to USCM Central Command."))
 				cooldown_destruct = world.time
 				return TRUE
@@ -294,13 +300,15 @@
 
 		if("selectlz")
 			if(!SSticker.mode.active_lz)
-				var/lz_choices = list()
-				for(var/obj/structure/machinery/computer/shuttle_control/console in machines)
-					if(is_ground_level(console.z) && !console.onboard && console.shuttle_type == SHUTTLE_DROPSHIP)
-						lz_choices += console
-				var/new_lz = input(usr, "Choose the primary LZ for this operation", "Operation Staging")  as null|anything in lz_choices
-				if(new_lz)
-					SSticker.mode.select_lz(new_lz)
+				var/lz_choices = list("lz1", "lz2")
+				var/new_lz = tgui_input_list(usr, "Select primary LZ", "LZ Select", lz_choices)
+				if(!new_lz)
+					return
+				if(new_lz == "lz1")
+					SSticker.mode.select_lz(locate(/obj/structure/machinery/computer/shuttle/dropship/flight/lz1))
+				else
+					SSticker.mode.select_lz(locate(/obj/structure/machinery/computer/shuttle/dropship/flight/lz2))
+
 
 		else return FALSE
 

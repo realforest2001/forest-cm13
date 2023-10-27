@@ -2,7 +2,6 @@
 	ERT Shuttles
 */
 
-#define ERT_SHUTTLE_DEFAULT_CALLTIME 30 SECONDS
 #define ERT_SHUTTLE_DEFAULT_RECHARGE 90 SECONDS
 
 #define ADMIN_LANDING_PAD_1 "base-ert1"
@@ -18,7 +17,7 @@
 	area_type = /area/shuttle/ert
 	width = 7
 	height = 13
-	callTime = ERT_SHUTTLE_DEFAULT_CALLTIME // 30s flight time
+	callTime = ERT_SHUTTLE_TRANSIT_DURATION
 	rechargeTime = ERT_SHUTTLE_DEFAULT_RECHARGE // 90s cooldown to recharge
 	var/list/doors = list()
 	var/list/external_doors = list()
@@ -106,6 +105,13 @@
 	port_direction = NORTH
 
 // ERT Shuttle 4
+
+/obj/docking_port/mobile/emergency_response/ert4
+	name = "TWE Shuttle"
+	id = MOBILE_SHUTTLE_ID_ERT4
+	preferred_direction = SOUTH
+	port_direction = NORTH
+
 /obj/docking_port/mobile/emergency_response/small
 	name = "Rescue Shuttle"
 	id = MOBILE_SHUTTLE_ID_ERT_SMALL
@@ -115,6 +121,7 @@
 	height = 9
 	var/port_door
 	var/starboard_door
+
 
 /obj/docking_port/mobile/emergency_response/small/Initialize(mapload)
 	. = ..()
@@ -294,6 +301,14 @@
 	height = 29
 	roundstart_template = /datum/map_template/shuttle/big_ert
 
+/obj/docking_port/stationary/emergency_response/idle_port6
+	name = "Response Station Landing Pad 6"
+	dir = NORTH
+	id = ADMIN_LANDING_PAD_5
+	width  = 17
+	height = 29
+	roundstart_template = /datum/map_template/shuttle/twe_ert
+
 /datum/map_template/shuttle/response_ert
 	name = "Response Shuttle"
 	shuttle_id = "ert_response_shuttle"
@@ -305,6 +320,10 @@
 /datum/map_template/shuttle/upp_ert
 	name = "UPP Shuttle"
 	shuttle_id = "ert_upp_shuttle"
+
+/datum/map_template/shuttle/twe_ert
+	name = "TWE Shuttle"
+	shuttle_id = "ert_twe_shuttle"
 
 /datum/map_template/shuttle/small_ert
 	name = "Rescue Shuttle"

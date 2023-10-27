@@ -59,6 +59,10 @@
 
 /obj/effect/overlay/temp/point/Initialize(mapload, mob/M, atom/actual_pointed_atom)
 	. = ..()
+
+	if(!M)
+		return INITIALIZE_HINT_QDEL
+
 	var/turf/T1 = loc
 	var/turf/T2 = M.loc
 
@@ -107,6 +111,9 @@
 /obj/effect/overlay/temp/point/big/queen/Initialize(mapload, mob/owner)
 	. = ..()
 
+	if(!owner)
+		return INITIALIZE_HINT_QDEL
+
 	self_icon = image(icon, src, icon_state = icon_state)
 	LAZYINITLIST(clients)
 
@@ -138,7 +145,7 @@
 	name = "laser"
 	anchored = TRUE
 	mouse_opacity = MOUSE_OPACITY_ICON
-	luminosity = 2
+	light_range = 2
 	icon = 'icons/obj/items/weapons/projectiles.dmi'
 	icon_state = "laser_target_coordinate"
 	effect_duration = 600
@@ -149,14 +156,13 @@
 		source_binoc.laser_cooldown = world.time + source_binoc.cooldown_duration
 		source_binoc.coord = null
 		source_binoc = null
-	SetLuminosity(0)
 	. = ..()
 
 /obj/effect/overlay/temp/laser_target
 	name = "laser"
 	anchored = TRUE
 	mouse_opacity = MOUSE_OPACITY_ICON
-	luminosity = 2
+	light_range = 2
 	icon = 'icons/obj/items/weapons/projectiles.dmi'
 	icon_state = "laser_target2"
 	effect_duration = 600
@@ -191,7 +197,6 @@
 		source_binoc.laser = null
 		source_binoc = null
 
-	SetLuminosity(0)
 	. = ..()
 
 /obj/effect/overlay/temp/laser_target/ex_act(severity) //immune to explosions
@@ -207,15 +212,11 @@
 /obj/effect/overlay/temp/blinking_laser
 	name = "blinking laser"
 	anchored = TRUE
-	luminosity = 2
+	light_range = 2
 	effect_duration = 10
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	icon = 'icons/obj/items/weapons/projectiles.dmi'
 	icon_state = "laser_target3"
-
-/obj/effect/overlay/temp/blinking_laser/Destroy()
-	SetLuminosity(0)
-	. = ..()
 
 /obj/effect/overlay/temp/emp_sparks
 	icon = 'icons/effects/effects.dmi'
@@ -243,6 +244,9 @@
 	effect_duration = 14
 
 /obj/effect/overlay/temp/gib_animation/New(Loc, mob/source_mob, gib_icon)
+	if(!source_mob)
+		return
+
 	pixel_x = source_mob.pixel_x
 	pixel_y = source_mob.pixel_y
 	icon_state = gib_icon
@@ -273,6 +277,9 @@
 	effect_duration = 12
 
 /obj/effect/overlay/temp/dust_animation/New(Loc, mob/source_mob, gib_icon)
+	if(!source_mob)
+		return
+
 	pixel_x = source_mob.pixel_x
 	pixel_y = source_mob.pixel_y
 	icon_state = gib_icon

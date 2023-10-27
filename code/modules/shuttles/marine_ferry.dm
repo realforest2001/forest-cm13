@@ -4,23 +4,6 @@
 //Front-end this should look exactly the same, save for a minor timing difference (about 1-3 deciseconds)
 //Some of this code is ported from the previous shuttle system and modified for these purposes.
 
-
-/*
-/client/verb/TestAlmayerEvac()
-	set name = "Test Almayer Evac"
-
-	for(var/datum/shuttle/ferry/marine/M in shuttle_controller.process_shuttles)
-		if(M.info_tag == "Almayer Evac" || M.info_tag == "Alt Almayer Evac")
-			spawn(1)
-				M.short_jump()
-				to_world("LAUNCHED THING WITH TAG [M.shuttle_tag]")
-		else if(M.info_tag == "Almayer Dropship")
-			spawn(1)
-				M.short_jump()
-				to_world("LAUNCHED THING WITH TAG [M.shuttle_tag]")
-		else to_world("did not launch thing with tag [M.shuttle_tag]")
-*/
-
 /datum/shuttle/ferry/marine
 	var/shuttle_tag //Unique ID for finding which landmarks to use
 	var/info_tag //Identifies which coord datums to copy
@@ -97,12 +80,6 @@
 	var/list/L = s_info[info_tag]
 	info_datums = L.Copy()
 
-/datum/shuttle/ferry/marine/proc/launch_crash(user)
-	if(!can_launch()) return //There's another computer trying to launch something
-
-	in_use = user
-	process_state = FORCE_CRASH
-
 /datum/shuttle/ferry/marine/proc/set_automated_launch(bool_v)
 	automated_launch = bool_v
 	if(bool_v)
@@ -125,6 +102,7 @@
 		automated_launch = FALSE
 	automated_launch_timer = TIMER_ID_NULL
 	ai_silent_announcement("Dropship '[name]' departing.")
+	log_ares_flight("Automated", "Dropship [name] launched on an automatic flight.")
 
 
 /*
@@ -151,12 +129,6 @@
 				else short_jump()
 
 				process_state = WAIT_ARRIVE
-
-		if (FORCE_CRASH)
-			if(move_time) long_jump_crash()
-			else short_jump() //If there's no move time, we are doing this normally
-
-			process_state = WAIT_ARRIVE
 
 		if (FORCE_LAUNCH)
 			if (move_time) long_jump()
@@ -257,7 +229,7 @@
 			if(X && X.stat != DEAD)
 				var/name = "Unidentified Lifesigns"
 				var/input = "Unidentified lifesigns detected onboard. Recommendation: lockdown of exterior access ports, including ducting and ventilation."
-				shipwide_ai_announcement(input, name, 'sound/AI/unidentified_lifesigns.ogg')
+				shipwide_ai_announcement(input, name, 'sound/AI/unidentified_lifesigns.ogg', ares_logging = ARES_LOG_SECURITY)
 				set_security_level(SEC_LEVEL_RED)
 				break
 
@@ -285,11 +257,6 @@
 
 	close_doors(turfs_int) // adding this for safety.
 
-	var/list/lightssource = get_landing_lights(T_src)
-	for(var/obj/structure/machinery/landinglight/F in lightssource)
-		if(F.id == shuttle_tag)
-			F.turn_off()
-
 	if(SSticker?.mode && !(SSticker.mode.flags_round_type & MODE_DS_LANDED)) //Launching on first drop.
 		SSticker.mode.ds_first_drop()
 
@@ -306,13 +273,6 @@
 	playsound_area(get_area(turfs_int[sound_target]), sound_landing, 100)
 	playsound(turfs_trg[sound_target], sound_landing, 100)
 	playsound_area(get_area(turfs_int[sound_target]), channel = SOUND_CHANNEL_AMBIENCE, status = SOUND_UPDATE)
-
-
-	var/list/lightsdest = get_landing_lights(T_trg)
-	for(var/obj/structure/machinery/landinglight/F in lightsdest)
-		if(F.id == shuttle_tag)
-			F.turn_on()
-
 	sleep(100) //Wait for it to finish.
 
 	if(EvacuationAuthority.dest_status == NUKE_EXPLOSION_FINISHED)
@@ -450,17 +410,12 @@
 
 	close_doors(turfs_int) // adding this for safety.
 
-	var/list/lights = get_landing_lights(T_src)
-	for(var/obj/structure/machinery/landinglight/F in lights)
-		if(F.id == shuttle_tag)
-			F.turn_off()
-
 	in_transit_time_left = travel_time
 	while(in_transit_time_left > 0)
 		// At halftime, we announce whether or not the AA forced the dropship to divert
 		// The rounding is because transit time is decreased by 10 each loop. Travel time, however, might not be a multiple of 10
 		if(in_transit_time_left == round(travel_time / 2, 10) && true_crash_target_section != crash_target_section)
-			marine_announcement("A hostile aircraft on course for the [true_crash_target_section] has been successfully deterred.", "IX-50 MGAD System")
+			marine_announcement("A hostile aircraft on course for the [true_crash_target_section] has been successfully deterred.", "IX-50 MGAD System", logging = ARES_LOG_SECURITY)
 
 			var/area/shuttle_area
 			for(var/turf/T in turfs_int)
@@ -484,10 +439,10 @@
 
 	//This is where things change and shit gets real
 
-	marine_announcement("DROPSHIP ON COLLISION COURSE. CRASH IMMINENT." , "EMERGENCY", 'sound/AI/dropship_emergency.ogg')
+	marine_announcement("DROPSHIP ON COLLISION COURSE. CRASH IMMINENT." , "EMERGENCY", 'sound/AI/dropship_emergency.ogg', logging = ARES_LOG_SECURITY)
 
 	for(var/mob/dead/observer/observer as anything in GLOB.observer_list)
-		to_chat(observer, SPAN_DEADSAY(FONT_SIZE_LARGE("The dropship is about to impact [get_area_name(T_trg)]" + " (<a href='?src=\ref[observer];jumptocoord=1;X=[T_trg.x];Y=[T_trg.y];Z=[T_trg.z]'>JMP</a>)")))
+		to_chat(observer, SPAN_DEADSAY(FONT_SIZE_LARGE("The dropship is about to impact [get_area_name(T_trg)]" + " [OBSERVER_JMP(observer, T_trg)]")))
 
 	playsound_area(get_area(turfs_int[sound_target]), sound_landing, 100)
 	playsound_area(get_area(turfs_int[sound_target]), channel = SOUND_CHANNEL_AMBIENCE, status = SOUND_UPDATE)
@@ -540,7 +495,7 @@
 				break
 		sleep(1)
 
-	for(var/mob/living/carbon/affected_mob in (GLOB.alive_human_list + GLOB.living_xeno_list)) //knock down mobs
+	for(var/mob/living/carbon/affected_mob in (GLOB.alive_human_list + GLOB.living_xeno_list))
 		if(affected_mob.z != T_trg.z)
 			continue
 		if(affected_mob.buckled)
@@ -578,15 +533,15 @@
 
 
 	for (var/obj/structure/machinery/door_display/research_cell/d in machines)
-		if(is_mainship_level(d.z) || is_loworbit_level(d.z))
+		if(is_mainship_level(d.z) || is_reserved_level(d.z))
 			d.ion_act() //Breaking xenos out of containment
 
 	//Stolen from events.dm. WARNING: This code is old as hell
 	for (var/obj/structure/machinery/power/apc/APC in machines)
-		if(is_mainship_level(APC.z) || is_loworbit_level(APC.z))
+		if(is_mainship_level(APC.z) || is_reserved_level(APC.z))
 			APC.ion_act()
 	for (var/obj/structure/machinery/power/smes/SMES in machines)
-		if(is_mainship_level(SMES.z) || is_loworbit_level(SMES.z))
+		if(is_mainship_level(SMES.z) || is_reserved_level(SMES.z))
 			SMES.ion_act()
 
 	//END: Heavy lifting backend
@@ -597,6 +552,9 @@
 	if(SSticker.mode)
 		SSticker.mode.is_in_endgame = TRUE
 		SSticker.mode.force_end_at = world.time + 15000 // 25 mins
+		if(istype(SSticker.mode, /datum/game_mode/colonialmarines))
+			var/datum/game_mode/colonialmarines/colonial_marines = SSticker.mode
+			colonial_marines.add_current_round_status_to_end_results("Hijack")
 
 /datum/shuttle/ferry/marine/proc/disable_latejoin()
 	enter_allowed = FALSE

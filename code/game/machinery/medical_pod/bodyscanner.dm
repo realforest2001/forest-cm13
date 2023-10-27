@@ -5,7 +5,6 @@
 	name = "body scanner"
 	icon_state = "body_scanner"
 
-
 	use_power = USE_POWER_IDLE
 	idle_power_usage = 60
 	active_power_usage = 10000 //10 kW. It's a big all-body scanner.
@@ -63,8 +62,6 @@
 		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
 			deconstruct(FALSE)
 			return
-		else
-	return
 
 #ifdef OBJECTS_PROXY_SPEECH
 // Transfers speech to occupant
@@ -125,8 +122,6 @@
 		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
 			deconstruct(FALSE)
 			return
-		else
-	return
 
 /obj/structure/machinery/body_scanconsole/power_change()
 	..()

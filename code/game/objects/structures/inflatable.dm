@@ -44,7 +44,7 @@
 	health = 50
 	var/deflated = FALSE
 
-/obj/structure/inflatable/bullet_act(obj/item/projectile/Proj)
+/obj/structure/inflatable/bullet_act(obj/projectile/Proj)
 	health -= Proj.damage
 	..()
 	if(health <= 0 && !deflated)
@@ -112,12 +112,12 @@
 		visible_message("[src] rapidly deflates!")
 		flick("wall_popping", src)
 		sleep(10)
-		deconstruct(TRUE)
+		deconstruct(FALSE)
 	else
 		visible_message("[src] slowly deflates.")
 		flick("wall_deflating", src)
 		spawn(50)
-			deconstruct(FALSE)
+			deconstruct(TRUE)
 
 
 /obj/structure/inflatable/deconstruct(disassembled = TRUE)

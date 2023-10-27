@@ -28,6 +28,11 @@
 	if (fixture_type == "bulb")
 		icon_state = "bulb-construct-stage1"
 
+/obj/structure/machinery/light_construct/Destroy()
+	newlight = null
+	. = ..()
+
+
 /obj/structure/machinery/light_construct/get_examine_text(mob/user)
 	. = ..()
 	switch(stage)
@@ -131,13 +136,14 @@
 	icon = 'icons/obj/items/lighting.dmi'
 	var/base_state = "tube" // base description and icon_state
 	icon_state = "tube1"
-	desc = "A bright fluorescent tube light. Looking at it for too long makes your eyes go watery."
+	desc = "A lighting fixture that is fitted with a bright fluorescent light tube. Looking at it for too long makes your eyes go watery."
 	anchored = TRUE
 	layer = FLY_LAYER
 	use_power = USE_POWER_IDLE
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = POWER_CHANNEL_LIGHT //Lights are calc'd via area so they dont need to be in the machine list
+	light_system = STATIC_LIGHT
 	var/on = 0 // 1 if on, 0 if off
 	var/on_gs = 0
 	var/brightness = 8 // luminosity when on, also used in power calculation
@@ -161,6 +167,10 @@
 /obj/structure/machinery/light/containment/attack_alien(mob/living/carbon/xenomorph/M)
 	return
 
+/obj/structure/machinery/light/blue
+	icon_state = "btube1"
+	base_state = "btube"
+	desc = "A lighting fixture that is fitted with a bright blue fluorescent light tube. Looking at it for too long makes your eyes go watery."
 
 // the smaller bulb light fixture
 
@@ -169,26 +179,45 @@
 	base_state = "bulb"
 	fitting = "bulb"
 	brightness = 4
-	desc = "A small lighting fixture."
+	desc = "A small lighting fixture that is fitted with a bright fluorescent light bulb. Looking at it for too long makes your eyes go watery."
+	light_type = /obj/item/light_bulb/bulb
+
+/obj/structure/machinery/light/small/blue
+	icon_state = "bbulb1"
+	base_state = "bbulb"
+	fitting = "bulb"
+	brightness = 4
+	desc = "A small lighting fixture that is fitted with a bright blue fluorescent light bulb. Looking at it for too long makes your eyes go watery."
 	light_type = /obj/item/light_bulb/bulb
 
 /obj/structure/machinery/light/double
 	icon_state = "ptube1"
 	base_state = "ptube"
-	brightness = 6
+	desc = "A lighting fixture that can be fitted with two bright blue fluorescent light tubes for that extra eye-watering goodness."
+
 /obj/structure/machinery/light/double/blue
 	icon_state = "bptube1"
 	base_state = "bptube"
-/obj/structure/machinery/light/alt
-	icon_state = "ltube1"
-	base_state = "ltube"
-
+	desc = "A lighting fixture that can be fitted with two bright fluorescent light tubes for that extra eye-watering goodness."
 
 /obj/structure/machinery/light/spot
 	name = "spotlight"
+	icon_state = "slight1"
+	base_state = "slight"
+	desc = "A wide light fixture fitted with a large, very bright fluorescent light tube. You want to sneeze just looking at it."
 	fitting = "large tube"
 	light_type = /obj/item/light_bulb/tube/large
 	brightness = 12
+
+/obj/structure/machinery/light/spot/blue
+	name = "spotlight"
+	icon_state = "bslight1"
+	base_state = "bslight"
+	desc = "A wide light fixture fitted with a large, blue, very bright fluorescent light tube. You want to sneeze just looking at it."
+	fitting = "large tube"
+	light_type = /obj/item/light_bulb/tube/large/
+	brightness = 12
+
 
 /obj/structure/machinery/light/built/Initialize()
 	. = ..()
@@ -242,7 +271,6 @@
 	if(A)
 		on = 0
 // A.update_lights()
-	SetLuminosity(0)
 	. = ..()
 
 /obj/structure/machinery/light/proc/is_broken()
@@ -266,7 +294,6 @@
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/structure/machinery/light/proc/update(trigger = 1)
-	SSlighting.lights_current.Add(light)
 	update_icon()
 	if(on)
 		if(luminosity != brightness)
@@ -282,13 +309,13 @@
 					status = LIGHT_BURNED
 					icon_state = "[base_state]-burned"
 					on = 0
-					SetLuminosity(0)
+					set_light(0)
 			else
 				update_use_power(USE_POWER_ACTIVE)
-				SetLuminosity(brightness)
+				set_light(brightness)
 	else
 		update_use_power(USE_POWER_NONE)
-		SetLuminosity(0)
+		set_light(0)
 
 	if(on != on_gs)
 		on_gs = on
@@ -411,8 +438,8 @@
 /obj/structure/machinery/light/proc/has_power()
 	var/area/A = src.loc.loc
 	if(!src.needs_power)
-		return A.master.lightswitch
-	return A.master.lightswitch && A.master.power_light
+		return A.lightswitch
+	return A.lightswitch && A.power_light
 
 /obj/structure/machinery/light/proc/flicker(amount = rand(10, 20))
 	if(flickering) return
@@ -562,9 +589,8 @@
 /obj/structure/machinery/light/power_change()
 	spawn(10)
 		if(loc)
-			var/area/A = src.loc.loc
-			A = A.master
-			if(!src.needs_power)
+			var/area/A = get_area(src)
+			if(!needs_power || A.unlimited_power)
 				seton(A.lightswitch)
 				return
 			seton(A.lightswitch && A.power_light)
@@ -575,7 +601,7 @@
 	if(prob(max(0, exposed_temperature - 673)))   //0% at <400C, 100% at >500C
 		broken()
 
-/obj/structure/machinery/light/bullet_act(obj/item/projectile/P)
+/obj/structure/machinery/light/bullet_act(obj/projectile/P)
 	src.bullet_ping(P)
 	if(P.ammo.damage_type == BRUTE)
 		if(P.damage > 10)
@@ -635,7 +661,10 @@
 /obj/item/light_bulb/tube/large
 	w_class = SIZE_SMALL
 	name = "large light tube"
+	icon_state = "largetube"
+	base_state = "largetube"
 	brightness = 15
+	matter = list("glass" = 100)
 
 /obj/item/light_bulb/bulb
 	name = "light bulb"
@@ -658,8 +687,8 @@
 /obj/item/light_bulb/tube/prison
 	name = "light tubes"
 	desc = "Replacement light tubes."
-	icon_state = "pbulb"
-	base_state = "pbulb"
+	icon_state = "ptube0"
+	base_state = "ptube0"
 	item_state = "contvapour"
 	matter = list("glass" = 100)
 	brightness = 5
@@ -725,7 +754,7 @@
 	power_channel = POWER_CHANNEL_LIGHT //Lights are calc'd via area so they dont need to be in the machine list
 	unslashable = TRUE
 	unacidable = TRUE
-	plane = FLOOR_PLANE
+	var/obj/docking_port/stationary/marine_dropship/linked_port = null
 
 //Don't allow blowing those up, so Marine nades don't fuck them
 /obj/structure/machinery/landinglight/ex_act(severity)
@@ -735,9 +764,15 @@
 	. = ..()
 	turn_off()
 
+/obj/structure/machinery/landinglight/Destroy()
+	. = ..()
+	if(linked_port)
+		linked_port.landing_lights -= src
+		linked_port = null
+
 /obj/structure/machinery/landinglight/proc/turn_off()
 	icon_state = initial(icon_state)
-	SetLuminosity(0)
+	set_light(0)
 
 /obj/structure/machinery/landinglight/ds1
 	id = "USS Almayer Dropship 1" // ID for landing zone
@@ -747,45 +782,45 @@
 
 /obj/structure/machinery/landinglight/proc/turn_on()
 	icon_state = initial(icon_state) + "0"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds1/delayone/turn_on()
 	icon_state = initial(icon_state) + "1"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds1/delaytwo/turn_on()
 	icon_state = initial(icon_state) + "2"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds1/delaythree/turn_on()
 	icon_state = initial(icon_state) + "3"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds2/delayone/turn_on()
 	icon_state = initial(icon_state) + "1"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds2/delaytwo/turn_on()
 	icon_state = initial(icon_state) + "2"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds2/delaythree/turn_on()
 	icon_state = initial(icon_state) + "3"
-	SetLuminosity(2)
+	set_light(2)
 
 /obj/structure/machinery/landinglight/ds1/spoke
 	icon_state = "lz_spoke_light"
 
 /obj/structure/machinery/landinglight/ds1/spoke/turn_on()
 	icon_state = initial(icon_state) + "1"
-	SetLuminosity(3)
+	set_light(3)
 
 /obj/structure/machinery/landinglight/ds2/spoke
 	icon_state = "lz_spoke_light"
 
 /obj/structure/machinery/landinglight/ds2/spoke/turn_on()
 	icon_state = initial(icon_state) + "1"
-	SetLuminosity(3)
+	set_light(3)
 
 /obj/structure/machinery/landinglight/escape_pods
 	id = "EVACUATION"

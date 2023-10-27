@@ -8,7 +8,7 @@
 
 // creates a new object and deletes itself
 /obj/effect/spawner/random/Initialize()
-	..()
+	. = ..()
 
 	if(!prob(spawn_nothing_percentage))
 		if(spawn_on_roundstart)
@@ -31,7 +31,7 @@
 // creates the random item
 /obj/effect/spawner/random/proc/spawn_item()
 	var/build_path = item_to_spawn()
-	if(isnull(build_path))
+	if(!ispath(build_path))
 		return
 	return (new build_path(src.loc))
 
@@ -57,10 +57,13 @@
 	icon_state = "atmos"
 
 /obj/effect/spawner/random/technology_scanner/item_to_spawn()
-	return pick(prob(5);/obj/item/device/t_scanner,\
-				prob(2);/obj/item/device/radio,\
-				prob(5);/obj/item/device/analyzer)
-
+	return pick_weight(list(
+		"none" = 10,
+		/obj/item/device/t_scanner = 10,
+		/obj/item/device/radio = 8,
+		/obj/item/device/analyzer = 10,
+		/obj/item/device/black_market_hacking_device = 2,
+	))
 
 /obj/effect/spawner/random/powercell
 	name = "Random Powercell"
@@ -175,6 +178,13 @@
 
 /obj/effect/spawner/random/supply_kit/item_to_spawn()
 	return pick(prob(3);/obj/item/storage/box/kit/pursuit,\
+				prob(3);/obj/item/storage/box/kit/self_defense,\
+				prob(3);/obj/item/storage/box/kit/mini_medic,\
+				prob(2);/obj/item/storage/box/kit/mou53_sapper,\
+				prob(1);/obj/item/storage/box/kit/heavy_support)
+
+/obj/effect/spawner/random/supply_kit/market/item_to_spawn()
+	return pick(prob(3);/obj/item/storage/box/kit/pursuit,\
 				prob(3);/obj/item/storage/box/kit/mini_intel,\
 				prob(3);/obj/item/storage/box/kit/mini_jtac,\
 				prob(2);/obj/item/storage/box/kit/mou53_sapper,\
@@ -199,7 +209,6 @@
 				/obj/item/poster,\
 				/obj/item/toy/bikehorn,\
 				/obj/item/toy/beach_ball,\
-				/obj/item/weapon/melee/banhammer,\
 				/obj/item/toy/balloon,\
 				/obj/item/toy/blink,\
 				/obj/item/toy/crossbow,\
@@ -393,7 +402,6 @@
 		/obj/item/weapon/gun/revolver/small = /obj/item/ammo_magazine/revolver/small,
 		/obj/item/weapon/gun/pistol/heavy = /obj/item/ammo_magazine/pistol/heavy,
 		/obj/item/weapon/gun/pistol/skorpion = /obj/item/ammo_magazine/pistol/skorpion,
-		/obj/item/weapon/gun/pistol/skorpion/upp = /obj/item/ammo_magazine/pistol/skorpion,
 		)
 
 /obj/effect/spawner/random/gun/pistol/lowchance
@@ -460,7 +468,6 @@
 		/obj/item/weapon/gun/lever_action/r4t = /obj/item/ammo_magazine/lever_action,
 		/obj/item/weapon/gun/shotgun/merc = null,
 		/obj/item/weapon/gun/shotgun/pump/dual_tube/cmb/m3717 = null,
-		/obj/item/weapon/gun/shotgun/double = null
 	) //no ammotypes needed as it spawns random 12g boxes. Apart from the r4t. why is the r4t in the shotgun pool? fuck you, that's why.
 
 /obj/effect/spawner/random/gun/shotgun/lowchance
@@ -488,7 +495,7 @@
 		/obj/item/weapon/gun/smg/mp27 = /obj/item/ammo_magazine/smg/mp27,
 		/obj/item/weapon/gun/smg/mp27 = /obj/item/ammo_magazine/smg/mp27,
 		/obj/item/weapon/gun/smg/mp27 = /obj/item/ammo_magazine/smg/mp27,
-		/obj/item/weapon/gun/smg/ppsh = /obj/item/ammo_magazine/smg/ppsh,
+		/obj/item/weapon/gun/smg/pps43 = /obj/item/ammo_magazine/smg/pps43,
 		/obj/item/weapon/gun/smg/mac15 = /obj/item/ammo_magazine/smg/mac15,
 		/obj/item/weapon/gun/smg/mac15 = /obj/item/ammo_magazine/smg/mac15,
 		/obj/item/weapon/gun/smg/uzi = /obj/item/ammo_magazine/smg/uzi,
@@ -514,7 +521,6 @@
 	icon_state = "loot_special"
 	guns = list(
 		/obj/item/weapon/gun/rifle/mar40/lmg = /obj/item/ammo_magazine/rifle/mar40/lmg,
-		/obj/item/weapon/gun/m60 = /obj/item/ammo_magazine/m60,
 		/obj/item/weapon/gun/shotgun/merc = null,
 		/obj/item/weapon/gun/launcher/rocket/anti_tank/disposable = /obj/item/prop/folded_anti_tank_sadar,
 		/obj/item/weapon/gun/rifle/m41a = /obj/item/ammo_magazine/rifle,

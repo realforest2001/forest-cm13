@@ -9,7 +9,7 @@
 	desc = "It shoots lasers by drawing power from an internal cell battery. Can be recharged at most convection stations."
 
 	icon_state = "stunrevolver"
-	item_state = "m44"//temp
+	item_state = "stunrevolver"
 	muzzle_flash = null//replace at some point
 	fire_sound = 'sound/weapons/emitter2.ogg'
 
@@ -32,6 +32,10 @@
 	cell = new /obj/item/cell/high(src)
 	update_icon()
 	max_shots = round((cell.maxcharge / charge_cost), 1)
+
+/obj/item/weapon/gun/energy/Destroy()
+	QDEL_NULL(cell)
+	. = ..()
 
 /obj/item/weapon/gun/energy/update_icon()
 	. = ..()
@@ -86,12 +90,13 @@
 			to_firer = "[round((cell.charge / charge_cost), 1)] / [max_shots] SHOTS REMAINING"
 		user.visible_message(SPAN_DANGER("[user] fires \the [src]!"),
 		SPAN_DANGER("[to_firer]"), message_flags = CHAT_TYPE_WEAPON_USE)
+		return AUTOFIRE_CONTINUE
 
 /obj/item/weapon/gun/energy/reload_into_chamber()
 	update_icon()
 	return TRUE
 
-/obj/item/weapon/gun/energy/delete_bullet(obj/item/projectile/projectile_to_fire, refund = 0)
+/obj/item/weapon/gun/energy/delete_bullet(obj/projectile/projectile_to_fire, refund = 0)
 	qdel(projectile_to_fire)
 	if(refund) cell.charge += charge_cost
 	return TRUE
@@ -108,6 +113,7 @@
 /obj/item/weapon/gun/energy/rxfm5_eva
 	name = "RXF-M5 EVA pistol"
 	desc = "A high power focusing laser pistol designed for Extra-Vehicular Activity, though it works just about anywhere really. Derived from the same technology as laser welders. Issued by the Weyland-Yutani Corporation, but also available on the civilian market."
+	icon = 'icons/obj/items/weapons/guns/guns_by_faction/colony.dmi'
 	icon_state = "rxfm5_eva"
 	item_state = "eva"
 	muzzle_flash = "muzzle_laser"
@@ -127,7 +133,7 @@
 
 /obj/item/weapon/gun/energy/rxfm5_eva/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_8
+	set_fire_delay(FIRE_DELAY_TIER_9)
 	accuracy_mult = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_3
 	scatter = SCATTER_AMOUNT_TIER_7
 	damage_mult = BASE_BULLET_DAMAGE_MULT
@@ -164,6 +170,7 @@
 /obj/item/weapon/gun/energy/laz_uzi
 	name = "laser UZI"
 	desc = "A refit of the classic Israeli SMG. Fires laser bolts."
+	icon = 'icons/obj/items/weapons/guns/guns_by_faction/colony.dmi'
 	icon_state = "laz_uzi"
 	item_state = "laz_uzi"
 	muzzle_flash = "muzzle_laser"
@@ -174,12 +181,13 @@
 	fire_sound = 'sound/weapons/Laser4.ogg'
 	has_charge_meter = FALSE
 	charge_icon = "+laz_uzi_empty"
+	start_automatic = TRUE
 
 /obj/item/weapon/gun/energy/laz_uzi/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_SMG
-	burst_delay = FIRE_DELAY_TIER_SMG
-	burst_amount = BURST_AMOUNT_TIER_2
+	set_fire_delay(FIRE_DELAY_TIER_SMG)
+	set_burst_delay(FIRE_DELAY_TIER_SMG)
+	set_burst_amount(BURST_AMOUNT_TIER_2)
 	accuracy_mult = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_3
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_7
 	scatter = SCATTER_AMOUNT_TIER_5
@@ -187,12 +195,14 @@
 	scatter_unwielded = SCATTER_AMOUNT_TIER_6
 	damage_mult = BASE_BULLET_DAMAGE_MULT
 	recoil_unwielded = RECOIL_AMOUNT_TIER_5
+	fa_scatter_peak = SCATTER_AMOUNT_TIER_8
 
 //############################ Taser ##################
 // Lots of bits for it so splitting off an area
 /obj/item/weapon/gun/energy/taser
 	name = "disabler gun"
 	desc = "An advanced stun device capable of firing balls of ionized electricity. Used for nonlethal takedowns. "
+	icon = 'icons/obj/items/weapons/guns/guns_by_faction/uscm.dmi'
 	icon_state = "taser"
 	item_state = "taser"
 	muzzle_flash = null //TO DO.
@@ -210,7 +220,7 @@
 
 /obj/item/weapon/gun/energy/taser/set_gun_config_values()
 	..()
-	fire_delay = FIRE_DELAY_TIER_7
+	set_fire_delay(FIRE_DELAY_TIER_7)
 	accuracy_mult = BASE_ACCURACY_MULT
 	accuracy_mult_unwielded = BASE_ACCURACY_MULT
 	damage_mult = BASE_BULLET_DAMAGE_MULT

@@ -18,7 +18,8 @@
 	bound_x = 0
 	bound_y = 0
 
-	interior_map = "van"
+	interior_map = /datum/map_template/interior/van
+
 	entrances = list(
 		"left" = list(2, 0),
 		"right" = list(-1, 0),
@@ -40,7 +41,7 @@
 	movement_sound = 'sound/vehicles/tank_driving.ogg'
 	honk_sound = 'sound/vehicles/honk_2_truck.ogg'
 
-	luminosity = 8
+	vehicle_light_range = 8
 
 	move_max_momentum = 3
 
@@ -217,7 +218,7 @@
 /obj/vehicle/multitile/van/proc/reset_overdrive()
 	misc_multipliers["move"] += overdrive_speed_mult
 
-/obj/vehicle/multitile/van/get_projectile_hit_boolean(obj/item/projectile/P)
+/obj/vehicle/multitile/van/get_projectile_hit_boolean(obj/projectile/P)
 	if(src == P.original) //clicking on the van itself will hit it.
 		var/hitchance = P.get_effective_accuracy()
 		if(prob(hitchance))
