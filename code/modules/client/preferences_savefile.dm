@@ -410,6 +410,9 @@
 	//Character
 	S["OOC_Notes"] >> metadata
 	S["real_name"] >> real_name
+	S["forename"] >> forename
+	S["nickname"] >> nickname
+	S["surname"] >> surname
 	S["name_is_always_random"] >> be_random_name
 	S["body_is_always_random"] >> be_random_body
 	S["gender"] >> gender
@@ -481,11 +484,14 @@
 	//Sanitize
 	metadata = sanitize_text(metadata, initial(metadata))
 	real_name = reject_bad_name(real_name)
+	forename = reject_bad_name(forename, max_length = MAX_NAME_LEN)
+	surname = reject_bad_name(surname, max_length = MAX_NAME_LEN)
+	nickname = reject_bad_name(nickname, max_length = MAX_NICK_LEN)
 
 	if(isnull(language)) language = "None"
 	if(isnull(spawnpoint)) spawnpoint = "Arrivals Shuttle"
 	if(isnull(nanotrasen_relation)) nanotrasen_relation = initial(nanotrasen_relation)
-	if(!real_name) real_name = random_name(gender)
+	if(!real_name || !forename || !surname) generate_random_name(gender)
 	be_random_name = sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	be_random_body = sanitize_integer(be_random_body, 0, 1, initial(be_random_body))
 	gender = sanitize_gender(gender)
@@ -557,6 +563,9 @@
 	//Character
 	S["OOC_Notes"] << metadata
 	S["real_name"] << real_name
+	S["forename"] << forename
+	S["nickname"] << nickname
+	S["surname"] << surname
 	S["name_is_always_random"] << be_random_name
 	S["body_is_always_random"] << be_random_body
 	S["gender"] << gender

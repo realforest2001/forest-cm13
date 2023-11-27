@@ -22,4 +22,7 @@
 	else
 		last_name = "[pick(GLOB.last_names_upp)]"
 
-	return first_name + " " + last_name
+	var/list/new_names = list()
+	new_names["forename"] = first_name
+	new_names["surname"] = last_name
+	return new_names

@@ -138,7 +138,7 @@
 				observer.alpha = 127
 
 				if(client.prefs.be_random_name)
-					client.prefs.real_name = random_name(client.prefs.gender)
+					client.prefs.real_name = client.prefs.generate_random_name(gender)
 				observer.real_name = client.prefs.real_name
 				observer.name = observer.real_name
 

@@ -192,7 +192,7 @@
 				new_name = reject_bad_name(raw_name)
 
 	if(!new_name)
-		to_chat(user, SPAN_NOTICE("Invalid name. The name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and ."))
+		to_chat(user, SPAN_NOTICE("Invalid name. The name should be at least 2 and at most [MAX_FULLNAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and ."))
 		return
 
 	if(!target_mob.client)

@@ -116,7 +116,10 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	var/synth_status = WHITELIST_NORMAL
 
 	//character preferences
-	var/real_name //our character's name
+	var/real_name //our character's full name
+	var/forename
+	var/nickname
+	var/surname
 	var/be_random_name = FALSE //whether we are a random name every round
 	var/human_name_ban = FALSE
 
@@ -256,8 +259,57 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	if(!ooccolor)
 		ooccolor = CONFIG_GET(string/ooc_color_default)
 	gender = pick(MALE, FEMALE)
-	real_name = random_name(gender)
+	generate_random_name(gender)
 	gear = list()
+
+/datum/preferences/proc/generate_random_name(gender)
+	switch(gender)
+		if(FEMALE)
+			forename = capitalize(pick(GLOB.first_names_female))
+		else
+			forename = capitalize(pick(GLOB.first_names_male))
+	surname = capitalize(pick(GLOB.last_names))
+	nickname = null
+	compile_char_name()
+
+/datum/preferences/proc/compile_char_name()
+	var/new_name = ""
+	if(forename)
+		new_name += forename
+	if(nickname)
+		new_name += " '[nickname]'"
+	if(surname)
+		new_name += " [surname]"
+	real_name = new_name
+
+#define NAME_FORENAME "forename"
+#define NAME_NICKNAME "nickname"
+#define NAME_SURNAME "surname"
+
+/datum/preferences/proc/process_new_name(mob/user, nametype = NAME_FORENAME)
+	var/max_name_length = MAX_NAME_LEN
+	if(nametype == NAME_NICKNAME)
+		max_name_length = MAX_NICK_LEN
+
+	var/name_attempt = tgui_input_text(user, "Choose your character's [nametype]:", "Character Preference", max_length = max_name_length)
+
+	if (!isnull(name_attempt)) // Check to ensure that the user entered text (rather than cancel.)
+		var/new_name = reject_bad_name(name_attempt, max_length = max_name_length)
+		if(new_name)
+			switch(nametype)
+				if(NAME_FORENAME)
+					forename = new_name
+				if(NAME_NICKNAME)
+					nickname = new_name
+				if(NAME_SURNAME)
+					surname = new_name
+			compile_char_name()
+		else
+			to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [max_name_length] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+
+/datum/preferences/proc/process_random_name(mob/user, nametype = NAME_FORENAME)
+	var/datum/origin/character_origin = GLOB.origins[origin]
+	real_name = character_origin.generate_human_name(gender)
 
 /datum/preferences/proc/client_reconnected(client/C)
 	owner = C
@@ -323,9 +375,15 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	switch(current_menu)
 		if(MENU_MARINE)
 			dat += "<div id='column1'>"
-			dat += "<h1><u><b>Name:</b></u> "
-			dat += "<a href='?_src_=prefs;preference=name;task=input'><b>[real_name]</b></a>"
-			dat += "<a href='?_src_=prefs;preference=name;task=random'>&reg</A></h1>"
+			dat += "<h1><u><b>Foreame:</b></u> "
+			dat += "<a href='?_src_=prefs;preference=forename;task=input'><b>[forename]</b></a>"
+			dat += "<a href='?_src_=prefs;preference=forename;task=random'>&reg</A></h1>"
+			dat += "<h1><u><b>Nickname:</b></u> "
+			dat += "<a href='?_src_=prefs;preference=nickname;task=input'><b>[nickname]</b></a>"
+			dat += "<a href='?_src_=prefs;preference=nickname;task=random'>&reg</A></h1>"
+			dat += "<h1><u><b>Surname:</b></u> "
+			dat += "<a href='?_src_=prefs;preference=surname;task=input'><b>[surname]</b></a>"
+			dat += "<a href='?_src_=prefs;preference=surname;task=random'>&reg</A></h1>"
 			dat += "<b>Always Pick Random Name:</b> <a href='?_src_=prefs;preference=rand_name'><b>[be_random_name ? "Yes" : "No"]</b></a><br>"
 			dat += "<b>Always Pick Random Appearance:</b> <a href='?_src_=prefs;preference=rand_body'><b>[be_random_body ? "Yes" : "No"]</b></a><br><br>"
 
@@ -1153,9 +1211,9 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	switch (href_list["task"])
 		if ("random")
 			switch (href_list["preference"])
-				if ("name")
-					var/datum/origin/character_origin = GLOB.origins[origin]
-					real_name = character_origin.generate_human_name(gender)
+				if (NAME_FORENAME, NAME_NICKNAME, NAME_SURNAME)
+					var/nametype = href_list["preference"]
+					process_random_name(user, nametype)
 				if ("age")
 					age = rand(AGE_MIN, AGE_MAX)
 				if ("ethnicity")
@@ -1196,17 +1254,12 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 					randomize_appearance()
 		if("input")
 			switch(href_list["preference"])
-				if("name")
+				if(NAME_FORENAME, NAME_NICKNAME, NAME_SURNAME)
 					if(human_name_ban)
 						to_chat(user, SPAN_NOTICE("You are banned from custom human names."))
 						return
-					var/raw_name = input(user, "Choose your character's name:", "Character Preference")  as text|null
-					if (!isnull(raw_name)) // Check to ensure that the user entered text (rather than cancel.)
-						var/new_name = reject_bad_name(raw_name)
-						if(new_name)
-							real_name = new_name
-						else
-							to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+					var/nametype = href_list["preference"]
+					process_new_name(user, nametype)
 
 				if("xeno_vision_level_pref")
 					var/static/list/vision_level_choices = list(XENO_VISION_LEVEL_NO_NVG, XENO_VISION_LEVEL_MID_NVG, XENO_VISION_LEVEL_FULL_NVG)
@@ -1226,7 +1279,7 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 					if(raw_name) // Check to ensure that the user entered text (rather than cancel.)
 						var/new_name = reject_bad_name(raw_name)
 						if(new_name) synthetic_name = new_name
-						else to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+						else to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_FULLNAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("synth_type")
 					var/new_synth_type = tgui_input_list(user, "Choose your model of synthetic:", "Make and Model", PLAYER_SYNTHS)
 					if(new_synth_type) synthetic_type = new_synth_type
@@ -1235,7 +1288,7 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 					if(raw_name) // Check to ensure that the user entered text (rather than cancel.)
 						var/new_name = reject_bad_name(raw_name)
 						if(new_name) predator_name = new_name
-						else to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+						else to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_FULLNAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("pred_gender")
 					predator_gender = predator_gender == MALE ? FEMALE : MALE
 				if("pred_age")
