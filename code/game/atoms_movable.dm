@@ -288,7 +288,7 @@
 	if(layer_override < TURF_LAYER)
 		//C.vis_flags |= VIS_UNDERLAY
 		C.plane = FLOOR_PLANE
-	clones.Add(C)
+	GLOB.clones.Add(C)
 	C.mstr = src //Link clone and master
 	src.clone = C
 
@@ -328,8 +328,8 @@
 			clone.plane = FLOOR_PLANE
 			clone.opacity = FALSE
 
-/atom/movable/proc/destroy_clone_movable()
-	clones.Remove(src.clone)
+/atom/movable/proc/destroy_clone()
+	GLOB.clones.Remove(src.clone)
 	qdel(src.clone)
 	src.clone = null
 

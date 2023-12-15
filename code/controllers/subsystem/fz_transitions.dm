@@ -1,6 +1,6 @@
-var/list/projectors = list()
-var/list/clones = list()
-var/list/clones_t = list()
+GLOBAL_LIST_EMPTY(projectors)
+GLOBAL_LIST_EMPTY(clones)
+GLOBAL_LIST_EMPTY(clones_t)
 
 SUBSYSTEM_DEF(fz_transitions)
 	name = "Z-Transitions"
@@ -10,18 +10,18 @@ SUBSYSTEM_DEF(fz_transitions)
 	flags = SS_KEEP_TIMING
 
 /datum/controller/subsystem/fz_transitions/stat_entry(msg)
-	msg = "P:[projectors.len]|C:[clones.len]|T:[clones_t.len]"
+	msg = "P:[GLOB.projectors.len]|C:[GLOB.clones.len]|T:[GLOB.clones_t.len]"
 	return ..()
 
 /datum/controller/subsystem/fz_transitions/Initialize()
 	for(var/obj/effect/projector/P in world)
-		projectors.Add(P)
+		GLOB.projectors.Add(P)
 	return SS_INIT_SUCCESS
 
 /datum/controller/subsystem/fz_transitions/fire(resumed = FALSE)
-	for(var/obj/effect/projector/P in projectors)
+	for(var/obj/effect/projector/P in GLOB.projectors)
 		if(!P || !P.loc)
-			projectors -= P
+			GLOB.projectors -= P
 			continue
 		if(!P.loc.clone && !P.paused)
 			P.loc.create_clone(P.vector_x, P.vector_y, P.layer_override)
@@ -35,13 +35,14 @@ SUBSYSTEM_DEF(fz_transitions)
 						O.clone.proj_x = P.vector_x //Make sure projection is correct
 						O.clone.proj_y = P.vector_y
 
-	for(var/atom/movable/clone/C in clones)
+
+	for(var/atom/movable/clone/C in GLOB.clones)
 		if(C.mstr == null || !istype(C.mstr.loc, /turf))
 			C.mstr.destroy_clone_movable() //Kill clone if master has been destroyed or picked up
 		else
 			if(C != C.mstr)
 				C.mstr.update_clone() //NOTE: Clone updates are also forced by player movement to reduce latency
 
-	for(var/atom/T in clones_t)
+	for(var/atom/T in GLOB.clones_t)
 		if(T.clone && T.icon_state) //Just keep the icon updated for explosions etc.
 			T.clone.icon_state = T.icon_state

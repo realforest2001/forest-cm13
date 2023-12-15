@@ -10,7 +10,8 @@
 
 	..()
 
-	if(is_zoomed && (stat || lying))
+	// replace this by signals or trait signals
+	if(is_zoomed && (stat || body_position == LYING_DOWN))
 		zoom_out()
 
 	if(stat != DEAD) //Stop if dead. Performance boost
@@ -23,7 +24,6 @@
 		handle_regular_status_updates()
 		handle_stomach_contents()
 		handle_overwatch() // For new Xeno hivewide overwatch - Fourk, 6/24/19
-		update_canmove()
 		update_icons()
 		handle_luminosity()
 		handle_blood()
@@ -61,7 +61,7 @@
 			evolution_stored += progress_amount
 
 /mob/living/carbon/xenomorph/proc/evolve_message()
-	to_chat(src, SPAN_XENODANGER("Your carapace crackles and your tendons strengthen. You are ready to <a href='?src=\ref[src];evolve=1;'>evolve</a>!")) //Makes this bold so the Xeno doesn't miss it
+	to_chat(src, SPAN_XENODANGER("Our carapace crackles and our tendons strengthen. We are ready to <a href='?src=\ref[src];evolve=1;'>evolve</a>!")) //Makes this bold so the Xeno doesn't miss it
 	playsound_client(client, sound('sound/effects/xeno_evolveready.ogg'))
 
 	var/datum/action/xeno_action/onclick/evolve/evolve_action = new()
@@ -187,9 +187,8 @@
 		ear_damage = 0
 		SetEyeBlind(0)
 
-		if(knocked_out) //If they're down, make sure they are actually down.
+		if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT)) //If they're down, make sure they are actually down.
 			blinded = TRUE
-			set_stat(UNCONSCIOUS)
 			if(regular_update && halloss > 0)
 				apply_damage(-3, HALLOSS)
 		else if(sleeping)
@@ -225,7 +224,7 @@
 		for(var/atom/movable/M in stomach_contents)
 			if(ishuman(M))
 				if(world.time > devour_timer - 50 && world.time < devour_timer - 30)
-					to_chat(src, SPAN_WARNING("You're about to regurgitate [M]..."))
+					to_chat(src, SPAN_WARNING("We're about to regurgitate [M]..."))
 					playsound(loc, 'sound/voice/alien_drool1.ogg', 50, 1)
 				var/mob/living/carbon/human/H = M
 				if(world.time > devour_timer || (H.stat == DEAD && !H.chestburst))
@@ -233,7 +232,7 @@
 
 			M.acid_damage++
 			if(M.acid_damage > 300)
-				to_chat(src, SPAN_XENODANGER("\The [M] is dissolved in your gut with a gurgle."))
+				to_chat(src, SPAN_XENODANGER("\The [M] is dissolved in our gut with a gurgle."))
 				stomach_contents.Remove(M)
 				qdel(M)
 
@@ -342,7 +341,7 @@ Make sure their actual health updates immediately.*/
 			if(recovery_aura)
 				plasma_stored += round(plasma_gain * plasma_max / 100 * recovery_aura/4) //Divided by four because it gets massive fast. 1 is equivalent to weed regen! Only the strongest pheromones should bypass weeds
 			if(health < maxHealth && !hardcore && is_hive_living(hive) && last_hit_time + caste.heal_delay_time <= world.time)
-				if(lying || resting)
+				if(body_position == LYING_DOWN || resting)
 					if(health < 0) //Unconscious
 						heal_wounds(caste.heal_knocked_out * regeneration_multiplier, recoveryActual) //Healing is much slower. Warding pheromones make up for the rest if you're curious
 					else
@@ -381,7 +380,7 @@ Make sure their actual health updates immediately.*/
 		plasma_stored = 0
 		if(current_aura)
 			current_aura = null
-			to_chat(src, SPAN_WARNING("You have run out of pheromones and stopped emitting pheromones."))
+			to_chat(src, SPAN_WARNING("We have run out of plasma and stopped emitting pheromones."))
 
 	for(var/X in actions)
 		var/datum/action/A = X
@@ -455,7 +454,7 @@ Make sure their actual health updates immediately.*/
 		var/area/A = get_area(loc)
 		var/area/QA = get_area(tracking_atom.loc)
 		if(A.fake_zlevel == QA.fake_zlevel)
-			QL.setDir(get_dir(src, tracking_atom))
+			QL.setDir(Get_Compass_Dir(src, tracking_atom))
 			QL.icon_state = "trackon"
 		else
 			QL.icon_state = "trackondirect"
@@ -484,7 +483,7 @@ Make sure their actual health updates immediately.*/
 		ML.overlays |= image('icons/mob/hud/xeno_markers.dmi', "all_direction")
 		return
 	else if(A.fake_zlevel == MA.fake_zlevel) //normal tracking
-		ML.setDir(get_dir(src, tracked_marker_turf))
+		ML.setDir(Get_Compass_Dir(src, tracked_marker_turf))
 		ML.overlays |= image(tracked_marker.seenMeaning, "pixel_y" = 0)
 		ML.overlays |= image('icons/mob/hud/xeno_markers.dmi', "center_glow")
 		ML.overlays |= image('icons/mob/hud/xeno_markers.dmi', "direction")
@@ -536,8 +535,6 @@ Make sure their actual health updates immediately.*/
 	if(layer != initial(layer)) //Unhide
 		layer = initial(layer)
 	recalculate_move_delay = TRUE
-	if(!lying)
-		update_canmove()
 
 /mob/living/carbon/xenomorph/proc/handle_luminosity()
 	var/new_luminosity = 0
@@ -583,16 +580,14 @@ Make sure their actual health updates immediately.*/
 	return superslowed
 
 /mob/living/carbon/xenomorph/handle_knocked_down()
-	if(knocked_down)
+	if(HAS_TRAIT(src, TRAIT_FLOORED))
 		adjust_effect(life_knockdown_reduction, WEAKEN, EFFECT_FLAG_LIFE)
 		knocked_down_callback_check()
-	return knocked_down
 
 /mob/living/carbon/xenomorph/handle_knocked_out()
-	if(knocked_out)
+	if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
 		adjust_effect(life_knockout_reduction, PARALYZE, EFFECT_FLAG_LIFE)
 		knocked_out_callback_check()
-	return knocked_out
 
 //Returns TRUE if xeno is on weeds
 //Returns TRUE if xeno is off weeds AND doesn't need weeds for healing AND is not on Almayer UNLESS Queen is also on Almayer (aka - no solo Lurker Almayer hero)

@@ -200,7 +200,7 @@
 	SSticker.mode.picked_calls += src
 
 	show_join_message() //Show our potential candidates the message to let them join.
-	message_admins("Distress beacon: '[name]' activated [src.hostility? "[SPAN_WARNING("(THEY ARE HOSTILE)")]":"(they are friendly)"]. Looking for candidates.")
+	message_admins("Distress beacon: '[name]' activated [hostility? "[SPAN_WARNING("(THEY ARE HOSTILE)")]":"(they are friendly)"]. Looking for candidates.")
 
 	if(!quiet_launch)
 		marine_announcement("A distress beacon has been launched from the [MAIN_SHIP_NAME].", "Priority Alert", 'sound/AI/distressbeacon.ogg', logging = ARES_LOG_SECURITY)
@@ -305,7 +305,7 @@
 
 	candidates = list()
 	if(arrival_message && announce_incoming)
-		marine_announcement(arrival_message, "Intercepted Tranmission:")
+		marine_announcement(arrival_message, "Intercepted Transmission:")
 
 /datum/emergency_call/proc/add_candidate(mob/M)
 	if(!M.client || (M.mind && (M.mind in candidates)) || istype(M, /mob/living/carbon/xenomorph))
