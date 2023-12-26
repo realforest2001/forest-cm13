@@ -4,7 +4,7 @@
 	permissions_required = R_PERMISSIONS
 
 /datum/player_action/nameless_ban/act(client/user, mob/target, list/params)
-	user.cmd_admin_do_ban(target)
+	user.cmd_do_management_ban(target, nameless = TRUE)
 	return TRUE
 
 
@@ -23,7 +23,7 @@
 	permissions_required = R_PERMISSIONS
 
 /datum/player_action/ban_staff/act(client/user, mob/target, list/params)
-	user.cmd_admin_do_ban(target)
+	user.cmd_do_management_ban(target, anti_staff = TRUE)
 	return TRUE
 
 

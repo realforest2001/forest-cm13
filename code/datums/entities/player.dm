@@ -19,6 +19,8 @@
 	var/time_ban_admin_id
 	var/time_ban_expiration
 	var/time_ban_date
+	var/time_ban_antistaff
+	var/time_ban_nameless
 
 	var/migrated_notes = FALSE
 	var/migrated_bans = FALSE
@@ -144,7 +146,7 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 	// murder it
 	note.delete()
 
-/datum/entity/player/proc/add_timed_ban(ban_text, duration)
+/datum/entity/player/proc/add_timed_ban(ban_text, duration, nameless = FALSE, antistaff = FALSE)
 	var/client/admin = usr.client
 	// do all checks here, especially for sensitive stuff like this
 	if(!admin || !admin.player_data)
@@ -155,11 +157,13 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 
 	if(owning_client && owning_client.admin_holder && (owning_client.admin_holder.rights & R_MOD))
 		return FALSE
-
+	var/banner = admin.ckey
+	if(nameless)
+		banner = "Management"
 	// this is here for a short transition period when we still are testing DB notes and constantly deleting the file
 	if(CONFIG_GET(flag/duplicate_notes_to_file))
-		AddBan(ckey, last_known_cid, ban_text, admin.ckey, 1, duration, last_known_ip)
-		notes_add(ckey, "Banned by [admin.ckey]|Duration: [duration] minutes|Reason: [sanitize(ban_text)]", usr)
+		AddBan(ckey, last_known_cid, ban_text, banner, 1, duration, last_known_ip)
+		notes_add(ckey, "Banned by [banner]|Duration: [duration] minutes|Reason: [sanitize(ban_text)]", usr)
 
 	message_admins("\blue[admin.ckey] has banned [ckey].\nReason: [sanitize(ban_text)]\nThis will be removed in [duration] minutes.")
 	ban_unban_log_save("[admin.ckey] has banned [ckey]|Duration: [duration] minutes|Reason: [sanitize(ban_text)]")
@@ -172,12 +176,14 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 	time_ban_admin_id = admin.player_data.id
 	time_ban_admin = admin.player_data
 	time_ban_reason = ban_text
+	time_ban_nameless = nameless
+	time_ban_antistaff = antistaff
 	is_time_banned = TRUE
 	save()
 
 	// then we drop the player if they are in
 	if(owning_client)
-		to_chat_forced(owning_client, SPAN_WARNING("<BIG><B>You have been banned by [admin.ckey].\nReason: [sanitize(ban_text)].</B></BIG>"))
+		to_chat_forced(owning_client, SPAN_WARNING("<BIG><B>You have been banned by [banner].\nReason: [sanitize(ban_text)].</B></BIG>"))
 		to_chat_forced(owning_client, SPAN_WARNING("This is a temporary ban, it will be removed in [duration] minutes."))
 		QDEL_NULL(owning_client)
 
@@ -492,14 +498,16 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 
 	if(!is_time_banned && !is_permabanned)
 		return null
+	var/ban_person
 	var/appeal
 	if(CONFIG_GET(string/banappeals))
 		appeal = "\nFor more information on your ban, or to appeal, head to <a href='[CONFIG_GET(string/banappeals)]'>[CONFIG_GET(string/banappeals)]</a>"
 	if(is_permabanned)
 		permaban_admin.sync()
+		ban_person = permaban_admin.ckey
 		log_access("Failed Login: [ckey] [last_known_cid] [last_known_ip] - Banned [permaban_reason]")
 		message_admins("Failed Login: [ckey] id:[last_known_cid] ip:[last_known_ip] - Banned [permaban_reason]")
-		.["desc"] = "\nReason: [permaban_reason]\nExpires: <B>PERMANENT</B>\nBy: [permaban_admin.ckey][appeal]"
+		.["desc"] = "\nReason: [permaban_reason]\nExpires: <B>PERMANENT</B>\nBy: [ban_person][appeal]"
 		.["reason"] = "ckey/id"
 		return .
 	if(is_time_banned)
@@ -507,6 +515,9 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 		if(time_left < 0)
 			return FALSE
 		time_ban_admin.sync()
+		ban_person = time_ban_admin.ckey
+		if(time_ban_nameless)
+			ban_person = "Management"
 		var/timeleftstring
 		if (time_left >= 1440) //1440 = 1 day in minutes
 			timeleftstring = "[round(time_left / 1440, 0.1)] Days"
@@ -516,7 +527,7 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 			timeleftstring = "[time_left] Minutes"
 		log_access("Failed Login: [ckey] [last_known_cid] [last_known_ip] - Banned [time_ban_reason]")
 		message_admins("Failed Login: [ckey] id:[last_known_cid] ip:[last_known_ip] - Banned [time_ban_reason]")
-		.["desc"] = "\nReason: [time_ban_reason]\nExpires: [timeleftstring]\nBy: [time_ban_admin.ckey][appeal]"
+		.["desc"] = "\nReason: [time_ban_reason]\nExpires: [timeleftstring]\nBy: [ban_person][appeal]"
 		.["reason"] = "ckey/id"
 		return .
 	// shouldn't be here

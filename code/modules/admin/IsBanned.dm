@@ -18,13 +18,13 @@
 		return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
 
 	WAIT_DB_READY
-	if(GLOB.admin_datums[ckey] && (GLOB.admin_datums[ckey].rights & R_MOD))
-		return ..()
+	var/datum/entity/player/the_player = get_player_from_key(ckey)
+	if(!the_player.time_ban_antistaff)
+		if(GLOB.admin_datums[ckey] && (GLOB.admin_datums[ckey].rights & R_MOD))
+			return ..()
 
-	if(!(staff_player && (player_limit && player_limit < GLOB.clients.len)))
+	if(CONFIG_GET(number/limit_players) && CONFIG_GET(number/limit_players) < GLOB.clients.len)
 		return list("reason"="POP CAPPED", "desc"="\nReason: Server is pop capped at the moment at [CONFIG_GET(number/limit_players)] players. Attempt reconnection in 2-3 minutes.")
-
-	var/datum/entity/player/P = get_player_from_key(ckey)
 
 	/// check if the IP address is a known TOR node
 	if(CONFIG_GET(flag/ToRban) && ToRban_isbanned(address))
@@ -34,7 +34,7 @@
 
 	/// wait for database to be ready
 
-	. = P.check_ban(computer_id, address)
+	. = the_player.check_ban(computer_id, address)
 	if(.)
 		return .
 
