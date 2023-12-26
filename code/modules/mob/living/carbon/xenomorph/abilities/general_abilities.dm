@@ -251,11 +251,10 @@
 	if(freeze_timer_id == TIMER_ID_NULL)
 		return
 	var/mob/living/carbon/xenomorph/X = owner
-	X.frozen = FALSE
-	X.update_canmove()
+	REMOVE_TRAIT(X, TRAIT_IMMOBILIZED, TRAIT_SOURCE_ABILITY("Pounce"))
 	deltimer(freeze_timer_id)
 	freeze_timer_id = TIMER_ID_NULL
-	to_chat(X, SPAN_XENONOTICE("Slashing frenzies you! You feel free to move immediately!"))
+	to_chat(X, SPAN_XENONOTICE("Slashing frenzies us! We feel free to move immediately!"))
 
 /// Any effects to apply to the xenomorph before the windup occurs
 /datum/action/xeno_action/activable/pounce/proc/pre_windup_effects()
@@ -285,7 +284,7 @@
 
 /datum/action/xeno_action/onclick/toggle_long_range/can_use_action()
 	var/mob/living/carbon/xenomorph/xeno = owner
-	if(xeno && !xeno.is_mob_incapacitated() && !xeno.lying && !xeno.buckled)
+	if(xeno && !xeno.is_mob_incapacitated() && !xeno.buckled)
 		return TRUE
 
 /datum/action/xeno_action/onclick/toggle_long_range/give_to(mob/living/living_mob)
@@ -305,7 +304,7 @@
 		xeno.zoom_out() // will call on_zoom_out()
 		return
 	xeno.visible_message(SPAN_NOTICE("[xeno] starts looking off into the distance."), \
-		SPAN_NOTICE("You start focusing your sight to look off into the distance."), null, 5)
+		SPAN_NOTICE("We start focusing our sight to look off into the distance."), null, 5)
 	if (should_delay)
 		if(!do_after(xeno, delay, INTERRUPT_NO_NEEDHAND, BUSY_ICON_GENERIC)) return
 	if(xeno.is_zoomed)
@@ -322,7 +321,7 @@
 /datum/action/xeno_action/onclick/toggle_long_range/proc/on_zoom_out()
 	var/mob/living/carbon/xenomorph/xeno = owner
 	xeno.visible_message(SPAN_NOTICE("[xeno] stops looking off into the distance."), \
-	SPAN_NOTICE("You stop looking off into the distance."), null, 5)
+	SPAN_NOTICE("We stop looking off into the distance."), null, 5)
 	if(movement_slowdown)
 		xeno.speed_modifier -= movement_slowdown
 		xeno.recalculate_speed()
@@ -382,6 +381,7 @@
 	name = "Hide"
 	action_icon_state = "xenohide"
 	plasma_cost = 0
+	xeno_cooldown = 0.5 SECONDS
 	macro_path = /datum/action/xeno_action/verb/verb_hide
 	action_type = XENO_ACTION_CLICK
 	listen_signal = COMSIG_KB_XENO_HIDE
@@ -390,6 +390,17 @@
 	var/mob/living/carbon/xenomorph/X = owner
 	if(X && !X.buckled && !X.is_mob_incapacitated())
 		return TRUE
+
+/// remove hide and apply modified attack cooldown
+/datum/action/xeno_action/onclick/xenohide/proc/post_attack()
+	var/mob/living/carbon/xenomorph/xeno = owner
+	UnregisterSignal(xeno, COMSIG_MOB_STATCHANGE)
+	if(xeno.layer == XENO_HIDING_LAYER)
+		xeno.layer = initial(xeno.layer)
+		button.icon_state = "template"
+		xeno.update_wounds()
+		xeno.update_layer()
+	apply_cooldown(4) //2 second cooldown after attacking
 
 /datum/action/xeno_action/onclick/xenohide/give_to(mob/living/living_mob)
 	. = ..()
@@ -413,7 +424,7 @@
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_5
 
-/datum/action/xeno_action/activable/place_construction/queen_macro //so it doesn't screw other macros up
+/datum/action/xeno_action/activable/place_construction/not_primary //so it doesn't screw other macros up
 	ability_primacy = XENO_NOT_PRIMARY_ACTION
 
 /datum/action/xeno_action/activable/xeno_spit
@@ -423,7 +434,7 @@
 	macro_path = /datum/action/xeno_action/verb/verb_xeno_spit
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_1
-	cooldown_message = "You feel your neurotoxin glands swell with ichor. You can spit again."
+	cooldown_message = "We feel our neurotoxin glands swell with ichor. We can spit again."
 	xeno_cooldown = 60 SECONDS
 
 	/// Var that keeps track of in-progress wind-up spits like Bombard to prevent spitting multiple spits at the same time
@@ -510,16 +521,15 @@
 	SIGNAL_HANDLER
 
 	if(tracked_queen)
-		UnregisterSignal(tracked_queen, list(COMSIG_QUEEN_MOUNT_OVIPOSITOR, COMSIG_QUEEN_DISMOUNT_OVIPOSITOR, COMSIG_PARENT_QDELETING))
+		UnregisterSignal(tracked_queen, list(COMSIG_QUEEN_MOUNT_OVIPOSITOR, COMSIG_QUEEN_DISMOUNT_OVIPOSITOR))
 
 	tracked_queen = new_queen
 
-	if(!tracked_queen.ovipositor)
+	if(!tracked_queen?.ovipositor)
 		hide_from(owner)
 
 	RegisterSignal(tracked_queen, COMSIG_QUEEN_MOUNT_OVIPOSITOR, PROC_REF(handle_mount_ovipositor))
 	RegisterSignal(tracked_queen, COMSIG_QUEEN_DISMOUNT_OVIPOSITOR, PROC_REF(handle_dismount_ovipositor))
-	RegisterSignal(tracked_queen, COMSIG_PARENT_QDELETING, PROC_REF(handle_queen_qdel))
 
 /// deals with the queen mounting the ovipositor, unhiding the action from the user
 /datum/action/xeno_action/onclick/tacmap/proc/handle_mount_ovipositor()
@@ -533,12 +543,13 @@
 
 	hide_from(owner)
 
-/// cleans up references to the queen when the queen is being qdel'd, hides the action from the user
-/datum/action/xeno_action/onclick/tacmap/proc/handle_queen_qdel()
-	SIGNAL_HANDLER
-
-	tracked_queen = null
-	hide_from(owner)
+/datum/action/xeno_action/onclick/tacmap/can_use_action()
+	if(!owner)
+		return FALSE
+	var/mob/living/carbon/xenomorph/xeno = owner
+	if(xeno.is_mob_incapacitated() || xeno.dazed)
+		return FALSE
+	return TRUE
 
 /datum/action/xeno_action/onclick/tacmap/use_ability(atom/target)
 	var/mob/living/carbon/xenomorph/xeno = owner

@@ -22,7 +22,7 @@
 #define NOTE_SYNTHETIC 4
 #define NOTE_YAUTJA 5
 ///Note categories in text form, in order of their numerical #defines.
-var/global/list/note_categories = list("Admin", "Merit", "Commanding Officer", "Synthetic", "Yautja")
+GLOBAL_LIST_INIT(note_categories, list("Admin", "Merit", "Commanding Officer", "Synthetic", "Yautja"))
 
 #define ADMIN_FLW(user) "(<a href='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservefollow=[REF(user)]'>FLW</a>)"
 #define ADMIN_PP(user) "(<a href='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayeropts=[REF(user)]'>PP</a>)"
@@ -71,3 +71,6 @@ var/global/list/note_categories = list("Admin", "Merit", "Commanding Officer", "
 #define ANTIGRIEF_NEW_PLAYERS 1
 /// Enables antigrief entirely: Nobody can activate explosives on the Almayer, unless the ship crashed.
 #define ANTIGRIEF_ENABLED 2
+
+/// Proc has been blocked by IsAdminAdvancedProcCall()
+#define PROC_BLOCKED "PROCCALL BLOCKED"

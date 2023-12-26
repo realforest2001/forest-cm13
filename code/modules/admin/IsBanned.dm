@@ -11,20 +11,15 @@
 	if (C && ckey == C.ckey && computer_id == C.computer_id && address == C.address)
 		return //don't recheck connected clients.
 
-	/// Guest Checking
-	if(IsGuestKey(key))
+	//Guest Checking
+	if(!real_bans_only && CONFIG_GET(flag/guest_ban) && IsGuestKey(key))
 		log_access("Failed Login: [key] - Guests not allowed")
 		message_admins("Failed Login: [key] - Guests not allowed")
 		return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
 
 	WAIT_DB_READY
-	/// Staff can always connect through cap, for safety.
-	var/staff_player = FALSE
-	var/player_limit = CONFIG_GET(number/limit_players)
-	if(admin_datums[ckey])
-		staff_player = TRUE
-		if(admin_datums[ckey].rights & R_PERMISSIONS)
-			return ..()
+	if(GLOB.admin_datums[ckey] && (GLOB.admin_datums[ckey].rights & R_MOD))
+		return ..()
 
 	if(!(staff_player && (player_limit && player_limit < GLOB.clients.len)))
 		return list("reason"="POP CAPPED", "desc"="\nReason: Server is pop capped at the moment at [CONFIG_GET(number/limit_players)] players. Attempt reconnection in 2-3 minutes.")
