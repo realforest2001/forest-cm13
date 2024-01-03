@@ -348,7 +348,7 @@ GLOBAL_LIST_INIT(roundstart_mod_verbs, list(
 	if(CLIENT_IS_MENTOR(src))
 		GLOB.RoleAuthority.roles_whitelist[ckey] |= WHITELIST_MENTOR
 	if(CLIENT_IS_STAFF(src))
-		GLOB.RoleAuthority.roles_whitelist[ckey] |= WHITELIST_JOE
+		GLOB.RoleAuthority.roles_whitelist[ckey] |= (WHITELIST_JOE|WHITELIST_ADMIN)
 
 /client/proc/remove_admin_verbs()
 	remove_verb(src, list(

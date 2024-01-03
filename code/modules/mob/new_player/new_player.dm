@@ -370,6 +370,10 @@
 			dat += "<hr>Squad Riflemen:<br>"
 			roles_show ^= FLAG_SHOW_MARINES
 
+		else if(roles_show & FLAG_SHOW_SPECIAL && GLOB.ROLES_SPECIAL.Find(J.title))
+			dat += "<hr>Special Roles:<br>"
+			roles_show ^= FLAG_SHOW_SPECIAL
+
 		dat += "<a href='byond://?src=\ref[src];lobby_choice=SelectedJob;job_selected=[J.title]'>[J.disp_title] ([J.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"

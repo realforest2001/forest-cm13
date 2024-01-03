@@ -158,6 +158,7 @@ GLOBAL_VAR_INIT(players_preassigned, 0)
 				if("syntheticcouncillegacy")		role |= WHITELIST_SYNTHETIC_COUNCIL_LEGACY
 				if("syntheticleader")				role |= WHITELIST_SYNTHETIC_LEADER
 				if("advisor")						role |= WHITELIST_MENTOR
+				if("special")						role |= WHITELIST_ADMIN
 				if("allgeneral")					role |= WHITELISTS_GENERAL
 				if("allcouncil")					role |= (WHITELISTS_COUNCIL|WHITELISTS_GENERAL)
 				if("alllegacycouncil")				role |= (WHITELISTS_LEGACY_COUNCIL|WHITELISTS_GENERAL)
@@ -313,11 +314,11 @@ I hope it's easier to tell what the heck this proc is even doing, unlike previou
 		// Assigning xenos first.
 		assigned += assign_initial_roles(priority, roles_for_mode & GLOB.ROLES_XENO, unassigned_players)
 		// Assigning special roles second. (survivor, predator)
-		assigned += assign_initial_roles(priority, roles_for_mode & (GLOB.ROLES_WHITELISTED|GLOB.ROLES_SPECIAL), unassigned_players)
+		assigned += assign_initial_roles(priority, roles_for_mode & (GLOB.ROLES_GROUND_WHITELISTED|GLOB.ROLES_GROUND), unassigned_players)
 		// Assigning command third.
 		assigned += assign_initial_roles(priority, roles_for_mode & GLOB.ROLES_COMMAND, unassigned_players)
 		// Assigning the rest
-		var/rest_roles_for_mode = roles_for_mode - (roles_for_mode & GLOB.ROLES_XENO) - (roles_for_mode & GLOB.ROLES_COMMAND) - (roles_for_mode & (GLOB.ROLES_WHITELISTED|GLOB.ROLES_SPECIAL))
+		var/rest_roles_for_mode = roles_for_mode - (roles_for_mode & GLOB.ROLES_XENO) - (roles_for_mode & GLOB.ROLES_COMMAND) - (roles_for_mode & (GLOB.ROLES_GROUND_WHITELISTED|GLOB.ROLES_GROUND))
 		if(count)
 			assigned += assign_initial_roles(priority, rest_roles_for_mode, unassigned_players)
 		else

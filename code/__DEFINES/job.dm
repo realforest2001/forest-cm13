@@ -371,15 +371,16 @@ GLOBAL_LIST_INIT(job_command_roles, JOB_COMMAND_ROLES_LIST)
 #define TIMELOCK_JOB(role_id, hours) new/datum/timelock(role_id, hours, role_id)
 
 //For displaying groups of jobs. Used by new player's latejoin menu and by crew manifest.
-#define FLAG_SHOW_CIC 1
-#define FLAG_SHOW_AUXIL_SUPPORT 2
-#define FLAG_SHOW_MISC 4
-#define FLAG_SHOW_POLICE 8
-#define FLAG_SHOW_ENGINEERING 16
-#define FLAG_SHOW_REQUISITION 32
-#define FLAG_SHOW_MEDICAL 64
-#define FLAG_SHOW_MARINES 128
-#define FLAG_SHOW_ALL_JOBS FLAG_SHOW_CIC|FLAG_SHOW_AUXIL_SUPPORT|FLAG_SHOW_MISC|FLAG_SHOW_POLICE|FLAG_SHOW_ENGINEERING|FLAG_SHOW_REQUISITION|FLAG_SHOW_MEDICAL|FLAG_SHOW_MARINES
+#define FLAG_SHOW_CIC (1<<0)
+#define FLAG_SHOW_AUXIL_SUPPORT (1<<1)
+#define FLAG_SHOW_MISC (1<<2)
+#define FLAG_SHOW_POLICE (1<<3)
+#define FLAG_SHOW_ENGINEERING (1<<4)
+#define FLAG_SHOW_REQUISITION (1<<5)
+#define FLAG_SHOW_MEDICAL (1<<6)
+#define FLAG_SHOW_MARINES (1<<7)
+#define FLAG_SHOW_SPECIAL (1<<8)
+#define FLAG_SHOW_ALL_JOBS FLAG_SHOW_CIC|FLAG_SHOW_AUXIL_SUPPORT|FLAG_SHOW_MISC|FLAG_SHOW_POLICE|FLAG_SHOW_ENGINEERING|FLAG_SHOW_REQUISITION|FLAG_SHOW_MEDICAL|FLAG_SHOW_MARINES|FLAG_SHOW_SPECIAL
 
 ///For denying certain traits being applied to people. ie. bad leg
 ///'Grunt' lists are for people who wouldn't logically get the bad leg trait, ie. UPP marine counterparts.

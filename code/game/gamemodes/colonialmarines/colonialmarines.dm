@@ -444,7 +444,7 @@
 		counted_humans["Squad Marines"][job] = 0
 	for(var/job in GLOB.ROLES_USCM - GLOB.ROLES_MARINES)
 		counted_humans["Auxiliary Marines"][job] = 0
-	for(var/job in GLOB.ROLES_SPECIAL)
+	for(var/job in GLOB.ROLES_GROUND)
 		counted_humans["Non-Standard Humans"][job] = 0
 
 	var/list/counted_xenos = list()
