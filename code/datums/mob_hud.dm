@@ -33,10 +33,8 @@ GLOBAL_LIST_INIT_TYPED(huds, /datum/mob_hud, list(
 /datum/mob_hud/proc/remove_hud_from(mob/user, source)
 	if(length(hudusers[user]) && (source in hudusers[user]))
 		hudusers[user] -= source
-
 	if(length(hudusers[user]))
 		return FALSE
-
 	for(var/mob/target in hudmobs)
 		remove_from_single_hud(user, target)
 
@@ -803,8 +801,6 @@ GLOBAL_DATUM(hud_icon_hudfocus, /image)
 	if (tag_found)
 		tag_holder.overlays += image('icons/mob/hud/hud.dmi', src, "prae_tag")
 
-	// Hacky, but works. Currently effects are hard to make with precise timings
-	var/freeze_found = HAS_TRAIT(src, TRAIT_IMMOBILIZED) && !buckled && !lying
-
+	var/freeze_found = HAS_TRAIT(src, TRAIT_IMMOBILIZED) && body_position == STANDING_UP && !buckled // Eligible targets are unable to move but can stand and aren't buckled (eg nested) - This is to convey that they are temporarily unable to move
 	if (freeze_found)
 		freeze_holder.overlays += image('icons/mob/hud/hud.dmi', src, "xeno_freeze")

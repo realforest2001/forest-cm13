@@ -102,7 +102,7 @@
 	switch(stage)
 		if(2)
 			if(prob(4))
-				if(affected_mob.knocked_out < 1)
+				if(!HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
 					affected_mob.pain.apply_pain(PAIN_CHESTBURST_WEAK)
 					affected_mob.visible_message(SPAN_DANGER("[affected_mob] starts shaking uncontrollably!"), \
 												SPAN_DANGER("You feel something moving inside you! You start shaking uncontrollably!"))
@@ -123,7 +123,7 @@
 			else if(prob(2))
 				affected_mob.emote("[pick("sneeze", "cough")]")
 			if(prob(5))
-				if(affected_mob.knocked_out < 1)
+				if(!HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
 					affected_mob.pain.apply_pain(PAIN_CHESTBURST_WEAK)
 					affected_mob.visible_message(SPAN_DANGER("\The [affected_mob] starts shaking uncontrollably!"), \
 												SPAN_DANGER("You feel something moving inside you! You start shaking uncontrollably!"))
@@ -139,7 +139,7 @@
 				if(prob(50))
 					affected_mob.emote("scream")
 			if(prob(6))
-				if(affected_mob.knocked_out < 1)
+				if(!HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
 					affected_mob.pain.apply_pain(PAIN_CHESTBURST_WEAK)
 					affected_mob.visible_message(SPAN_DANGER("[affected_mob] starts shaking uncontrollably!"), \
 												SPAN_DANGER("You feel something moving inside you! You start shaking uncontrollably!"))
@@ -160,7 +160,7 @@
 /obj/item/alien_embryo/proc/become_larva()
 	// We do not allow chest bursts on the Centcomm Z-level, to prevent
 	// stranded players from admin experiments and other issues
-	if(!affected_mob || is_admin_level(affected_mob.z))
+	if(!affected_mob || should_block_game_interaction(affected_mob))
 		return
 
 	stage = 6 // Increase the stage value to prevent this proc getting repeated
@@ -294,8 +294,8 @@
 	if(victim.chestburst || loc != victim)
 		return
 	victim.chestburst = TRUE
-	to_chat(src, SPAN_DANGER("You start bursting out of [victim]'s chest!"))
-	if(victim.knocked_out < 1)
+	to_chat(src, SPAN_DANGER("We start bursting out of [victim]'s chest!"))
+	if(!HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
 		victim.apply_effect(20, DAZE)
 	victim.visible_message(SPAN_DANGER("\The [victim] starts shaking uncontrollably!"), \
 						SPAN_DANGER("You feel something ripping up your insides!"))
@@ -352,7 +352,7 @@
 			qdel(larva_embryo)
 
 		if(!victim.first_xeno)
-			to_chat(larva_embryo, SPAN_XENOHIGHDANGER("The Queen's will overwhelms your instincts..."))
+			to_chat(larva_embryo, SPAN_XENOHIGHDANGER("The Queen's will overwhelms our instincts..."))
 			to_chat(larva_embryo, SPAN_XENOHIGHDANGER("\"[hive.hive_orders]\""))
 			log_attack("[key_name(victim)] chestbursted in [get_area_name(larva_embryo)] at X[victim.x], Y[victim.y], Z[victim.z]. The larva was [key_name(larva_embryo)].") //this is so that admins are not spammed with los logs
 

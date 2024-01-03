@@ -15,7 +15,7 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 	"1548" = "bug breaking the \"alpha\" functionality in the game, allowing clients to be able to see things/mobs they should not be able to see.",
 	))
 
-#define LIMITER_SIZE 5
+#define LIMITER_SIZE 12
 #define CURRENT_SECOND 1
 #define SECOND_COUNT 2
 #define CURRENT_MINUTE 3
@@ -56,6 +56,12 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 	/client/proc/receive_random_tip,
 	/client/proc/set_eye_blur_type,
 ))
+
+/client/proc/reduce_minute_count()
+	if (!topiclimiter)
+		topiclimiter = new(LIMITER_SIZE)
+	if(topiclimiter[MINUTE_COUNT] > 0)
+		topiclimiter[MINUTE_COUNT] -= 1
 
 /client/Topic(href, href_list, hsrc)
 	if(!usr || usr != mob) //stops us calling Topic for somebody else's client. Also helps prevent usr=null
@@ -795,3 +801,79 @@ GLOBAL_LIST_INIT(whitelisted_client_procs, list(
 		xeno_prefix = "XX"
 	if(!xeno_postfix || xeno_name_ban)
 		xeno_postfix = ""
+
+/// playtime for all castes
+/client/proc/get_total_xeno_playtime(skip_cache = FALSE)
+	if(cached_xeno_playtime && !skip_cache)
+		return cached_xeno_playtime
+
+	var/total_xeno_playtime = 0
+
+	for(var/caste in GLOB.RoleAuthority.castes_by_name)
+		total_xeno_playtime += get_job_playtime(src, caste)
+
+	total_xeno_playtime += get_job_playtime(src, JOB_XENOMORPH)
+
+	if(player_entity)
+		var/past_xeno_playtime = player_entity.get_playtime(STATISTIC_XENO)
+		if(past_xeno_playtime)
+			total_xeno_playtime += past_xeno_playtime
+
+
+	cached_xeno_playtime = total_xeno_playtime
+
+	return total_xeno_playtime
+
+/// playtime for drone and drone evolution castes
+/client/proc/get_total_drone_playtime()
+	var/total_drone_playtime = 0
+
+	var/list/drone_evo_castes = list(XENO_CASTE_DRONE, XENO_CASTE_CARRIER, XENO_CASTE_BURROWER, XENO_CASTE_HIVELORD, XENO_CASTE_QUEEN)
+
+	for(var/caste in GLOB.RoleAuthority.castes_by_name)
+		if(!(caste in drone_evo_castes))
+			continue
+		total_drone_playtime += get_job_playtime(src, caste)
+
+	return total_drone_playtime
+
+/// playtime for t3 castes and queen
+/client/proc/get_total_t3_playtime()
+	var/total_t3_playtime = 0
+	var/datum/caste_datum/caste
+	for(var/caste_name in GLOB.RoleAuthority.castes_by_name)
+		caste = GLOB.RoleAuthority.castes_by_name[caste_name]
+		if(caste.tier < 3)
+			continue
+		total_t3_playtime += get_job_playtime(src, caste_name)
+
+	return total_t3_playtime
+
+/client/verb/action_hide_menu()
+	set name = "Show/Hide Actions"
+	set category = "IC"
+
+	var/mob/user = usr
+
+	var/list/actions_list = list()
+	for(var/datum/action/action as anything in user.actions)
+		var/action_name = action.name
+		if(action.player_hidden)
+			action_name += " (Hidden)"
+		actions_list[action_name] += action
+
+	if(!LAZYLEN(actions_list))
+		to_chat(user, SPAN_WARNING("You have no actions available."))
+		return
+
+	var/selected_action_name = tgui_input_list(user, "Show or hide selected action", "Show/Hide Actions", actions_list, 30 SECONDS)
+	if(!selected_action_name)
+		to_chat(user, SPAN_WARNING("You did not select an action."))
+		return
+
+	var/datum/action/selected_action = actions_list[selected_action_name]
+	selected_action.player_hidden = !selected_action.player_hidden
+	user.update_action_buttons()
+
+	if(!selected_action.player_hidden && selected_action.hidden) //Inform the player that even if they are unhiding it, itll still not be visible
+		to_chat(user, SPAN_NOTICE("[selected_action] is forcefully hidden, bypassing player unhiding."))

@@ -36,6 +36,7 @@ GLOBAL_LIST_INIT(admin_verbs_default, list(
 	/client/proc/togglenichelogs,
 	/datum/admins/proc/display_tags,
 	/datum/admins/proc/player_notes_show,
+	/datum/admins/proc/check_ckey,
 	/datum/admins/proc/toggleooc, /*toggles ooc on/off for everyone*/
 	/datum/admins/proc/togglelooc, /*toggles ooc on/off for everyone*/
 	/datum/admins/proc/toggledsay, /*toggles dsay on/off for everyone*/
@@ -66,7 +67,7 @@ GLOBAL_LIST_INIT(admin_verbs_default, list(
 	/datum/admins/proc/subtlemessageall,
 	/datum/admins/proc/alertall,
 	/datum/admins/proc/imaginary_friend,
-	/client/proc/toggle_ares_ping,
+	/client/proc/toggle_admin_pings,
 	/client/proc/cmd_admin_say, /*staff-only ooc chat*/
 	/client/proc/cmd_mod_say, /* alternate way of typing asay, no different than cmd_admin_say  */
 	/client/proc/cmd_admin_tacmaps_panel,
@@ -234,7 +235,6 @@ GLOBAL_LIST_INIT(debug_verbs, list(
 	/client/proc/view_power_update_stats_area,
 	/client/proc/view_power_update_stats_machines,
 	/client/proc/toggle_power_update_profiling,
-	/client/proc/nanomapgen_DumpImage,
 ))
 
 GLOBAL_LIST_INIT(admin_verbs_possess, list(
@@ -585,15 +585,15 @@ GLOBAL_LIST_INIT(roundstart_mod_verbs, list(
 	message_admins("[key_name(usr)] announced a random fact.")
 	SSticker.mode?.declare_fun_facts()
 
-/client/proc/toggle_ares_ping()
-	set name = "Toggle ARES notification sound"
-	set category = "Preferences.Logs"
+/client/proc/toggle_admin_pings()
+	set name = "Toggle StaffIC log sounds"
+	set category = "Preferences.Sound"
 
 	prefs.toggles_sound ^= SOUND_ARES_MESSAGE
 	if (prefs.toggles_sound & SOUND_ARES_MESSAGE)
-		to_chat(usr, SPAN_BOLDNOTICE("You will now hear a ping for ARES messages."))
+		to_chat(usr, SPAN_BOLDNOTICE("You will now hear an audio cue for ARES and Prayer messages."))
 	else
-		to_chat(usr, SPAN_BOLDNOTICE("You will no longer hear a ping for ARES messages."))
+		to_chat(usr, SPAN_BOLDNOTICE("You will no longer hear an audio cue for ARES and Prayer messages."))
 
 
 #undef MAX_WARNS

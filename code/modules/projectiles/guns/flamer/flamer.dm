@@ -375,29 +375,6 @@
 	. = ..()
 	set_fire_delay(FIRE_DELAY_TIER_7)
 
-GLOBAL_LIST_EMPTY(flamer_particles)
-/particles/flamer_fire
-	icon = 'icons/effects/particles/fire.dmi'
-	icon_state = "bonfire"
-	width = 100
-	height = 100
-	count = 1000
-	spawning = 8
-	lifespan = 0.7 SECONDS
-	fade = 1 SECONDS
-	grow = -0.01
-	velocity = list(0, 0)
-	position = generator("box", list(-16, -16), list(16, 16), NORMAL_RAND)
-	drift = generator("vector", list(0, -0.2), list(0, 0.2))
-	gravity = list(0, 0.95)
-	scale = generator("vector", list(0.3, 0.3), list(1,1), NORMAL_RAND)
-	rotation = 30
-	spin = generator("num", -20, 20)
-
-/particles/flamer_fire/New(set_color)
-	..()
-	color = set_color
-
 /obj/flamer_fire
 	name = "fire"
 	desc = "Ouch!"
@@ -453,10 +430,6 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 		flame_icon = R.burn_sprite
 
 	set_light(l_color = R.burncolor)
-
-	if(!GLOB.flamer_particles[R.burncolor])
-		GLOB.flamer_particles[R.burncolor] = new /particles/flamer_fire(R.burncolor)
-	particles = GLOB.flamer_particles[R.burncolor]
 
 	tied_reagent = new R.type() // Can't get deleted this way
 	tied_reagent.make_alike(R)
@@ -648,7 +621,7 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 		burn_damage = 0
 
 	if(!burn_damage)
-		to_chat(M, SPAN_DANGER("You step over the flames."))
+		to_chat(M, SPAN_DANGER("[isxeno(M) ? "We" : "You"] step over the flames."))
 		return
 
 	M.last_damage_data = weapon_cause_data
@@ -659,7 +632,7 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 		if(FIRE_VARIANT_TYPE_B)
 			if(isxeno(M))
 				var/mob/living/carbon/xenomorph/X = M
-				X.armor_deflection?(variant_burn_msg=" You feel the flames weakening your exoskeleton!"):(variant_burn_msg=" You feel the flaming chemicals eating into your body!")
+				X.armor_deflection?(variant_burn_msg=" We feel the flames weakening our exoskeleton!"):(variant_burn_msg=" You feel the flaming chemicals eating into your body!")
 	to_chat(M, SPAN_DANGER("You are burned![variant_burn_msg?"[variant_burn_msg]":""]"))
 	M.updatehealth()
 

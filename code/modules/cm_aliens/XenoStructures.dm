@@ -88,7 +88,7 @@
 	else
 		M.animation_attack_on(src)
 		M.visible_message(SPAN_XENONOTICE("\The [M] claws \the [src]!"), \
-		SPAN_XENONOTICE("You claw \the [src]."))
+		SPAN_XENONOTICE("We claw \the [src]."))
 		if(istype(src, /obj/effect/alien/resin/sticky))
 			playsound(loc, "alien_resin_move", 25)
 		else
@@ -160,12 +160,12 @@
 /obj/effect/alien/resin/sticky/Crossed(atom/movable/AM)
 	. = ..()
 	var/mob/living/carbon/human/H = AM
-	if(istype(H) && !H.lying && !H.ally_of_hivenumber(hivenumber))
-		H.next_move_slowdown = H.next_move_slowdown + slow_amt
+	if(istype(H) && !H.ally_of_hivenumber(hivenumber))
+		H.next_move_slowdown = max(H.next_move_slowdown, slow_amt)
 		return .
 	var/mob/living/carbon/xenomorph/X = AM
 	if(istype(X) && !X.ally_of_hivenumber(hivenumber))
-		X.next_move_slowdown = X.next_move_slowdown + slow_amt
+		X.next_move_slowdown = max(X.next_move_slowdown, slow_amt)
 		return .
 
 /obj/effect/alien/resin/sticky/proc/forsaken_handling()
@@ -565,7 +565,7 @@
 			return FALSE
 		burning_friendly = TRUE
 
-	else if(current_mob.lying || current_mob.is_mob_incapacitated(TRUE))
+	else if(current_mob.body_position == LYING_DOWN || current_mob.is_mob_incapacitated(TRUE))
 		return FALSE
 
 	if(!burning_friendly && current_mob.health < 0)
@@ -780,7 +780,7 @@
 
 /obj/effect/alien/resin/resin_pillar/proc/brittle()
 	//playsound(granite cracking)
-	visible_message(SPAN_DANGER("You hear cracking sounds from the [src] as splinters start falling off from the structure! It seems brittle now."))
+	visible_message(SPAN_DANGER("You hear cracking sounds from [src] as splinters start falling off from the structure! It seems brittle now."))
 	health = vulnerable_health
 	for(var/i in walls)
 		var/turf/closed/wall/T = i
@@ -813,7 +813,7 @@
 
 /obj/effect/alien/resin/resin_pillar/hitby(atom/movable/AM)
 	if(!brittle)
-		visible_message(SPAN_DANGER("[AM] harmlessly bounces off the [src]!"))
+		visible_message(SPAN_DANGER("[AM] harmlessly bounces off [src]!"))
 		return
 	return ..()
 

@@ -242,6 +242,8 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	/// if this client has tooltips enabled
 	var/tooltips = TRUE
 
+	/// A list of tutorials that the client has completed, saved across rounds
+	var/list/completed_tutorials = list()
 	/// If this client has auto observe enabled, used by /datum/orbit_menu
 	var/auto_observe = TRUE
 
@@ -631,6 +633,7 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 			dat += "<b>Ghost Ears:</b> <a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles_chat & CHAT_GHOSTEARS) ? "All Speech" : "Nearest Creatures"]</b></a><br>"
 			dat += "<b>Ghost Sight:</b> <a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles_chat & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearest Creatures"]</b></a><br>"
 			dat += "<b>Ghost Radio:</b> <a href='?_src_=prefs;preference=ghost_radio'><b>[(toggles_chat & CHAT_GHOSTRADIO) ? "All Chatter" : "Nearest Speakers"]</b></a><br>"
+			dat += "<b>Ghost Spy Radio:</b> <a href='?_src_=prefs;preference=ghost_spyradio'><b>[(toggles_chat & CHAT_LISTENINGBUG) ? "Hear" : "Silence"] listening devices</b></a><br>"
 			dat += "<b>Ghost Hivemind:</b> <a href='?_src_=prefs;preference=ghost_hivemind'><b>[(toggles_chat & CHAT_GHOSTHIVEMIND) ? "Show Hivemind" : "Hide Hivemind"]</b></a><br>"
 			dat += "<b>Abovehead Chat:</b> <a href='?_src_=prefs;preference=lang_chat_disabled'><b>[lang_chat_disabled ? "Hide" : "Show"]</b></a><br>"
 			dat += "<b>Abovehead Emotes:</b> <a href='?_src_=prefs;preference=langchat_emotes'><b>[(toggles_langchat & LANGCHAT_SEE_EMOTES) ? "Show" : "Hide"]</b></a><br>"
@@ -1673,6 +1676,8 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 					var/new_pref_armor = tgui_input_list(user, "Choose your character's default style of armor:", "Character Preferences", GLOB.armor_style_list)
 					if(new_pref_armor)
 						preferred_armor = new_pref_armor
+						// Update the dummy with the new armor style.
+						update_preview_icon()
 
 				if("limbs")
 					var/limb_name = tgui_input_list(user, "Which limb do you want to change?", list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand"))
@@ -1883,6 +1888,9 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 				if("ghost_radio")
 					toggles_chat ^= CHAT_GHOSTRADIO
 
+				if("ghost_spyradio")
+					toggles_chat ^= CHAT_LISTENINGBUG
+
 				if("ghost_hivemind")
 					toggles_chat ^= CHAT_GHOSTHIVEMIND
 
@@ -2042,7 +2050,8 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	if(!istype(character))
 		return
 
-	find_assigned_slot(job_title, is_late_join)
+	if(job_title)
+		find_assigned_slot(job_title, is_late_join)
 	if(check_datacore && !(be_random_body && be_random_name))
 		for(var/datum/data/record/record as anything in GLOB.data_core.locked)
 			if(record.fields["name"] == real_name)
@@ -2348,6 +2357,22 @@ GLOBAL_LIST_INIT(bgstate_options, list(
 	dat += "</body>"
 	show_browser(user, dat, "Character Traits", "character_traits")
 	update_preview_icon(TRUE)
+
+/// Converts a client's list of completed tutorials into a string for saving
+/datum/preferences/proc/tutorial_list_to_savestring()
+	if(!length(completed_tutorials))
+		return ""
+
+	var/return_string = ""
+	var/last_id = completed_tutorials[length(completed_tutorials)]
+	for(var/tutorial_id in completed_tutorials)
+		return_string += tutorial_id + (tutorial_id != last_id ? ";" : "")
+	return return_string
+
+/// Converts a saved string of completed tutorials into a list for in-game use
+/datum/preferences/proc/tutorial_savestring_to_list(savestring)
+	completed_tutorials = splittext(savestring, ";")
+	return completed_tutorials
 
 #undef MENU_MARINE
 #undef MENU_XENOMORPH

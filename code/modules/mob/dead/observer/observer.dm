@@ -25,7 +25,6 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost"
 	density = FALSE
-	canmove = TRUE
 	blinded = FALSE
 	anchored = TRUE //  don't get pushed around
 	invisibility = INVISIBILITY_OBSERVER
@@ -79,6 +78,9 @@
 	. = ..()
 
 	GLOB.observer_list += src
+
+	// Ghosts don't move, they teleport via a special case in mob code
+	ADD_TRAIT(src, TRAIT_IMMOBILIZED, TRAIT_SOURCE_INHERENT)
 
 	var/turf/spawn_turf
 	if(ismob(body))
@@ -461,7 +463,7 @@ Works together with spawning an observer, noted above.
 	ghost.langchat_make_image()
 
 	SStgui.on_transfer(src, ghost)
-	if(is_admin_level((get_turf(src))?.z)) // Gibbed humans ghostize the brain in their head which itself is z 0
+	if(should_block_game_interaction(src)) // Gibbed humans ghostize the brain in their head which itself is z 0
 		ghost.timeofdeath = 1 // Bypass respawn limit if you die on the admin zlevel
 
 	ghost.key = key
@@ -545,7 +547,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			msg_admin_niche("[key_name_admin(client)] has ghosted. [ADMIN_JMP(location)]")
 		log_game("[key_name_admin(client)] has ghosted.")
 		var/mob/dead/observer/ghost = ghostize((is_nested && nest && !QDELETED(nest))) //FALSE parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
-		if(ghost && !is_admin_level(z))
+		SEND_SIGNAL(src, COMSIG_LIVING_GHOSTED, ghost)
+		if(ghost && !should_block_game_interaction(src))
 			ghost.timeofdeath = world.time
 
 			// Larva queue: We use the larger of their existing queue time or the new timeofdeath except for facehuggers or lesser drone
@@ -756,12 +759,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!tx || !ty || !tz)
 		return
 	following = null
-	spawn(0)
-		// To stop the ghost flickering.
-		x = tx
-		y = ty
-		z = tz
-		sleep(15)
+	forceMove(locate(tx, ty, tz))
 
 /mob/dead/observer/verb/dead_teleport_mob() //Moves the ghost instead of just changing the ghosts's eye -Nodrak
 	set category = "Ghost"
@@ -1234,6 +1232,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(client.prefs?.be_special & BE_ALIEN_AFTER_DEATH)
 		if(larva_queue_cached_message)
 			. += larva_queue_cached_message
+			. += ""
+
+	if(timeofdeath)
+		. += "Time Since Death: [duration2text_sec(world.time - timeofdeath)]"
 
 
 /proc/message_ghosts(message)

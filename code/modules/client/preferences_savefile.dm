@@ -188,11 +188,6 @@
 	S["co_affiliation"] >> affiliation
 	S["yautja_status"] >> yautja_status
 	S["synth_status"] >> synth_status
-	S["key_bindings"] >> key_bindings
-	check_keybindings()
-
-	var/list/remembered_key_bindings
-	S["remembered_key_bindings"] >> remembered_key_bindings
 
 	S["lang_chat_disabled"] >> lang_chat_disabled
 	S["show_permission_errors"] >> show_permission_errors
@@ -206,6 +201,10 @@
 	S["autofit_viewport"] >> auto_fit_viewport
 	S["adaptive_zoom"] >> adaptive_zoom
 	S["tooltips"] >> tooltips
+	S["key_bindings"] >> key_bindings
+
+	var/list/remembered_key_bindings
+	S["remembered_key_bindings"] >> remembered_key_bindings
 
 	//Sanitize
 	ooccolor = sanitize_hexcolor(ooccolor, CONFIG_GET(string/ooc_color_default))
@@ -273,6 +272,9 @@
 	pref_special_job_options = sanitize_islist(pref_special_job_options, list())
 	pref_job_slots = sanitize_islist(pref_job_slots, list())
 	vars["fps"] = fps
+
+	check_keybindings()
+	S["key_bindings"] << key_bindings
 
 	if(remembered_key_bindings)
 		for(var/i in GLOB.keybindings_by_name)
@@ -481,6 +483,10 @@
 	S["uplinklocation"] >> uplinklocation
 	S["exploit_record"] >> exploit_record
 
+	var/tutorial_string = ""
+	S["completed_tutorials"] >> tutorial_string
+	tutorial_savestring_to_list(tutorial_string)
+
 	//Sanitize
 	metadata = sanitize_text(metadata, initial(metadata))
 	real_name = reject_bad_name(real_name)
@@ -632,6 +638,8 @@
 	S["uplinklocation"] << uplinklocation
 	S["exploit_record"] << exploit_record
 
+	S["completed_tutorials"] << tutorial_list_to_savestring()
+
 	return 1
 
 /// checks through keybindings for outdated unbound keys and updates them
@@ -660,7 +668,7 @@
 					addedbind = TRUE
 		if(!addedbind)
 			notadded += kb
-	save_preferences()
+
 	if(length(notadded))
 		addtimer(CALLBACK(src, PROC_REF(announce_conflict), notadded), 5 SECONDS)
 

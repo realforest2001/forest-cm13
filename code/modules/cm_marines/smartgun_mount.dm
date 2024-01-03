@@ -1,12 +1,6 @@
 //////////////////////////////////////////////////////////////
 //Mounted MG, Replacment for the current jury rig code.
 
-//Adds a coin for engi vendors
-/obj/item/coin/marine/engineer
-	name = "marine engineer support token"
-	desc = "Insert this into an engineer vendor in order to access a support weapon."
-	icon_state = "coin_platinum"
-
 // First thing we need is the ammo drum for this thing.
 /obj/item/ammo_magazine/m56d
 	name = "M56D drum magazine (10x28mm Caseless)"
@@ -48,8 +42,12 @@
 	flags_equip_slot = SLOT_BACK
 	icon = 'icons/turf/whiskeyoutpost.dmi'
 	icon_state = "M56D_gun_e"
-	var/rounds = 0 // How many rounds are in the weapon. This is useful if we break down our guns.
-	var/has_mount = FALSE // Indicates whether the M56D will come with its folding mount already attached
+	///How many rounds are in the weapon. This is useful if we break down our guns.
+	var/rounds = 0
+	///Indicates whether the M56D will come with its folding mount already attached
+	var/has_mount = FALSE 
+	///The distance this has to be away from other m56d_hmg and m56d_post to be placed.
+	var/defense_check_range = 5
 
 /obj/item/device/m56d_gun/Initialize(mapload, ...)
 	. = ..()
@@ -90,7 +88,10 @@
 
 /obj/item/device/m56d_gun/attack_self(mob/user)
 	..()
-
+	for(var/obj/structure/machinery/machine in urange(defense_check_range, loc))
+		if(istype(machine, /obj/structure/machinery/m56d_hmg) || istype(machine, /obj/structure/machinery/m56d_post))
+			to_chat(user, SPAN_WARNING("This is too close to [machine]!"))
+			return
 	if(!ishuman(user))
 		return
 	if(!has_mount)
@@ -131,6 +132,10 @@
 
 	if(!do_after(user, 1 SECONDS, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD))
 		return
+	for(var/obj/structure/machinery/machine in urange(defense_check_range, loc))
+		if(istype(machine, /obj/structure/machinery/m56d_hmg) || istype(machine, /obj/structure/machinery/m56d_post))
+			to_chat(user, SPAN_WARNING("This is too close to [machine]!"))
+			return
 
 	var/obj/structure/machinery/m56d_post/M = new /obj/structure/machinery/m56d_post(user.loc)
 	M.setDir(user.dir) // Make sure we face the right direction
@@ -313,6 +318,10 @@
 
 	if(istype(O,/obj/item/device/m56d_gun)) //lets mount the MG onto the mount.
 		var/obj/item/device/m56d_gun/MG = O
+		for(var/obj/structure/machinery/machine in urange(MG.defense_check_range, loc, TRUE))
+			if(istype(machine, /obj/structure/machinery/m56d_hmg) || istype(machine, /obj/structure/machinery/m56d_post))
+				to_chat(user, SPAN_WARNING("This is too close to [machine]!"))
+				return
 		if(!anchored)
 			to_chat(user, SPAN_WARNING("[src] must be anchored! Use a screwdriver!"))
 			return
@@ -704,9 +713,12 @@
 	if(!istype(in_chamber, /obj/projectile))
 		return
 
-	var/angle = get_angle(T, U)
+	var/angle = Get_Angle(T, U)
 
 	if((dir == NORTH) && (angle > 180) && (abs(360 - angle) > shoot_degree)) // If north and shooting to the left, we do some extra math
+		return
+
+	if((dir == NORTH) && (angle < 180) && (angle > shoot_degree))
 		return
 
 	else if((dir != NORTH) && (abs(angle - dir2angle(dir)) > shoot_degree))
@@ -800,7 +812,7 @@
 	I.flick_overlay(src, 3)
 
 /obj/structure/machinery/m56d_hmg/MouseDrop(over_object, src_location, over_location) //Drag the MG to us to man it.
-	if(!ishuman(usr))
+	if(!ishuman(usr) || usr.stat)
 		return
 	var/mob/living/carbon/human/user = usr //this is us
 
@@ -839,7 +851,7 @@
 			to_chat(usr, SPAN_NOTICE("You are too far from the handles to man [src]!"))
 
 /obj/structure/machinery/m56d_hmg/on_set_interaction(mob/user)
-	RegisterSignal(user, list(COMSIG_MOB_MG_EXIT, COMSIG_MOB_RESISTED, COMSIG_MOB_DEATH, COMSIG_MOB_KNOCKED_DOWN), PROC_REF(exit_interaction))
+	RegisterSignal(user, list(COMSIG_MOB_MG_EXIT, COMSIG_MOB_RESISTED, COMSIG_MOB_DEATH, COMSIG_LIVING_SET_BODY_POSITION), PROC_REF(exit_interaction))
 	flags_atom |= RELAY_CLICK
 	user.status_flags |= IMMOBILE_ACTION
 	user.visible_message(SPAN_NOTICE("[user] mans \the [src]."),SPAN_NOTICE("You man \the [src], locked and loaded!"))
@@ -854,7 +866,7 @@
 	update_pixels(user)
 	operator = user
 
-/obj/structure/machinery/m56d_hmg/on_unset_interaction(mob/user)
+/obj/structure/machinery/m56d_hmg/on_unset_interaction(mob/living/user)
 	flags_atom &= ~RELAY_CLICK
 	SEND_SIGNAL(src, COMSIG_GUN_INTERRUPT_FIRE)
 	user.status_flags &= ~IMMOBILE_ACTION
@@ -875,7 +887,7 @@
 		COMSIG_MOB_MG_EXIT,
 		COMSIG_MOB_RESISTED,
 		COMSIG_MOB_DEATH,
-		COMSIG_MOB_KNOCKED_DOWN,
+		COMSIG_LIVING_SET_BODY_POSITION,
 	))
 
 
@@ -915,8 +927,8 @@
 			user.client.pixel_y = 0
 		animate(user, pixel_x=user_old_x, pixel_y=user_old_y, 4, 1)
 
-/obj/structure/machinery/m56d_hmg/check_eye(mob/user)
-	if(user.lying || get_dist(user,src) > 0 || user.is_mob_incapacitated() || !user.client)
+/obj/structure/machinery/m56d_hmg/check_eye(mob/living/user)
+	if(user.body_position != STANDING_UP || get_dist(user,src) > 0 || user.is_mob_incapacitated() || !user.client)
 		user.unset_interaction()
 
 /obj/structure/machinery/m56d_hmg/clicked(mob/user, list/mods)
@@ -1086,6 +1098,19 @@
 	projectile_coverage = PROJECTILE_COVERAGE_HIGH
 	icon = 'icons/turf/whiskeyoutpost.dmi'
 	zoom = 1
+	ammo = /datum/ammo/bullet/machinegun/doorgun
+
+/obj/structure/machinery/m56d_hmg/mg_turret/update_health(amount) //Negative values restores health.
+	health -= amount
+	if(health <= 0)
+		playsound(src.loc, 'sound/items/Welder2.ogg', 25, 1)
+		qdel(src)
+		return
+
+	if(health > health_max)
+		health = health_max
+	update_damage_state()
+	update_icon()
 
 /obj/structure/machinery/m56d_hmg/mg_turret/dropship
 	name = "\improper scoped M56D heavy machine gun"
