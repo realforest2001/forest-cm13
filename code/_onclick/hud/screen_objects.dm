@@ -30,6 +30,10 @@
 /atom/movable/screen/inventory
 	var/slot_id //The indentifier for the slot. It has nothing to do with ID cards.
 
+/atom/movable/screen/inventory/Initialize(mapload, ...)
+	. = ..()
+
+	RegisterSignal(src, COMSIG_ATOM_DROPPED_ON, PROC_REF(handle_dropped_on))
 
 /atom/movable/screen/close
 	name = "close"
@@ -207,9 +211,6 @@
 		update_icon(user)
 	return 1
 
-/atom/movable/screen/zone_sel/robot
-	icon = 'icons/mob/hud/screen1_robot.dmi'
-
 /atom/movable/screen/clicked(mob/user)
 	if(!user)
 		return TRUE
@@ -226,42 +227,6 @@
 
 		if("Reset Machine")
 			user.unset_interaction()
-			return 1
-
-		if("module")
-			if(isSilicon(user))
-				if(user:module)
-					return 1
-				user:pick_module()
-			return 1
-
-		if("radio")
-			if(isSilicon(user))
-				user:radio_menu()
-			return 1
-		if("panel")
-			if(isSilicon(user))
-				user:installed_modules()
-			return 1
-
-		if("store")
-			if(isSilicon(user))
-				user:uneq_active()
-			return 1
-
-		if("module1")
-			if(isrobot(user))
-				user:toggle_module(1)
-			return 1
-
-		if("module2")
-			if(isrobot(user))
-				user:toggle_module(2)
-			return 1
-
-		if("module3")
-			if(isrobot(user))
-				user:toggle_module(3)
 			return 1
 
 		if("Activate weapon attachment")
@@ -324,6 +289,22 @@
 				user.update_inv_r_hand(0)
 				return 1
 	return 0
+
+/atom/movable/screen/inventory/proc/handle_dropped_on(atom/dropped_on, atom/dropping, client/user)
+	SIGNAL_HANDLER
+
+	if(slot_id != WEAR_L_HAND && slot_id != WEAR_R_HAND)
+		return
+
+	if(!isstorage(dropping.loc))
+		return
+
+	if(!user.mob.Adjacent(dropping))
+		return
+
+	var/obj/item/storage/store = dropping.loc
+	store.remove_from_storage(dropping, get_turf(user.mob))
+	user.mob.put_in_active_hand(dropping)
 
 /atom/movable/screen/throw_catch
 	name = "throw/catch"
@@ -503,19 +484,19 @@
 		if(user.observed_xeno == user.tracked_marker)
 			user.overwatch(user.tracked_marker, TRUE) //passing in an obj/effect into a proc that expects mob/xenomorph B)
 		else
-			to_chat(user, SPAN_XENONOTICE("You psychically observe the [user.tracked_marker.mark_meaning.name] resin mark in [get_area_name(user.tracked_marker)]."))
+			to_chat(user, SPAN_XENONOTICE("We psychically observe the [user.tracked_marker.mark_meaning.name] resin mark in [get_area_name(user.tracked_marker)]."))
 			user.overwatch(user.tracked_marker) //this is so scuffed, sorry if this causes errors
 		return
 	if(mods["alt"] && user.tracked_marker)
 		user.stop_tracking_resin_mark()
 		return
 	if(!user.hive)
-		to_chat(user, SPAN_WARNING("You don't belong to a hive!"))
+		to_chat(user, SPAN_WARNING("We don't belong to a hive!"))
 		return FALSE
 	if(!user.hive.living_xeno_queen)
-		to_chat(user, SPAN_WARNING("Without a queen your psychic link is broken!"))
+		to_chat(user, SPAN_WARNING("Without a queen our psychic link is broken!"))
 		return FALSE
-	if(user.burrow || user.is_mob_incapacitated() || user.buckled)
+	if(HAS_TRAIT(user, TRAIT_ABILITY_BURROWED) || user.is_mob_incapacitated() || user.buckled)
 		return FALSE
 	user.hive.mark_ui.update_all_data()
 	user.hive.mark_ui.open_mark_menu(user)
@@ -531,10 +512,10 @@
 		return FALSE
 	if(mods["shift"])
 		var/area/current_area = get_area(user)
-		to_chat(user, SPAN_NOTICE("You are currently at: <b>[current_area.name]</b>."))
+		to_chat(user, SPAN_NOTICE("We are currently at: <b>[current_area.name]</b>."))
 		return
 	if(!user.hive)
-		to_chat(user, SPAN_WARNING("You don't belong to a hive!"))
+		to_chat(user, SPAN_WARNING("We don't belong to a hive!"))
 		return FALSE
 	if(mods["alt"])
 		var/list/options = list()
@@ -551,9 +532,10 @@
 				options["Xeno Leader [xeno_lead]"] = list(TRACKER_LEADER, xeno_leader_index)
 			xeno_leader_index++
 
+		var/list/sorted_tunnels = sort_list_dist(user.hive.tunnels, get_turf(user))
 		var/tunnel_index = 1
-		for(var/obj/structure/tunnel/tracked_tunnel in user.hive.tunnels)
-			options["Tunnel [tracked_tunnel.tunnel_desc]"] = list(TRACKER_TUNNEL, tunnel_index)
+		for(var/obj/structure/tunnel/tunnel in sorted_tunnels)
+			options["Tunnel [tunnel.tunnel_desc]"] = list(TRACKER_TUNNEL, tunnel_index)
 			tunnel_index++
 
 		var/selected = tgui_input_list(user, "Select what you want the locator to track.", "Locator Options", options)
@@ -561,9 +543,9 @@
 			track_state = options[selected]
 		return
 	if(!user.hive.living_xeno_queen)
-		to_chat(user, SPAN_WARNING("Your hive doesn't have a living queen!"))
+		to_chat(user, SPAN_WARNING("Our hive doesn't have a living queen!"))
 		return FALSE
-	if(user.burrow || user.is_mob_incapacitated() || user.buckled)
+	if(HAS_TRAIT(user, TRAIT_ABILITY_BURROWED) || user.is_mob_incapacitated() || user.buckled)
 		return FALSE
 	user.overwatch(user.hive.living_xeno_queen)
 

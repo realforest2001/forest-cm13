@@ -118,6 +118,15 @@ const ObservableContent = (props, context) => {
     survivors = [],
     xenos = [],
     ert_members = [],
+    upp = [],
+    clf = [],
+    wy = [],
+    twe = [],
+    freelancer = [],
+    mercenary = [],
+    contractor = [],
+    dutch = [],
+    marshal = [],
     synthetics = [],
     predators = [],
     animals = [],
@@ -145,6 +154,43 @@ const ObservableContent = (props, context) => {
         section={synthetics}
         title="Synthetics"
       />
+      <ObservableSection
+        color="green"
+        section={upp}
+        title="Union of Progressive Peoples"
+      />
+      <ObservableSection
+        color="teal"
+        section={clf}
+        title="Colonial Liberation Front"
+      />
+      <ObservableSection color="white" section={wy} title="Weyland Yutani" />
+      <ObservableSection
+        color="red"
+        section={twe}
+        title="Royal Marines Commando"
+      />
+      <ObservableSection
+        color="orange"
+        section={freelancer}
+        title="Freelancers"
+      />
+      <ObservableSection
+        color="label"
+        section={mercenary}
+        title="Mercenaries"
+      />
+      <ObservableSection
+        color="light-grey"
+        section={contractor}
+        title="Military Contractors"
+      />
+      <ObservableSection color="good" section={dutch} title="Dutchs Dozen" />
+      <ObservableSection
+        color="dark-blue"
+        section={marshal}
+        title="Colonial Marshal Bureau"
+      />
       <ObservableSection color="green" section={predators} title="Predators" />
       <ObservableSection color="olive" section={escaped} title="Escaped" />
       <ObservableSection section={vehicles} title="Vehicles" />
@@ -163,9 +209,9 @@ const ObservableContent = (props, context) => {
  */
 const ObservableSection = (
   props: {
-    color?: string;
-    section: Array<Observable>;
-    title: string;
+    readonly color?: string;
+    readonly section: Array<Observable>;
+    readonly title: string;
   },
   context
 ) => {
@@ -205,7 +251,7 @@ const ObservableSection = (
 
 /** Renders an observable button that has tooltip info for living Observables*/
 const ObservableItem = (
-  props: { color?: string; item: Observable },
+  props: { readonly color?: string; readonly item: Observable },
   context
 ) => {
   const { act } = useBackend<OrbitData>(context);
@@ -214,6 +260,8 @@ const ObservableItem = (
     item;
 
   const [autoObserve] = useLocalState<boolean>(context, 'autoObserve', false);
+
+  const displayHealth = typeof health === 'number';
 
   return (
     <Button
@@ -225,9 +273,9 @@ const ObservableItem = (
         'color': color ? 'white' : 'grey',
       }}
       onClick={() => act('orbit', { ref: ref })}
-      tooltip={!!health && <ObservableTooltip item={item} />}
+      tooltip={displayHealth && <ObservableTooltip item={item} />}
       tooltipPosition="bottom-start">
-      {!!health && (
+      {displayHealth && (
         <ColorBox
           color={getHealthColor(health)}
           style={{ 'margin-right': '0.5em' }}
@@ -246,11 +294,13 @@ const ObservableItem = (
 };
 
 /** Displays some info on the mob as a tooltip. */
-const ObservableTooltip = (props: { item: Observable }) => {
+const ObservableTooltip = (props: { readonly item: Observable }) => {
   const {
     item: { caste, health, job, full_name, icon, background_color },
   } = props;
-  const displayHealth = !!health && health >= 0 ? `${health}%` : 'Critical';
+
+  const displayHealth = typeof health === 'number';
+  const healthText = !!health && health >= 0 ? `${health}%` : 'Critical';
 
   return (
     <LabeledList>
@@ -273,8 +323,8 @@ const ObservableTooltip = (props: { item: Observable }) => {
           {job}
         </LabeledList.Item>
       )}
-      {!!health && (
-        <LabeledList.Item label="Health">{displayHealth}</LabeledList.Item>
+      {displayHealth && (
+        <LabeledList.Item label="Health">{healthText}</LabeledList.Item>
       )}
     </LabeledList>
   );
@@ -283,8 +333,8 @@ const ObservableTooltip = (props: { item: Observable }) => {
 /** Generates a small icon for buttons based on ICONMAP */
 const ObservableIcon = (
   props: {
-    icon: Observable['icon'];
-    background_color: Observable['background_color'];
+    readonly icon: Observable['icon'];
+    readonly background_color: Observable['background_color'];
   },
   context
 ) => {
