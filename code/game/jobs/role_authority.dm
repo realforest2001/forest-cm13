@@ -158,7 +158,6 @@ GLOBAL_VAR_INIT(players_preassigned, 0)
 				if("syntheticcouncillegacy")		role |= WHITELIST_SYNTHETIC_COUNCIL_LEGACY
 				if("syntheticleader")				role |= WHITELIST_SYNTHETIC_LEADER
 				if("advisor")						role |= WHITELIST_MENTOR
-				if("special")						role |= WHITELIST_ADMIN
 				if("allgeneral")					role |= WHITELISTS_GENERAL
 				if("allcouncil")					role |= (WHITELISTS_COUNCIL|WHITELISTS_GENERAL)
 				if("alllegacycouncil")				role |= (WHITELISTS_LEGACY_COUNCIL|WHITELISTS_GENERAL)
