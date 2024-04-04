@@ -204,12 +204,15 @@
 
 			if(M.attempt_tackle(src, tackle_mult, tackle_min_offset, tackle_max_offset))
 				playsound(loc, 'sound/weapons/alien_knockdown.ogg', 25, 1)
-				apply_effect(rand(M.tacklestrength_min, M.tacklestrength_max), WEAKEN)
+				var/strength = rand(M.tacklestrength_min, M.tacklestrength_max)
+				Stun(strength)
+				KnockDown(strength) // Purely for knockdown visuals. All the heavy lifting is done by Stun
 				M.visible_message(SPAN_DANGER("[M] tackles down [src]!"), \
 				SPAN_DANGER("We tackle down [src]!"), null, 5, CHAT_TYPE_XENO_COMBAT)
+				SEND_SIGNAL(src, COMSIG_MOB_TACKLED_DOWN, M)
 			else
 				playsound(loc, 'sound/weapons/alien_claw_swipe.ogg', 25, 1)
-				if (HAS_TRAIT(src, TRAIT_FLOORED))
+				if (body_position == LYING_DOWN)
 					M.visible_message(SPAN_DANGER("[M] tries to tackle [src], but they are already down!"), \
 					SPAN_DANGER("We try to tackle [src], but they are already down!"), null, 5, CHAT_TYPE_XENO_COMBAT)
 				else
@@ -285,6 +288,7 @@
 /mob/living/attack_larva(mob/living/carbon/xenomorph/larva/M)
 	M.visible_message(SPAN_DANGER("[M] nudges its head against [src]."), \
 	SPAN_DANGER("We nudge our head against [src]."), null, 5, CHAT_TYPE_XENO_FLUFF)
+	M.animation_attack_on(src)
 
 /mob/living/proc/is_xeno_grabbable()
 	if(stat == DEAD)
@@ -306,7 +310,7 @@
 		return FALSE // leave the dead alone
 
 //This proc is here to prevent Xenomorphs from picking up objects (default attack_hand behaviour)
-//Note that this is overriden by every proc concerning a child of obj unless inherited
+//Note that this is overridden by every proc concerning a child of obj unless inherited
 /obj/item/attack_alien(mob/living/carbon/xenomorph/M)
 	return
 
@@ -908,7 +912,7 @@
 		return XENO_ATTACK_ACTION
 
 /obj/structure/girder/attack_alien(mob/living/carbon/xenomorph/M)
-	if((M.caste && M.caste.tier < 2 && !isqueen(M)) || unacidable)
+	if((M.caste && M.caste.tier < 2 && M.claw_type < CLAW_TYPE_VERY_SHARP) || unacidable)
 		to_chat(M, SPAN_WARNING("Our claws aren't sharp enough to damage [src]."))
 		return XENO_NO_DELAY_ACTION
 	M.animation_attack_on(src)

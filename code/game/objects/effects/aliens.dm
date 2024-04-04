@@ -326,11 +326,11 @@
 	handle_weather()
 	RegisterSignal(SSdcs, COMSIG_GLOB_WEATHER_CHANGE, PROC_REF(handle_weather))
 	RegisterSignal(acid_t, COMSIG_PARENT_QDELETING, PROC_REF(cleanup))
-	START_PROCESSING(SSeffects, src)
+	START_PROCESSING(SSoldeffects, src)
 
 /obj/effect/xenomorph/acid/Destroy()
 	acid_t = null
-	STOP_PROCESSING(SSeffects, src)
+	STOP_PROCESSING(SSoldeffects, src)
 	. = ..()
 
 /obj/effect/xenomorph/acid/proc/cleanup()
@@ -500,13 +500,13 @@
 	QDEL_IN(src, ttl)
 
 /obj/effect/xenomorph/xeno_telegraph/red
-	color = COLOUR_DARK_RED
+	color = COLOR_DARK_RED
 
 /obj/effect/xenomorph/xeno_telegraph/brown
-	color = COLOUR_BROWN
+	color = COLOR_BROWN
 
 /obj/effect/xenomorph/xeno_telegraph/green
-	color = COLOUR_GREEN
+	color = COLOR_LIGHT_GREEN
 
 /// This has a brown icon state and does not have a color overlay by default.
 /obj/effect/xenomorph/xeno_telegraph/abduct_hook

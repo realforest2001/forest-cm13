@@ -78,6 +78,7 @@
 
 	playsound(xeno.loc, "alien_resin_build", 25)
 	apply_cooldown()
+	SEND_SIGNAL(xeno, COMSIG_XENO_PLANT_RESIN_NODE)
 	return ..()
 
 /mob/living/carbon/xenomorph/lay_down()
@@ -363,6 +364,7 @@
 		current_aura = pheromone
 		visible_message(SPAN_XENOWARNING("\The [src] begins to emit strange-smelling pheromones."), \
 		SPAN_XENOWARNING("We begin to emit '[pheromone]' pheromones."), null, 5)
+		SEND_SIGNAL(src, COMSIG_XENO_START_EMIT_PHEROMONES, pheromone)
 		playsound(loc, "alien_drool", 25)
 
 	if(isqueen(src) && hive && hive.xeno_leader_list.len && anchored)
@@ -433,7 +435,7 @@
 	pre_pounce_effects()
 
 	X.pounce_distance = get_dist(X, A)
-	X.throw_atom(A, distance, throw_speed, X, pass_flags = pounce_pass_flags, collision_callbacks = pounce_callbacks)
+	X.throw_atom(A, distance, throw_speed, X, launch_type = LOW_LAUNCH, pass_flags = pounce_pass_flags, collision_callbacks = pounce_callbacks)
 	X.update_icons()
 
 	additional_effects_always()
@@ -481,7 +483,7 @@
 
 	// Build our list of target turfs based on
 	if (spray_type == ACID_SPRAY_LINE)
-		X.do_acid_spray_line(getline2(X, A, include_from_atom = FALSE), spray_effect_type, spray_distance)
+		X.do_acid_spray_line(get_line(X, A, include_start_atom = FALSE), spray_effect_type, spray_distance)
 
 	else if (spray_type == ACID_SPRAY_CONE)
 		X.do_acid_spray_cone(get_turf(A), spray_effect_type, spray_distance)
@@ -500,13 +502,20 @@
 		xeno.layer = XENO_HIDING_LAYER
 		to_chat(xeno, SPAN_NOTICE("We are now hiding."))
 		button.icon_state = "template_active"
+		RegisterSignal(xeno, COMSIG_MOB_STATCHANGE, PROC_REF(unhide_on_stat))
 	else
 		xeno.layer = initial(xeno.layer)
 		to_chat(xeno, SPAN_NOTICE("We have stopped hiding."))
 		button.icon_state = "template"
+		UnregisterSignal(xeno, COMSIG_MOB_STATCHANGE)
 	xeno.update_wounds()
 	apply_cooldown()
 	return ..()
+
+/datum/action/xeno_action/onclick/xenohide/proc/unhide_on_stat(mob/living/carbon/xenomorph/source, new_stat, old_stat)
+	SIGNAL_HANDLER
+	if(!QDELETED(source) && (new_stat >= UNCONSCIOUS && old_stat <= UNCONSCIOUS))
+		post_attack()
 
 /datum/action/xeno_action/onclick/place_trap/use_ability(atom/A)
 	var/mob/living/carbon/xenomorph/X = owner
@@ -627,13 +636,14 @@
 		to_chat(X, SPAN_WARNING("The weeds are still recovering from the death of the hive core, wait until the weeds have recovered!"))
 		return FALSE
 	if(X.hive.has_structure(XENO_STRUCTURE_CORE) || !X.hive.can_build_structure(XENO_STRUCTURE_CORE))
-		choice = tgui_input_list(X, "Choose a structure to build", "Build structure", X.hive.hive_structure_types + "help", theme="hive_status")
+		choice = tgui_input_list(X, "Choose a structure to build", "Build structure", X.hive.hive_structure_types + "help", theme = "hive_status")
 		if(!choice)
 			return
 		if(choice == "help")
-			var/message = "<br>Placing a construction node creates a template for special structures that can benefit the hive, which require the insertion of [MATERIAL_CRYSTAL] to construct the following:<br>"
+			var/message = "Placing a construction node creates a template for special structures that can benefit the hive, which require the insertion of plasma to construct the following:<br>"
 			for(var/structure_name in X.hive.hive_structure_types)
-				message += "[get_xeno_structure_desc(structure_name)]<br>"
+				var/datum/construction_template/xenomorph/structure_type = X.hive.hive_structure_types[structure_name]
+				message += "<b>[capitalize_first_letters(structure_name)]</b> - [initial(structure_type.description)]<br>"
 			to_chat(X, SPAN_NOTICE(message))
 			return TRUE
 	if(!X.check_state(TRUE) || !X.check_plasma(400))
@@ -641,32 +651,28 @@
 	var/structure_type = X.hive.hive_structure_types[choice]
 	var/datum/construction_template/xenomorph/structure_template = new structure_type()
 
-	if(!spacecheck(X,T,structure_template))
+	if(!spacecheck(X, T, structure_template))
 		return FALSE
 
 	if(!do_after(X, XENO_STRUCTURE_BUILD_TIME, INTERRUPT_NO_NEEDHAND|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD))
 		return FALSE
 
-	if(!spacecheck(X,T,structure_template)) //doublechecking
+	if(!spacecheck(X, T, structure_template)) //doublechecking
 		return FALSE
 
 	if((choice == XENO_STRUCTURE_CORE) && isqueen(X) && X.hive.has_structure(XENO_STRUCTURE_CORE))
 		if(X.hive.hive_location.hardcore || world.time > XENOMORPH_PRE_SETUP_CUTOFF)
 			to_chat(X, SPAN_WARNING("We can't rebuild this structure!"))
-			return
+			return FALSE
 		if(alert(X, "Are we sure that we want to move the hive and destroy the old hive core?", , "Yes", "No") != "Yes")
-			return
+			return FALSE
 		qdel(X.hive.hive_location)
 	else if(!X.hive.can_build_structure(choice))
 		to_chat(X, SPAN_WARNING("We can't build any more [choice]s for the hive."))
-		return FALSE
-
-	if(!X.hive.can_build_structure(structure_template.name) && !(choice == XENO_STRUCTURE_CORE))
-		to_chat(X, SPAN_WARNING("We cannot build any more [structure_template.name]!"))
 		qdel(structure_template)
 		return FALSE
 
-	if (QDELETED(T))
+	if(QDELETED(T))
 		to_chat(X, SPAN_WARNING("We cannot build here!"))
 		qdel(structure_template)
 		return FALSE
@@ -923,7 +929,7 @@
 	if(distance > 2)
 		return FALSE
 
-	var/list/turf/path = getline2(stabbing_xeno, targetted_atom, include_from_atom = FALSE)
+	var/list/turf/path = get_line(stabbing_xeno, targetted_atom, include_start_atom = FALSE)
 	for(var/turf/path_turf as anything in path)
 		if(path_turf.density)
 			to_chat(stabbing_xeno, SPAN_WARNING("There's something blocking our strike!"))
@@ -1009,6 +1015,9 @@
 		// The xeno flips around for a second to impale the target with their tail. These look awsome.
 		stab_direction = turn(get_dir(stabbing_xeno, target), 180)
 		stab_overlay = "tail"
+	log_attack("[key_name(stabbing_xeno)] tailstabbed [key_name(target)] at [get_area_name(stabbing_xeno)]")
+	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was tailstabbed by [key_name(stabbing_xeno)]</font>")
+	stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>tailstabbed [key_name(target)]</font>")
 
 	stabbing_xeno.setDir(stab_direction)
 	stabbing_xeno.emote("tail")

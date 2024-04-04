@@ -37,6 +37,8 @@
 
 	if (xeno.Adjacent(carbon))
 		xeno.start_pulling(carbon,1)
+		if(ishuman(carbon))
+			INVOKE_ASYNC(carbon, TYPE_PROC_REF(/mob, emote), "scream")
 	else
 		xeno.visible_message(SPAN_XENOWARNING("[xeno]'s claws twitch."), SPAN_XENOWARNING("Our claws twitch as we lunge but are unable to grab onto our target. Wait a moment to try again."))
 
@@ -77,30 +79,21 @@
 	xeno.visible_message(SPAN_XENOWARNING("[xeno] effortlessly flings [carbon] to the side!"), SPAN_XENOWARNING("We effortlessly fling [carbon] to the side!"))
 	playsound(carbon,'sound/weapons/alien_claw_block.ogg', 75, 1)
 	if(stun_power)
-		carbon.apply_effect(get_xeno_stun_duration(carbon, stun_power), STUN)
+		carbon.Stun(get_xeno_stun_duration(carbon, stun_power))
 	if(weaken_power)
-		carbon.apply_effect(weaken_power, WEAKEN)
+		carbon.KnockDown(get_xeno_stun_duration(carbon, weaken_power))
 	if(slowdown)
 		if(carbon.slowed < slowdown)
 			carbon.apply_effect(slowdown, SLOW)
 	carbon.last_damage_data = create_cause_data(initial(xeno.caste_type), xeno)
-	shake_camera(carbon, 2, 1)
 
 	var/facing = get_dir(xeno, carbon)
-	var/turf/throw_turf = xeno.loc
-	var/turf/temp = xeno.loc
-
-	for (var/step in 0 to fling_distance-1)
-		temp = get_step(throw_turf, facing)
-		if (!temp)
-			break
-		throw_turf = temp
 
 	// Hmm today I will kill a marine while looking away from them
 	xeno.face_atom(carbon)
 	xeno.animation_attack_on(carbon)
 	xeno.flick_attack_overlay(carbon, "disarm")
-	carbon.throw_atom(throw_turf, fling_distance, SPEED_VERY_FAST, xeno, TRUE)
+	xeno.throw_carbon(carbon, facing, fling_distance, SPEED_VERY_FAST, shake_camera = TRUE, immobilize = TRUE)
 
 	apply_cooldown()
 	return ..()

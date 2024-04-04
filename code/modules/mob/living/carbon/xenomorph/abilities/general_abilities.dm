@@ -394,10 +394,12 @@
 /// remove hide and apply modified attack cooldown
 /datum/action/xeno_action/onclick/xenohide/proc/post_attack()
 	var/mob/living/carbon/xenomorph/xeno = owner
+	UnregisterSignal(xeno, COMSIG_MOB_STATCHANGE)
 	if(xeno.layer == XENO_HIDING_LAYER)
 		xeno.layer = initial(xeno.layer)
 		button.icon_state = "template"
 		xeno.update_wounds()
+		xeno.update_layer()
 	apply_cooldown(4) //2 second cooldown after attacking
 
 /datum/action/xeno_action/onclick/xenohide/give_to(mob/living/living_mob)
@@ -422,7 +424,7 @@
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_5
 
-/datum/action/xeno_action/activable/place_construction/queen_macro //so it doesn't screw other macros up
+/datum/action/xeno_action/activable/place_construction/not_primary //so it doesn't screw other macros up
 	ability_primacy = XENO_NOT_PRIMARY_ACTION
 
 /datum/action/xeno_action/activable/xeno_spit
@@ -495,6 +497,7 @@
 	ability_name = "view tacmap"
 
 	var/mob/living/carbon/xenomorph/queen/tracked_queen
+	var/hivenumber
 
 /datum/action/xeno_action/onclick/tacmap/Destroy()
 	tracked_queen = null
@@ -503,6 +506,7 @@
 /datum/action/xeno_action/onclick/tacmap/give_to(mob/living/carbon/xenomorph/xeno)
 	. = ..()
 
+	hivenumber = xeno.hive.hivenumber
 	RegisterSignal(xeno.hive, COMSIG_HIVE_NEW_QUEEN, PROC_REF(handle_new_queen))
 
 	if(!xeno.hive.living_xeno_queen)
@@ -513,6 +517,10 @@
 		hide_from(xeno)
 
 	handle_new_queen(new_queen = xeno.hive.living_xeno_queen)
+
+/datum/action/xeno_action/onclick/tacmap/remove_from(mob/living/carbon/xenomorph/xeno)
+	. = ..()
+	UnregisterSignal(GLOB.hive_datum[hivenumber], COMSIG_HIVE_NEW_QUEEN)
 
 /// handles the addition of a new queen, hiding if appropriate
 /datum/action/xeno_action/onclick/tacmap/proc/handle_new_queen(datum/hive_status/hive, mob/living/carbon/xenomorph/queen/new_queen)

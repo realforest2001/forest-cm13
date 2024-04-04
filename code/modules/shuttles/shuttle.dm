@@ -30,8 +30,6 @@
 	var/almayerelevator = 0 //elevators on the almayer without limitations
 	var/replacement_turf_type = /turf/open/floor/almayer/empty //this is what replaces the turf when leaving there
 
-	var/list/last_passangers = list() //list of living creatures that were our last passengers
-
 	var/require_link = FALSE
 	var/linked = FALSE
 	var/ambience_muffle = MUFFLE_HIGH
@@ -203,9 +201,7 @@
 
 	origin.move_contents_to(destination, direction=direction)
 
-	last_passangers.Cut()
-	for(var/mob/M in destination)
-		last_passangers += M
+	for(var/mob/living/M in destination)
 		if(M.client)
 			spawn(0)
 				if(M.buckled && !iselevator)
@@ -216,17 +212,19 @@
 					shake_camera(M, iselevator? 2 : 10, 1)
 		if(istype(M, /mob/living/carbon) && !iselevator)
 			if(!M.buckled)
-				M.apply_effect(3, WEAKEN)
+				M.Stun(3)
+				M.KnockDown(3)
 
 	for(var/turf/T in origin) // WOW so hacky - who cares. Abby
 		if(iselevator)
 			if(istype(T,/turf/open/space))
 				if(is_mainship_level(T.z))
 					new replacement_turf_type(T)
+					T.ChangeTurf(/turf/open/floor/almayer/empty/requisitions)
 				else
-					new /turf/open/gm/empty(T)
+					T.ChangeTurf(/turf/open/gm/empty)
 		else if(istype(T,/turf/open/space))
-			new /turf/open/floor/plating(T)
+			T.ChangeTurf(/turf/open/floor/plating)
 
 	return
 

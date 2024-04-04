@@ -555,7 +555,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 								vend_fail()
 								return FALSE
 							var/obj/item/card/id/ID = user.wear_id
-							if(!istype(ID) || ID.registered_ref != WEAKREF(usr))
+							if(!istype(ID) || !ID.check_biometrics(user))
 								to_chat(user, SPAN_WARNING("You must be wearing your [SPAN_INFO("dog tags")] to select a specialization!"))
 								return FALSE
 							var/specialist_assignment
@@ -576,7 +576,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 									user.skills.set_skill(SKILL_SPEC_WEAPONS, SKILL_SPEC_PYRO)
 									specialist_assignment = "Pyro"
 								else
-									to_chat(user, SPAN_WARNING("<b>Something bad occured with [src], tell a Dev.</b>"))
+									to_chat(user, SPAN_WARNING("<b>Something bad occurred with [src], tell a Dev.</b>"))
 									vend_fail()
 									return FALSE
 							ID.set_assignment((user.assigned_squad ? (user.assigned_squad.name + " ") : "") + JOB_SQUAD_SPECIALIST + " ([specialist_assignment])")
@@ -779,15 +779,15 @@ GLOBAL_LIST_EMPTY(vending_products)
 				vend_fail()
 			return FALSE
 
-		var/mob/living/carbon/human/H = user
-		var/obj/item/card/id/I = H.wear_id
-		if(!istype(I))
+		var/mob/living/carbon/human/human_user = user
+		var/obj/item/card/id/idcard = human_user.wear_id
+		if(!istype(idcard))
 			if(display)
 				to_chat(user, SPAN_WARNING("Access denied. No ID card detected"))
 				vend_fail()
 			return FALSE
 
-		if(I.registered_name != user.real_name)
+		if(!idcard.check_biometrics(human_user))
 			if(display)
 				to_chat(user, SPAN_WARNING("Wrong ID card owner detected."))
 				vend_fail()
@@ -900,7 +900,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 		for(var/list/vendspec in listed_products)
 			var/multiplier = vendspec[2]
 			if(multiplier > 0)
-				var/awarded = round(vendspec[2] * scale) // Starting amount
+				var/awarded = round(vendspec[2] * scale, 1) // Starting amount
 				//Record the multiplier and how many have actually been given out
 				dynamic_stock_multipliers[vendspec] = list(vendspec[2], awarded)
 				vendspec[2] = awarded // Override starting amount
@@ -920,8 +920,8 @@ GLOBAL_LIST_EMPTY(vending_products)
 		var/list/metadata = dynamic_stock_multipliers[vendspec]
 		var/multiplier = metadata[1] // How much do we multiply scales by
 		var/previous_max_amount = metadata[2] // How many we already handed out at old scale
-		var/projected_max_amount = round(new_scale * multiplier) // How much we would have had total now in total
-		var/amount_to_add = round(projected_max_amount - previous_max_amount) // Rounding just in case
+		var/projected_max_amount = round(new_scale * multiplier, 1) // How much we would have had total now in total
+		var/amount_to_add = round(projected_max_amount - previous_max_amount, 1) // Rounding just in case
 		if(amount_to_add > 0)
 			metadata[2] += amount_to_add
 			vendspec[2] += amount_to_add
@@ -1239,8 +1239,10 @@ GLOBAL_LIST_INIT(cm_vending_gear_corresponding_types_list, list(
 		if(islist(prod_type))
 			for(var/each_type in prod_type)
 				vendor_successful_vend_one(each_type, user, target_turf, itemspec[4] == MARINE_CAN_BUY_UNIFORM)
+				SEND_SIGNAL(src, COMSIG_VENDOR_SUCCESSFUL_VEND, src, itemspec, user)
 		else
 			vendor_successful_vend_one(prod_type, user, target_turf, itemspec[4] == MARINE_CAN_BUY_UNIFORM)
+			SEND_SIGNAL(src, COMSIG_VENDOR_SUCCESSFUL_VEND, src, itemspec, user)
 
 		if(vend_flags & VEND_LIMITED_INVENTORY)
 			itemspec[2]--
@@ -1273,12 +1275,15 @@ GLOBAL_LIST_INIT(cm_vending_gear_corresponding_types_list, list(
 	if(vend_flags & VEND_UNIFORM_RANKS)
 		if(insignas_override)
 			var/obj/item/clothing/under/underclothes = new_item
+
 			//Gives ranks to the ranked
 			if(istype(underclothes) && user.wear_id && user.wear_id.paygrade)
 				var/rankpath = get_rank_pins(user.wear_id.paygrade)
 				if(rankpath)
 					var/obj/item/clothing/accessory/ranks/rank_insignia = new rankpath()
+					var/obj/item/clothing/accessory/patch/uscmpatch = new()
 					underclothes.attach_accessory(user, rank_insignia)
+					underclothes.attach_accessory(user, uscmpatch)
 
 	if(vend_flags & VEND_UNIFORM_AUTOEQUIP)
 		// autoequip

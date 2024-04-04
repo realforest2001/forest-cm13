@@ -55,12 +55,17 @@
 		/datum/action/xeno_action/onclick/tacmap,
 	)
 
-	mutation_type = WARRIOR_NORMAL
 	claw_type = CLAW_TYPE_SHARP
+
 	icon_xeno = 'icons/mob/xenos/warrior.dmi'
 	icon_xenonid = 'icons/mob/xenonids/warrior.dmi'
 
+	weed_food_icon = 'icons/mob/xenos/weeds_64x64.dmi'
+	weed_food_states = list("Warrior_1","Warrior_2","Warrior_3")
+	weed_food_states_flipped = list("Warrior_1","Warrior_2","Warrior_3")
+
 	var/lunging = FALSE // whether or not the warrior is currently lunging (holding) a target
+
 /mob/living/carbon/xenomorph/warrior/throw_item(atom/target)
 	toggle_throw_mode(THROW_MODE_OFF)
 
@@ -95,7 +100,9 @@
 
 		if(should_neckgrab && living_mob.mob_size < MOB_SIZE_BIG)
 			living_mob.drop_held_items()
-			living_mob.apply_effect(get_xeno_stun_duration(living_mob, 2), WEAKEN)
+			var/duration = get_xeno_stun_duration(living_mob, 2)
+			living_mob.KnockDown(duration)
+			living_mob.Stun(duration)
 			if(living_mob.pulledby != src)
 				return // Grab was broken, probably as Stun side effect (eg. target getting knocked away from a manned M56D)
 			visible_message(SPAN_XENOWARNING("[src] grabs [living_mob] by the throat!"), \
@@ -153,7 +160,7 @@
 			emote_cooldown = world.time + 5 SECONDS
 		addtimer(CALLBACK(src, PROC_REF(lifesteal_lock)), lifesteal_lock_duration/2)
 
-	bound_xeno.gain_health(Clamp(final_lifesteal / 100 * (bound_xeno.maxHealth - bound_xeno.health), 20, 40))
+	bound_xeno.gain_health(clamp(final_lifesteal / 100 * (bound_xeno.maxHealth - bound_xeno.health), 20, 40))
 
 /datum/behavior_delegate/warrior_base/proc/lifesteal_lock()
 	bound_xeno.remove_filter("empower_rage")
