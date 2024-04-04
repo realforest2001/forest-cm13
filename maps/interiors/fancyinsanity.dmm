@@ -8747,7 +8747,7 @@
 /turf/closed/shuttle/ert{
 	icon_state = "wy20"
 	},
-/area/corsat/omega/hangar)
+/area/prison/hangar_storage/research/shuttle)
 "aDZ" = (
 /obj/structure/machinery/door/airlock/multi_tile/almayer/generic{
 	name = "Control Room";
@@ -8772,17 +8772,17 @@
 /turf/closed/shuttle/ert{
 	icon_state = "wy27"
 	},
-/area/corsat/omega/hangar)
+/area/prison/hangar_storage/research/shuttle)
 "aEd" = (
 /turf/closed/shuttle/ert{
 	icon_state = "wy25"
 	},
-/area/corsat/omega/hangar)
+/area/prison/hangar_storage/research/shuttle)
 "aEe" = (
 /turf/closed/shuttle/ert{
 	icon_state = "wy21"
 	},
-/area/corsat/omega/hangar)
+/area/prison/hangar_storage/research/shuttle)
 "aEf" = (
 /obj/structure/window/framed/corsat/hull,
 /obj/structure/machinery/door/poddoor/almayer/open{
@@ -8808,11 +8808,6 @@
 	icon_state = "squares"
 	},
 /area/corsat/omega/hallways)
-"aEj" = (
-/turf/open/floor/plating{
-	icon_state = "warnplate"
-	},
-/area/prison/hangar_storage/research/shuttle)
 "aEk" = (
 /turf/open/floor/corsat{
 	dir = 4;
@@ -66060,7 +66055,7 @@ aiv
 aiz
 aiH
 apj
-ahW
+apk
 apk
 gcM
 apk
@@ -66263,7 +66258,7 @@ aie
 aie
 aie
 apm
-ahW
+apk
 gcM
 oHU
 ahZ
@@ -66466,7 +66461,7 @@ aip
 aip
 aiw
 apm
-aEj
+gcM
 sJk
 ahZ
 xfT
@@ -66668,7 +66663,7 @@ aiF
 aiF
 aiF
 fSX
-aEj
+gcM
 apk
 ahZ
 xfT
@@ -66870,7 +66865,7 @@ gGR
 ilo
 aiA
 aQf
-aEj
+gcM
 apk
 ahZ
 xfT
@@ -67072,7 +67067,7 @@ aiF
 aiF
 aQe
 ahW
-aEj
+gcM
 apk
 ahZ
 xfT
@@ -67274,7 +67269,7 @@ jjb
 gGR
 aiw
 apm
-aEj
+gcM
 apk
 ahZ
 xfT
@@ -67476,7 +67471,7 @@ aiF
 aiF
 aiF
 fSX
-aEj
+gcM
 apk
 ahZ
 xfT
@@ -67678,7 +67673,7 @@ aiu
 aiu
 aiA
 aQf
-aEj
+gcM
 oHU
 ahZ
 xfT
@@ -67879,7 +67874,7 @@ aiq
 aiq
 aiq
 aQf
-ahW
+apk
 gcM
 sJk
 ahZ
@@ -68080,7 +68075,7 @@ aiE
 aiG
 aiI
 aQg
-ahW
+apk
 apk
 gcM
 apk
