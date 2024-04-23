@@ -8,6 +8,10 @@
 	var/whitelist_status
 	var/whitelist_flags
 
+	var/admin_status
+	var/admin_flags
+	var/admin_title
+
 	var/discord_link_id
 
 	var/last_login
@@ -70,6 +74,8 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 		"permaban_reason" = DB_FIELDTYPE_STRING_MAX,
 		"permaban_date" = DB_FIELDTYPE_STRING_LARGE,
 		"whitelist_status" = DB_FIELDTYPE_STRING_MAX,
+		"admin_status" = DB_FIELDTYPE_STRING_MAX,
+		"admin_title" = DB_FIELDTYPE_STRING_LARGE,
 		"discord_link_id" = DB_FIELDTYPE_BIGINT,
 		"permaban_admin_id" = DB_FIELDTYPE_BIGINT,
 		"is_time_banned" = DB_FIELDTYPE_INT,
@@ -423,6 +429,12 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 			if(whitelist in GLOB.bitfields["whitelist_status"])
 				whitelist_flags |= GLOB.bitfields["whitelist_status"]["[whitelist]"]
 
+	if(admin_status)
+		var/list/admin_perms = splittext(admin_status, "|")
+		for(var/permission in admin_perms)
+			if(permission in GLOB.bitfields["rights"])
+				admin_flags |= GLOB.bitfields["rights"]["[permission]"]
+
 /datum/entity/player/proc/on_read_notes(list/datum/entity/player_note/_notes)
 	notes_loaded = TRUE
 	if(notes)
@@ -721,6 +733,9 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 	return FALSE
 
 /datum/entity/player/proc/set_whitelist_status(field_to_set)
+	if(IsAdminAdvancedProcCall())
+		return PROC_BLOCKED
+
 	whitelist_flags = field_to_set
 
 	var/list/output = list()
@@ -728,6 +743,20 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 		if(field_to_set & GLOB.bitfields["whitelist_status"]["[bitfield]"])
 			output += bitfield
 	whitelist_status = output.Join("|")
+
+	save()
+
+/datum/entity/player/proc/set_admin_status(field_to_set)
+	if(IsAdminAdvancedProcCall())
+		return PROC_BLOCKED
+
+	admin_flags = field_to_set
+
+	var/list/output = list()
+	for(var/bitfield in GLOB.bitfields["rights"])
+		if(field_to_set & GLOB.bitfields["rights"]["[bitfield]"])
+			output += bitfield
+	admin_status = output.Join("|")
 
 	save()
 
@@ -759,6 +788,8 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 	var/last_known_ip
 	var/discord_link_id
 	var/whitelist_status
+	var/admin_status
+	var/admin_title
 
 /datum/entity_view_meta/players
 	root_record_type = /datum/entity/player
@@ -776,5 +807,7 @@ BSQL_PROTECT_DATUM(/datum/entity/player)
 		"last_known_ip",
 		"last_known_cid",
 		"discord_link_id",
-		"whitelist_status"
+		"whitelist_status",
+		"admin_status",
+		"admin_title",
 		)
