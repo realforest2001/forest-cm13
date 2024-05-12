@@ -29,6 +29,10 @@
 	name = "van interior"
 	icon_state = "van"
 
+/area/interior/vehicle/arc
+	name = "\improper ARC interior"
+	icon_state = "arc"
+
 /area/interior/fancylocker
 	name = "closet interior"
 
