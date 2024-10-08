@@ -18,6 +18,19 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
+"cH" = (
+/obj/structure/filingcabinet{
+	density = 0;
+	pixel_y = 24;
+	pixel_x = -7
+	},
+/obj/structure/filingcabinet/documentation/highcom/wy{
+	density = 0;
+	pixel_x = 9;
+	pixel_y = 24
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
 "fr" = (
 /obj/structure/machinery/cryopod,
 /turf/open/floor/wood/ship,
@@ -54,6 +67,9 @@
 	name = "USCM monitoring computer"
 	},
 /turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"iQ" = (
+/turf/closed/wall/solaris/reinforced/hull,
 /area/adminlevel/ert_station/fax_response_station)
 "jh" = (
 /turf/closed/wall/r_wall/prison_unmeltable,
@@ -154,6 +170,19 @@
 /obj/structure/surface/table/woodentable/fancy,
 /obj/structure/machinery/faxmachine/press/highcom{
 	pixel_y = 8
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"rs" = (
+/obj/structure/filingcabinet{
+	density = 0;
+	pixel_y = 24;
+	pixel_x = -7
+	},
+/obj/structure/filingcabinet/documentation/highcom/provost{
+	pixel_x = 9;
+	pixel_y = 24;
+	density = 0
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -513,6 +542,9 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
+"Ot" = (
+/turf/closed/wall/shiva/prefabricated/reinforced/hull,
+/area/adminlevel/ert_station/fax_response_station)
 "OA" = (
 /obj/structure/machinery/light{
 	dir = 8
@@ -550,6 +582,19 @@
 	pixel_y = 24;
 	pixel_x = 8;
 	name = "USCM monitoring computer"
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"SR" = (
+/obj/structure/filingcabinet{
+	density = 0;
+	pixel_y = 24;
+	pixel_x = -7
+	},
+/obj/structure/filingcabinet/documentation/highcom/uscm{
+	density = 0;
+	pixel_x = 9;
+	pixel_y = 24
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -1002,12 +1047,12 @@ Yy
 xX
 xX
 Ei
-EI
+SR
 gu
 gu
 gu
 Pn
-EI
+rs
 gu
 gu
 gu
@@ -1424,7 +1469,7 @@ Yy
 Yy
 xX
 BC
-EI
+cH
 gu
 gu
 gu
@@ -2128,19 +2173,19 @@ Yy
 Yy
 Yy
 xX
-xX
-xX
-xX
-xX
-xX
-xX
+iQ
+iQ
+iQ
+iQ
+iQ
+iQ
 pu
-xX
-xX
-xX
-xX
-xX
-xX
+Ot
+Ot
+Ot
+Ot
+Ot
+Ot
 xX
 Yy
 Yy
@@ -2175,19 +2220,19 @@ Yy
 Yy
 Yy
 xX
-xX
+iQ
 nB
 OA
 wv
 fr
-xX
+iQ
 vc
-xX
+Ot
 YR
 OA
 Bz
 fr
-xX
+Ot
 xX
 Yy
 Yy
@@ -2222,19 +2267,19 @@ Yy
 Yy
 Yy
 xX
-xX
+iQ
 EI
 gu
 gu
 gu
-xX
+iQ
 vc
-xX
+Ot
 Ba
 gu
 gu
 gu
-xX
+Ot
 xX
 Yy
 Yy
@@ -2269,7 +2314,7 @@ Yy
 Yy
 Yy
 xX
-xX
+iQ
 gu
 gu
 gu
@@ -2281,7 +2326,7 @@ gu
 gu
 gu
 gu
-xX
+Ot
 xX
 Yy
 Yy
@@ -2316,19 +2361,19 @@ Yy
 Yy
 Yy
 xX
-xX
+iQ
 ny
 ST
 gu
 Nb
-xX
+iQ
 vc
-xX
+Ot
 qw
 ST
 gu
 Wv
-xX
+Ot
 xX
 Yy
 Yy
@@ -2363,19 +2408,19 @@ Yy
 Yy
 Yy
 xX
-xX
+iQ
 wx
 kT
 Bp
 sx
-xX
+iQ
 vc
-xX
+Ot
 XW
 kT
 Bp
 sx
-xX
+Ot
 xX
 Yy
 Yy
@@ -2410,19 +2455,19 @@ Yy
 Yy
 Yy
 xX
-xX
-xX
-xX
-xX
-xX
-xX
+iQ
+iQ
+iQ
+iQ
+iQ
+iQ
 vc
-xX
-xX
-xX
-xX
-xX
-xX
+Ot
+Ot
+Ot
+Ot
+Ot
+Ot
 xX
 Yy
 Yy
