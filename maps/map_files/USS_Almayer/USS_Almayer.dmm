@@ -8832,13 +8832,6 @@
 "bju" = (
 /turf/open/floor/almayer/red/north,
 /area/almayer/shipboard/brig/processing)
-"bjv" = (
-/obj/structure/disposalpipe/junction,
-/obj/structure/pipes/standard/manifold/hidden/supply{
-	dir = 4
-	},
-/turf/open/floor/plating/plating_catwalk,
-/area/almayer/hallways/upper/fore_hallway)
 "bjA" = (
 /turf/open/floor/almayer/red/northwest,
 /area/almayer/squads/alpha)
@@ -8970,6 +8963,10 @@
 /obj/structure/surface/table/reinforced/prison,
 /turf/open/floor/almayer/sterile_green,
 /area/almayer/medical/lockerroom)
+"bkQ" = (
+/obj/structure/filingcabinet/documentation/liaison,
+/turf/open/floor/wood/ship,
+/area/almayer/command/corporateliaison)
 "bkS" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "N";
@@ -11593,6 +11590,10 @@
 	dir = 4
 	},
 /turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/hangar)
+"bHD" = (
+/obj/structure/dropship_equipment/weapon/launch_bay,
+/turf/open/floor/almayer/cargo,
 /area/almayer/hallways/hangar)
 "bHG" = (
 /obj/structure/machinery/light{
@@ -19904,10 +19905,6 @@
 	},
 /turf/open/floor/almayer/plate,
 /area/almayer/engineering/lower/workshop)
-"enn" = (
-/obj/structure/filingcabinet/documentation/liaison,
-/turf/open/floor/wood/ship,
-/area/almayer/command/corporateliaison)
 "enK" = (
 /obj/effect/step_trigger/clone_cleaner,
 /obj/structure/blocker/forcefield/multitile_vehicles,
@@ -22263,6 +22260,10 @@
 /obj/structure/blocker/fuelpump,
 /turf/open/floor/almayer,
 /area/almayer/lifeboat_pumps/north1)
+"fno" = (
+/obj/effect/landmark/spycam_start,
+/turf/open/floor/almayer/plate,
+/area/almayer/hallways/hangar)
 "fnv" = (
 /obj/structure/machinery/light{
 	dir = 4
@@ -24729,13 +24730,6 @@
 	},
 /turf/open/floor/almayer/silvercorner/east,
 /area/almayer/command/cichallway)
-"gtz" = (
-/obj/structure/filingcabinet/documentation/military_police{
-	pixel_y = 24;
-	density = 0
-	},
-/turf/open/floor/almayer/red/north,
-/area/almayer/shipboard/brig/processing)
 "gtD" = (
 /turf/open/floor/plating/plating_catwalk,
 /area/almayer/hallways/lower/starboard_fore_hallway)
@@ -28158,6 +28152,13 @@
 /obj/structure/machinery/light,
 /turf/open/floor/almayer/orange/southwest,
 /area/almayer/engineering/lower/engine_core)
+"hQx" = (
+/obj/structure/filingcabinet/documentation/military_police{
+	pixel_y = 24;
+	density = 0
+	},
+/turf/open/floor/almayer/red/north,
+/area/almayer/shipboard/brig/processing)
 "hQK" = (
 /obj/effect/step_trigger/clone_cleaner,
 /turf/closed/wall/almayer,
@@ -29429,6 +29430,14 @@
 	},
 /turf/open/floor/almayer/sterile_green_side,
 /area/almayer/medical/medical_science)
+"isc" = (
+/obj/structure/disposalpipe/junction,
+/obj/structure/pipes/standard/manifold/hidden/supply{
+	dir = 4
+	},
+/obj/effect/landmark/spycam_start,
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/upper/fore_hallway)
 "ish" = (
 /turf/open/floor/almayer/orange/east,
 /area/almayer/engineering/lower/workshop)
@@ -34487,6 +34496,13 @@
 	},
 /turf/open/floor/almayer/plate,
 /area/almayer/engineering/upper_engineering)
+"kvL" = (
+/obj/structure/surface/table/almayer,
+/obj/structure/machinery/computer/cameras/almayer_network{
+	dir = 4
+	},
+/turf/open/floor/almayer/red/west,
+/area/almayer/shipboard/brig/warden_office)
 "kvU" = (
 /obj/structure/surface/table/almayer,
 /turf/open/floor/plating/plating_catwalk,
@@ -40875,6 +40891,10 @@
 	},
 /turf/open/floor/almayer,
 /area/almayer/lifeboat_pumps/north1)
+"nfF" = (
+/obj/structure/ship_ammo/sentry,
+/turf/open/floor/almayer/cargo,
+/area/almayer/hallways/hangar)
 "ngf" = (
 /obj/structure/machinery/cm_vending/sorted/medical/wall_med{
 	pixel_y = 25
@@ -41267,6 +41287,10 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/almayer/maint/hull/upper/s_bow)
+"nls" = (
+/obj/effect/landmark/spycam_start,
+/turf/open/floor/almayer,
+/area/almayer/command/lifeboat)
 "nlz" = (
 /obj/structure/machinery/brig_cell/cell_3{
 	pixel_x = 32;
@@ -49987,13 +50011,6 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/almayer/shipboard/brig/cic_hallway)
-"qOb" = (
-/obj/structure/surface/table/almayer,
-/obj/structure/machinery/computer/cameras/almayer_network{
-	dir = 4
-	},
-/turf/open/floor/almayer/red/west,
-/area/almayer/shipboard/brig/warden_office)
 "qOf" = (
 /obj/structure/machinery/door/poddoor/almayer/open{
 	dir = 4;
@@ -55011,10 +55028,6 @@
 	},
 /turf/open/floor/almayer,
 /area/almayer/living/briefing)
-"sTx" = (
-/obj/structure/dropship_equipment/weapon/launch_bay,
-/turf/open/floor/almayer/cargo,
-/area/almayer/hallways/hangar)
 "sTU" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/pipes/standard/simple/hidden/supply{
@@ -59307,6 +59320,10 @@
 "uHT" = (
 /turf/open/floor/almayer/plate,
 /area/almayer/maint/lower/s_bow)
+"uIn" = (
+/obj/effect/landmark/spycam_start,
+/turf/open/floor/almayer/plate,
+/area/almayer/engineering/lower/workshop)
 "uIv" = (
 /turf/open/floor/almayer/orange,
 /area/almayer/engineering/upper_engineering/port)
@@ -63159,10 +63176,6 @@
 /obj/item/device/cotablet,
 /turf/open/floor/almayer/silver/north,
 /area/almayer/command/cic)
-"wcg" = (
-/obj/structure/ship_ammo/sentry,
-/turf/open/floor/almayer/cargo,
-/area/almayer/hallways/hangar)
 "wcm" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "NW-out";
@@ -80010,7 +80023,7 @@ cmM
 tzd
 tzd
 sgi
-gtz
+hQx
 wSm
 kAL
 xkd
@@ -81647,7 +81660,7 @@ emp
 cHk
 hlI
 ekZ
-qOb
+kvL
 oix
 cHk
 uxb
@@ -84982,7 +84995,7 @@ xyw
 xyw
 xyw
 xyw
-xyw
+fno
 xyw
 xyw
 xyw
@@ -88433,7 +88446,7 @@ pcl
 gHZ
 pcl
 gHZ
-sTx
+bHD
 api
 aYt
 sIU
@@ -88636,7 +88649,7 @@ pcl
 bpj
 pcl
 gHZ
-wcg
+nfF
 fgE
 btO
 btO
@@ -94625,7 +94638,7 @@ pcs
 fCW
 fCW
 tTZ
-bjv
+isc
 tTZ
 dNj
 dNj
@@ -102759,7 +102772,7 @@ xIj
 xIj
 bBH
 fKh
-enn
+bkQ
 nQA
 nQA
 vEG
@@ -118274,7 +118287,7 @@ uZF
 xoj
 xoj
 osI
-qXk
+uIn
 fie
 pUj
 xoj
@@ -119391,7 +119404,7 @@ eky
 aDQ
 pyy
 eky
-eky
+nls
 eky
 dLc
 aDQ
