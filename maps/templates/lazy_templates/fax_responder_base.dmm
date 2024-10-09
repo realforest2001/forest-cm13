@@ -1,5 +1,5 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
-"am" = (
+"aJ" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/item/folder/red{
 	pixel_x = 6
@@ -7,32 +7,11 @@
 /obj/item/folder/black{
 	pixel_x = 12
 	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","UPP","Fax Responders");
-	phone_id = "UPP Communications Officer";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
-	phone_color = "green"
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","CLF","Fax Responders");
+	phone_id = "CLF Information Correspondant";
+	phone_color = "orange"
 	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
-"cH" = (
-/obj/structure/filingcabinet{
-	density = 0;
-	pixel_y = 24;
-	pixel_x = -7
-	},
-/obj/structure/filingcabinet/documentation/highcom/wy{
-	density = 0;
-	pixel_x = 9;
-	pixel_y = 24
-	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
-"fr" = (
-/obj/structure/machinery/cryopod/no_store,
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
 "gu" = (
@@ -68,30 +47,8 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"iQ" = (
-/turf/closed/wall/solaris/reinforced/hull,
-/area/adminlevel/ert_station/fax_response_station)
 "jh" = (
 /turf/closed/wall/r_wall/prison_unmeltable,
-/area/adminlevel/ert_station/fax_response_station)
-"jV" = (
-/obj/structure/surface/table/woodentable/fancy,
-/obj/item/folder/red{
-	pixel_x = 6
-	},
-/obj/item/folder/black{
-	pixel_x = 12
-	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","TWE","Fax Responders");
-	phone_id = "TWE Communications Officer";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
-	phone_color = "yellow"
-	},
-/turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
 "kT" = (
 /obj/structure/surface/table/woodentable/fancy,
@@ -113,6 +70,21 @@
 	pixel_y = 8;
 	name = "Overwatch Cameras";
 	colony_camera_mapload = 0
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"mb" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/folder/red{
+	pixel_x = 6
+	},
+/obj/item/folder/black{
+	pixel_x = 12
+	},
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","UPP","Fax Responders");
+	phone_id = "UPP Communications Officer";
+	phone_color = "green"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -173,19 +145,6 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"rs" = (
-/obj/structure/filingcabinet{
-	density = 0;
-	pixel_y = 24;
-	pixel_x = -7
-	},
-/obj/structure/filingcabinet/documentation/highcom/provost{
-	pixel_x = 9;
-	pixel_y = 24;
-	density = 0
-	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
 "rV" = (
 /obj/effect/landmark/late_join/responder/uscm/provost,
 /turf/open/floor/wood/ship,
@@ -198,6 +157,21 @@
 /obj/item/folder/white,
 /obj/item/folder/white{
 	pixel_x = 6
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"sA" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/folder/red{
+	pixel_x = 6
+	},
+/obj/item/folder/black{
+	pixel_x = 12
+	},
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","Colonial Marshal","Fax Responders");
+	phone_id = "CMB Deputy Operations Officer";
+	phone_color = "green"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -224,25 +198,6 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"tq" = (
-/obj/structure/surface/table/woodentable/fancy,
-/obj/item/folder/red{
-	pixel_x = 6
-	},
-/obj/item/folder/black{
-	pixel_x = 12
-	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","Fax Responders");
-	phone_id = "USCM-HC Communications Officer";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
-	phone_color = "blue"
-	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
 "tM" = (
 /obj/effect/landmark/late_join/responder/clf,
 /turf/open/floor/wood/ship,
@@ -256,6 +211,21 @@
 /area/adminlevel/ert_station/fax_response_station)
 "vc" = (
 /turf/open/floor/plating,
+/area/adminlevel/ert_station/fax_response_station)
+"vf" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/folder/red{
+	pixel_x = 6
+	},
+/obj/item/folder/black{
+	pixel_x = 12
+	},
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","Press","Fax Responders");
+	phone_id = "Free Press Relay";
+	
+	},
+/turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
 "wv" = (
 /obj/effect/landmark/late_join/responder/cmb,
@@ -305,8 +275,24 @@
 	hull = 1
 	},
 /area/adminlevel/ert_station/fax_response_station)
+"xA" = (
+/obj/structure/filingcabinet{
+	density = 0;
+	pixel_y = 24;
+	pixel_x = -7
+	},
+/obj/structure/filingcabinet/documentation/highcom/wy{
+	density = 0;
+	pixel_x = 9;
+	pixel_y = 24
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
 "xX" = (
 /turf/closed/wall/r_wall/unmeltable,
+/area/adminlevel/ert_station/fax_response_station)
+"ys" = (
+/turf/closed/wall/solaris/reinforced/hull,
 /area/adminlevel/ert_station/fax_response_station)
 "yv" = (
 /obj/structure/surface/table/woodentable/fancy,
@@ -372,6 +358,21 @@
 /area/adminlevel/ert_station/fax_response_station)
 "BC" = (
 /turf/closed/wall/r_wall/biodome/biodome_unmeltable,
+/area/adminlevel/ert_station/fax_response_station)
+"BT" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/folder/red{
+	pixel_x = 6
+	},
+/obj/item/folder/black{
+	pixel_x = 12
+	},
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","Wey-Yu","PMC","Fax Responders");
+	phone_id = "WY Communications Executive";
+	
+	},
+/turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
 "Du" = (
 /obj/structure/surface/table/woodentable/fancy,
@@ -442,24 +443,6 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"FB" = (
-/obj/structure/surface/table/woodentable/fancy,
-/obj/item/folder/red{
-	pixel_x = 6
-	},
-/obj/item/folder/black{
-	pixel_x = 12
-	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","Wey-Yu","PMC","Fax Responders");
-	phone_id = "WY Communications Executive";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders")
-	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
 "FD" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/structure/machinery/faxmachine/corporate/highcom{
@@ -471,6 +454,13 @@
 	name = "PMC monitoring computer"
 	},
 /turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"GY" = (
+/obj/structure/machinery/cryopod/no_store,
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"HD" = (
+/turf/closed/wall/shiva/prefabricated/reinforced/hull,
 /area/adminlevel/ert_station/fax_response_station)
 "IO" = (
 /obj/structure/surface/table/woodentable/fancy,
@@ -503,7 +493,7 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"Nb" = (
+"Jm" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/item/folder/red{
 	pixel_x = 6
@@ -511,18 +501,14 @@
 /obj/item/folder/black{
 	pixel_x = 12
 	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","Colonial Marshal","Fax Responders");
-	phone_id = "CMB Deputy Operations Officer";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
-	phone_color = "green"
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","TWE","Fax Responders");
+	phone_id = "TWE Communications Officer";
+	phone_color = "yellow"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"NP" = (
+"KJ" = (
 /obj/structure/machinery/light,
 /obj/structure/surface/table/woodentable/fancy,
 /obj/item/folder/red{
@@ -531,19 +517,12 @@
 /obj/item/folder/black{
 	pixel_x = 12
 	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
+/obj/structure/transmitter/rotary/fax_responder{
 	networks_transmit = list("USCM","Colonist","Fax Responders");
 	phone_id = "Provost Communications Officer";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
 	phone_color = "red"
 	},
 /turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
-"Ot" = (
-/turf/closed/wall/shiva/prefabricated/reinforced/hull,
 /area/adminlevel/ert_station/fax_response_station)
 "OA" = (
 /obj/structure/machinery/light{
@@ -585,7 +564,7 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"SR" = (
+"Rr" = (
 /obj/structure/filingcabinet{
 	density = 0;
 	pixel_y = 24;
@@ -622,7 +601,7 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"Wv" = (
+"WA" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/item/folder/red{
 	pixel_x = 6
@@ -630,13 +609,10 @@
 /obj/item/folder/black{
 	pixel_x = 12
 	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","Press","Fax Responders");
-	phone_id = "Free Press Relay";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders")
+/obj/structure/transmitter/rotary/fax_responder{
+	networks_transmit = list("USCM","Colonist","Fax Responders");
+	phone_id = "USCM-HC Communications Officer";
+	phone_color = "blue"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -667,25 +643,6 @@
 /obj/effect/landmark/late_join/responder/twe,
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
-"Yv" = (
-/obj/structure/surface/table/woodentable/fancy,
-/obj/item/folder/red{
-	pixel_x = 6
-	},
-/obj/item/folder/black{
-	pixel_x = 12
-	},
-/obj/structure/transmitter/rotary{
-	pixel_x = -6;
-	pixel_y = 6;
-	networks_transmit = list("USCM","Colonist","CLF","Fax Responders");
-	phone_id = "CLF Information Correspondant";
-	phone_category = "Comms Relay";
-	networks_receive = list("Fax Responders");
-	phone_color = "orange"
-	},
-/turf/open/floor/wood/ship,
-/area/adminlevel/ert_station/fax_response_station)
 "Yy" = (
 /turf/open/space/basic,
 /area/space)
@@ -700,6 +657,19 @@
 	},
 /obj/structure/machinery/cm_vending/sorted/medical/wall_med{
 	pixel_x = -24
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"YT" = (
+/obj/structure/filingcabinet{
+	density = 0;
+	pixel_y = 24;
+	pixel_x = -7
+	},
+/obj/structure/filingcabinet/documentation/highcom/provost{
+	pixel_x = 9;
+	pixel_y = 24;
+	density = 0
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -1003,12 +973,12 @@ Ei
 YR
 OA
 rV
-fr
+GY
 Ei
 nB
 OA
 YO
-fr
+GY
 Ei
 Yy
 Yy
@@ -1047,12 +1017,12 @@ Yy
 xX
 xX
 Ei
-SR
+Rr
 gu
 gu
 gu
 Pn
-rs
+YT
 gu
 gu
 gu
@@ -1144,12 +1114,12 @@ Ei
 UB
 ST
 gu
-NP
+KJ
 Pn
 ov
 ST
 gu
-tq
+WA
 Ei
 vc
 xX
@@ -1425,14 +1395,14 @@ BC
 YR
 OA
 xb
-fr
+GY
 BC
 vc
 wz
 YR
 OA
 VV
-fr
+GY
 wz
 xX
 Yy
@@ -1469,7 +1439,7 @@ Yy
 Yy
 xX
 BC
-cH
+xA
 gu
 gu
 gu
@@ -1566,14 +1536,14 @@ BC
 FD
 ST
 gu
-FB
+BT
 BC
 vc
 wz
 Wp
 ST
 gu
-am
+mb
 wz
 xX
 Yy
@@ -1848,14 +1818,14 @@ jh
 YR
 OA
 tM
-fr
+GY
 jh
 vc
 xc
 YR
 OA
 XZ
-fr
+GY
 xc
 xX
 Yy
@@ -1989,14 +1959,14 @@ jh
 uX
 ST
 gu
-Yv
+aJ
 jh
 vc
 xc
 oA
 ST
 gu
-jV
+Jm
 xc
 xX
 Yy
@@ -2173,19 +2143,19 @@ Yy
 Yy
 Yy
 xX
-iQ
-iQ
-iQ
-iQ
-iQ
-iQ
+ys
+ys
+ys
+ys
+ys
+ys
 pu
-Ot
-Ot
-Ot
-Ot
-Ot
-Ot
+HD
+HD
+HD
+HD
+HD
+HD
 xX
 Yy
 Yy
@@ -2220,19 +2190,19 @@ Yy
 Yy
 Yy
 xX
-iQ
+ys
 nB
 OA
 wv
-fr
-iQ
+GY
+ys
 vc
-Ot
+HD
 YR
 OA
 Bz
-fr
-Ot
+GY
+HD
 xX
 Yy
 Yy
@@ -2267,19 +2237,19 @@ Yy
 Yy
 Yy
 xX
-iQ
+ys
 EI
 gu
 gu
 gu
-iQ
+ys
 vc
-Ot
+HD
 Ba
 gu
 gu
 gu
-Ot
+HD
 xX
 Yy
 Yy
@@ -2314,7 +2284,7 @@ Yy
 Yy
 Yy
 xX
-iQ
+ys
 gu
 gu
 gu
@@ -2326,7 +2296,7 @@ gu
 gu
 gu
 gu
-Ot
+HD
 xX
 Yy
 Yy
@@ -2361,19 +2331,19 @@ Yy
 Yy
 Yy
 xX
-iQ
+ys
 ny
 ST
 gu
-Nb
-iQ
+sA
+ys
 vc
-Ot
+HD
 qw
 ST
 gu
-Wv
-Ot
+vf
+HD
 xX
 Yy
 Yy
@@ -2408,19 +2378,19 @@ Yy
 Yy
 Yy
 xX
-iQ
+ys
 wx
 kT
 Bp
 sx
-iQ
+ys
 vc
-Ot
+HD
 XW
 kT
 Bp
 sx
-Ot
+HD
 xX
 Yy
 Yy
@@ -2455,19 +2425,19 @@ Yy
 Yy
 Yy
 xX
-iQ
-iQ
-iQ
-iQ
-iQ
-iQ
+ys
+ys
+ys
+ys
+ys
+ys
 vc
-Ot
-Ot
-Ot
-Ot
-Ot
-Ot
+HD
+HD
+HD
+HD
+HD
+HD
 xX
 Yy
 Yy
