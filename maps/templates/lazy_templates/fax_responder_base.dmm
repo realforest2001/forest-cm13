@@ -14,6 +14,44 @@
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
+"bw" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/tool/stamp/hos{
+	name = "red stamp";
+	pixel_y = 8
+	},
+/obj/item/tool/stamp/hop{
+	name = "blue stamp"
+	},
+/obj/item/tool/stamp/ce{
+	name = "yellow stamp";
+	pixel_y = -8
+	},
+/obj/structure/machinery/computer/spy_camera/cmb{
+	dir = 8;
+	pixel_x = 16
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"fJ" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/tool/stamp/hos{
+	name = "red stamp";
+	pixel_y = 8
+	},
+/obj/item/tool/stamp/hop{
+	name = "blue stamp"
+	},
+/obj/item/tool/stamp/ce{
+	name = "yellow stamp";
+	pixel_y = -8
+	},
+/obj/structure/machinery/computer/spy_camera/uscm{
+	dir = 8;
+	pixel_x = 16
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
 "gu" = (
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -222,8 +260,7 @@
 	},
 /obj/structure/transmitter/rotary/fax_responder{
 	networks_transmit = list("USCM","Colonist","Press","Fax Responders");
-	phone_id = "Free Press Relay";
-	
+	phone_id = "Free Press Relay"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -350,6 +387,10 @@
 	name = "yellow stamp";
 	pixel_y = -8
 	},
+/obj/structure/machinery/computer/spy_camera/upp{
+	dir = 8;
+	pixel_x = 16
+	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
 "Bz" = (
@@ -369,8 +410,7 @@
 	},
 /obj/structure/transmitter/rotary/fax_responder{
 	networks_transmit = list("USCM","Colonist","Wey-Yu","PMC","Fax Responders");
-	phone_id = "WY Communications Executive";
-	
+	phone_id = "WY Communications Executive"
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -462,6 +502,36 @@
 "HD" = (
 /turf/closed/wall/shiva/prefabricated/reinforced/hull,
 /area/adminlevel/ert_station/fax_response_station)
+"IF" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/tool/stamp/hos{
+	name = "red stamp";
+	pixel_y = 8
+	},
+/obj/item/tool/stamp/hop{
+	name = "blue stamp"
+	},
+/obj/item/tool/stamp/ce{
+	name = "yellow stamp";
+	pixel_y = -8
+	},
+/obj/structure/machinery/computer/cameras/almayer{
+	dir = 8;
+	admin_console = 1;
+	network = list("ARES","Almayer","Research","Containment");
+	pixel_x = 16;
+	name = "USS Almayer Cameras";
+	pixel_y = 16;
+	colony_camera_mapload = 0;
+	layer = 2.99
+	},
+/obj/structure/machinery/computer/spy_camera/wy{
+	dir = 8;
+	pixel_x = 16;
+	layer = 2.99
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
 "IO" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/structure/machinery/computer/cameras/almayer{
@@ -479,16 +549,6 @@
 	network = list("WY","Containment Hidden","Colony");
 	pixel_x = 16;
 	name = "WY Cameras";
-	colony_camera_mapload = 0
-	},
-/obj/structure/machinery/computer/cameras/almayer{
-	dir = 8;
-	admin_console = 1;
-	network = list("ARES","Almayer","Research","Containment");
-	pixel_x = 16;
-	layer = 2.99;
-	name = "USS Almayer Cameras";
-	pixel_y = -16;
 	colony_camera_mapload = 0
 	},
 /turf/open/floor/wood/ship,
@@ -594,6 +654,25 @@
 /obj/effect/landmark/late_join/responder/upp,
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
+"Wa" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/tool/stamp/hos{
+	name = "red stamp";
+	pixel_y = 8
+	},
+/obj/item/tool/stamp/hop{
+	name = "blue stamp"
+	},
+/obj/item/tool/stamp/ce{
+	name = "yellow stamp";
+	pixel_y = -8
+	},
+/obj/structure/machinery/computer/spy_camera/twe{
+	dir = 8;
+	pixel_x = 16
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
 "Wp" = (
 /obj/structure/surface/table/woodentable/fancy,
 /obj/structure/machinery/faxmachine/upp/highcom{
@@ -670,6 +749,25 @@
 	pixel_x = 9;
 	pixel_y = 24;
 	density = 0
+	},
+/turf/open/floor/wood/ship,
+/area/adminlevel/ert_station/fax_response_station)
+"YU" = (
+/obj/structure/surface/table/woodentable/fancy,
+/obj/item/tool/stamp/hos{
+	name = "red stamp";
+	pixel_y = 8
+	},
+/obj/item/tool/stamp/hop{
+	name = "blue stamp"
+	},
+/obj/item/tool/stamp/ce{
+	name = "yellow stamp";
+	pixel_y = -8
+	},
+/obj/structure/machinery/computer/spy_camera/clf{
+	dir = 8;
+	pixel_x = 16
 	},
 /turf/open/floor/wood/ship,
 /area/adminlevel/ert_station/fax_response_station)
@@ -1160,12 +1258,12 @@ vc
 Ei
 Du
 sZ
-Bp
+fJ
 sx
 Ei
 Du
 sZ
-Bp
+fJ
 sx
 Ei
 vc
@@ -1582,7 +1680,7 @@ xX
 BC
 EK
 IO
-Bp
+IF
 sx
 BC
 vc
@@ -2005,14 +2103,14 @@ xX
 jh
 Rh
 kT
-Bp
+YU
 sx
 jh
 vc
 xc
 yv
 kT
-Bp
+Wa
 sx
 xc
 xX
@@ -2381,14 +2479,14 @@ xX
 ys
 wx
 kT
-Bp
+bw
 sx
 ys
 vc
 HD
 XW
 kT
-Bp
+fJ
 sx
 HD
 xX
