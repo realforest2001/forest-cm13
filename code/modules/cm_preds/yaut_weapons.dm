@@ -499,7 +499,7 @@
 		setup_chain(user)
 
 /obj/item/weapon/yautja/chained/try_to_throw(mob/living/user)
-	if(!charged)
+	if(ability_charge < ability_cost)
 		to_chat(user, SPAN_WARNING("Your [src] refuses to leave your hand. You must charge it with blood from prey before throwing it."))
 		return FALSE
 	ability_charge -= ability_cost
@@ -659,28 +659,6 @@
 	add_fingerprint(user)
 
 	return
-
-/obj/item/weapon/yautja/chained/attack(mob/living/target, mob/living/carbon/human/user)
-	. = ..()
-	if(!.)
-		return
-	if((human_adapted || isspeciesyautja(user)) && isxeno(target))
-		var/mob/living/carbon/xenomorph/xenomorph = target
-		xenomorph.AddComponent(/datum/component/status_effect/interference, 30, 30)
-
-	if(target == user || target.stat == DEAD)
-		to_chat(user, SPAN_DANGER("You think you're smart?")) //very funny
-		return
-	if(isanimal(target))
-		return
-
-	if(!charged)
-		to_chat(user, SPAN_DANGER("Your [src]'s reservoir fills up with your opponent's blood! You may now throw it!"))
-		charged = TRUE
-		var/color = target.get_blood_color()
-		var/alpha = 70
-		color += num2text(alpha, 2, 16)
-		add_filter("combistick_charge", 1, list("type" = "outline", "color" = color, "size" = 2))
 
 /obj/item/weapon/yautja/chained/attack_hand(mob/user) //Prevents marines from instantly picking it up via pickup macros.
 	if(!human_adapted && !HAS_TRAIT(user, TRAIT_SUPER_STRONG))
