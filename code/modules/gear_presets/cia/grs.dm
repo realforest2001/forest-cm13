@@ -545,6 +545,7 @@
 /datum/equipment_preset/cia_global_response/leader/weak/survivor
 	strength_type = STRENGTH_SURVIVOR
 	skills = /datum/skills/cia/global_response/leader/survivor
+	helmet_type = /obj/item/clothing/head/helmet/marine/sof/grs/damaged
 
 /datum/equipment_preset/cia_global_response/leader/load_gear(mob/living/carbon/human/new_human)
 	load_standard_gear(new_human)
@@ -722,6 +723,7 @@
 	job_title = JOB_CIA_GRS_DCDR
 	skills = /datum/skills/cia/global_response/commander/deputy
 	role_comm_title = "DCDR"
+	minimap_icon = "pmc_ld"
 
 /datum/equipment_preset/cia_global_response/commander/deputy/deathsquad
 	strength_type = STRENGTH_DEATH
