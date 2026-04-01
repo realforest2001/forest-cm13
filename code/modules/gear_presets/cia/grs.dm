@@ -280,6 +280,7 @@
 /datum/equipment_preset/cia_global_response/sniper/weak/survivor
 	strength_type = STRENGTH_SURVIVOR
 	skills = /datum/skills/cia/global_response/sniper/survivor
+	helmet_type = /obj/item/clothing/head/helmet/marine/sof/grs/sniper/damaged
 
 /datum/equipment_preset/cia_global_response/sniper/load_gear(mob/living/carbon/human/new_human)
 	load_standard_gear(new_human)
