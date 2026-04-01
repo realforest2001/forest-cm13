@@ -1,15 +1,15 @@
 /client/var/inquisitive_ghost = 1
 /mob/dead/observer/verb/toggle_inquisition() // warning: unexpected inquisition
 	set name = "Toggle Inquisitiveness"
-	set desc = "Sets whether your ghost examines everything on click by default"
+	set desc = "Sets whether your ghost examines everything on click by default."
 	set category = "Ghost.Settings"
 	if(!client)
 		return
 	client.inquisitive_ghost = !client.inquisitive_ghost
 	if(client.inquisitive_ghost)
-		to_chat(src, SPAN_NOTICE(" You will now examine everything you click on."))
+		to_chat(src, SPAN_NOTICE("You will now examine everything you click on."))
 	else
-		to_chat(src, SPAN_NOTICE(" You will no longer examine things you click on."))
+		to_chat(src, SPAN_NOTICE("You will no longer examine things you click on."))
 
 /mob/dead/observer/do_click(atom/A, location, params)
 	. = ..()

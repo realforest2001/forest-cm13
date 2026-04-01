@@ -65,6 +65,8 @@
 	offhand.name = "[item_name] - offhand"
 	offhand.desc = "Your second grip on the [item_name]."
 	offhand.flags_item |= WIELDED
+	offhand.force_wielded = 0 // no reason for these things to deal the same damage as the parent when they shouldnt be used for attacks anyway
+	offhand.force = 0 // ditto
 	user.put_in_inactive_hand(offhand)
 	user.update_inv_l_hand(0)
 	user.update_inv_r_hand()
@@ -179,7 +181,7 @@
 
 /obj/item/weapon/twohanded/sledgehammer
 	name = "sledgehammer"
-	desc = "a large block of metal on the end of a pole. Smashing!"
+	desc = "A large block of metal on the end of a pole. Smashing!"
 	icon_state = "sledgehammer"
 	item_state = "sledgehammer"
 	icon = 'icons/obj/items/weapons/melee/hammers.dmi'

@@ -135,7 +135,7 @@ CLIENT_VERB(looc, msg as text)
 
 	if(!admin_holder || !(admin_holder.rights & R_MOD))
 		if(!GLOB.looc_allowed)
-			to_chat(src, SPAN_DANGER("LOOC is globally muted"))
+			to_chat(src, SPAN_DANGER("LOOC is globally muted."))
 			return
 		if(!GLOB.dlooc_allowed && (mob.stat != CONSCIOUS || isobserver(mob)))
 			to_chat(usr, SPAN_DANGER("Sorry, you cannot utilize LOOC while dead or incapacitated."))
@@ -159,7 +159,7 @@ CLIENT_VERB(looc, msg as text)
 	var/list/heard = get_mobs_in_view(7, src.mob)
 	var/mob/S = src.mob
 
-	var/display_name = S.key
+	var/display_name = S.username()
 	if(S.stat != DEAD && !isobserver(S))
 		display_name = S.real_name
 
@@ -180,10 +180,11 @@ CLIENT_VERB(looc, msg as text)
 		var/transmit_language = isxeno(mob) ? LANGUAGE_XENOMORPH : LANGUAGE_ENGLISH
 		mob.langchat_speech(msg, heard, GLOB.all_languages[transmit_language], "#ff47d7")
 
-	// Now handle admins
-	display_name = S.key
+	// Now handle admins - show username (key) when different, otherwise just key
+	var/username = S.username()
+	display_name = username != S.key ? "[username] ([S.key])" : S.key
 	if(S.stat != DEAD && !isobserver(S))
-		display_name = "[S.real_name]/([S.key])"
+		display_name = "[S.real_name]/([username != S.key ? "[username] ([S.key])" : S.key])"
 
 	for(var/client/C in GLOB.admins)
 		if(!C.admin_holder || !(C.admin_holder.rights & R_MOD))
@@ -197,7 +198,7 @@ CLIENT_VERB(looc, msg as text)
 
 CLIENT_VERB(round_info)
 	set name = "Current Map" //Gave this shit a shorter name so you only have to time out "ooc" rather than "ooc message" to use it --NeoFite
-	set desc = "Information about the current round"
+	set desc = "Information about the current round."
 	set category = "OOC"
 	to_chat_spaced(usr, html = FONT_SIZE_LARGE(SPAN_NOTICE("The current map is [SSmapping.configs[GROUND_MAP].map_name]")))
 
@@ -205,7 +206,7 @@ CLIENT_VERB(round_info)
 // If this happens, let the player manually close them all
 CLIENT_VERB(fixnanoui)
 	set name = "Fix Interfaces"
-	set desc = "Fixes all broken interfaces by forcing all existing ones to close"
+	set desc = "Fixes all broken interfaces by forcing all existing ones to close."
 	set category = "OOC.Fix"
 
 	if(!mob)
@@ -228,7 +229,7 @@ CLIENT_VERB(fixnanoui)
 CLIENT_VERB(fit_viewport)
 	set name = "Fit Viewport"
 	set category = "OOC"
-	set desc = "Fit the width of the map window to match the viewport"
+	set desc = "Fit the width of the map window to match the viewport."
 
 	// Fetch aspect ratio
 	var/view_size = getviewsize(view)

@@ -198,7 +198,7 @@
 			to_chat(user, SPAN_DANGER("You can't add any more to [target]."))
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
-		to_chat(user, SPAN_NOTICE(" You transfer [trans] units of the contents to [target]."))
+		to_chat(user, SPAN_NOTICE("You transfer [trans] units of the contents to [target]."))
 
 	return ..()
 
@@ -417,7 +417,7 @@
 /obj/item/reagent_container/food/drinks/cans/waterbottle/upp
 	name = "\improper Gerolsteiner Bottled Sparkling Water"
 	desc = "German bottled, sparkling water popular among germanic population of UPP."
-	desc_lore = "After Gerolsteiner company becoming an intergrated state enterprise, their products became a common thing in military rations and in other places."
+	desc_lore = "After Gerolsteiner company becoming an integrated state enterprise, their products became a common thing in military rations and in other places."
 	icon_state = "upp_water"
 	crushed_icon = "upp_water_crushed"
 
@@ -521,7 +521,7 @@
 
 /obj/item/reagent_container/food/drinks/cans/souto/diet
 	name = "\improper Diet Souto"
-	desc = "Now with 0% fruit juice! Canned in Havana"
+	desc = "Now with 0% fruit juice! Canned in Havana."
 	icon_state = "souto_diet_classic"
 	item_state = "souto_diet_classic"
 
@@ -541,7 +541,7 @@
 
 /obj/item/reagent_container/food/drinks/cans/souto/diet/classic
 	name = "\improper Diet Souto"
-	desc = "Now with 0% fruit juice! Canned in Havana"
+	desc = "Now with 0% fruit juice! Canned in Havana."
 	icon_state = "souto_diet_classic"
 	item_state = "souto_diet_classic"
 
@@ -551,7 +551,7 @@
 
 /obj/item/reagent_container/food/drinks/cans/souto/cherry
 	name = "\improper Cherry Souto"
-	desc = "Now with more artificial flavors! Canned in Havana"
+	desc = "Now with more artificial flavors! Canned in Havana."
 	icon_state = "souto_cherry"
 	item_state = "souto_cherry"
 

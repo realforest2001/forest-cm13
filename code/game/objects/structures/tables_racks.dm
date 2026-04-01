@@ -353,7 +353,7 @@
 
 /obj/structure/surface/table/verb/do_flip()
 	set name = "Flip table"
-	set desc = "Flips a non-reinforced table"
+	set desc = "Flips a non-reinforced table."
 	set category = "Object"
 	set src in oview(1)
 
@@ -415,7 +415,7 @@
 
 /obj/structure/surface/table/proc/do_put()
 	set name = "Put table back"
-	set desc = "Puts flipped table back"
+	set desc = "Puts flipped table back."
 	set category = "Object"
 	set src in oview(1)
 
@@ -736,3 +736,21 @@
 	. = ..()
 	if(.)
 		deconstruct(FALSE)
+
+/obj/structure/surface/hunter_shuttle_table
+	name = "console base"
+	desc = "A smooth metal alloy base table."
+	icon = 'icons/obj/structures/tables.dmi'
+	icon_state = "hs_table"
+	density = TRUE
+	layer = TABLE_LAYER
+	anchored = TRUE
+	throwpass = TRUE //You can throw objects over this, despite it's density.
+	breakable = FALSE
+	climbable = FALSE
+	wrenchable = FALSE
+	explo_proof = TRUE
+	health = 100
+
+/obj/structure/surface/hunter_shuttle_table/deconstruct(disassembled = TRUE)
+	return FALSE

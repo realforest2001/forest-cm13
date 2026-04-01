@@ -272,6 +272,9 @@
 	req_one_access = list(ACCESS_YAUTJA_ANCIENT)
 	unslashable = TRUE
 
+/obj/structure/machinery/door/airlock/yautja/secure/turf_plane
+	plane = TURF_PLANE
+
 //FIORINA PENITENTIARY (PRISON_FOP) MAINTENANCE HATCHES
 
 /obj/structure/machinery/door/airlock/prison_hatch
@@ -904,7 +907,7 @@
 	if(!locked)
 		return ..()
 
-	to_chat(xeno, SPAN_NOTICE("You try and force the doors open"))
+	to_chat(xeno, SPAN_NOTICE("You try and force the doors open."))
 	if(do_after(xeno, 3 SECONDS, INTERRUPT_ALL, BUSY_ICON_HOSTILE))
 		unlock(TRUE)
 		open(1)
