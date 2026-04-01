@@ -303,7 +303,6 @@
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10, WEAR_IN_JACKET)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/belt/shotgun/xm88/black/half_full_cia, WEAR_WAIST)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/medical/socmed/not_op, WEAR_R_STORE)
-			new_human.equip_to_slot_or_del(new /obj/item/device/motiondetector/m717/cia, WEAR_L_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/firstaid/regular/response, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/m15, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/smoke, WEAR_IN_BACK)
@@ -385,7 +384,6 @@
 			new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/shotgun/es7/tactical/lethal, WEAR_J_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/belt/shotgun/black/es7_lethal/half, WEAR_WAIST)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/medical/socmed/not_op, WEAR_R_STORE)
-			new_human.equip_to_slot_or_del(new /obj/item/device/motiondetector/m717/cia, WEAR_L_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/medium_stack, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/medium_stack, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/plasteel/medium_stack, WEAR_IN_BACK)
@@ -671,7 +669,6 @@
 
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/phosphorus, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/high_explosive, WEAR_IN_BACK)
-			new_human.equip_to_slot_or_del(new /obj/item/device/motiondetector/m717/cia, WEAR_IN_BACK)
 			if(strength_type == STRENGTH_SURVIVOR)
 				new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/medium_stack, WEAR_IN_BACK)
 
