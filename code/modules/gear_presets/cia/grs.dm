@@ -22,6 +22,7 @@
 	var/suit_type = /obj/item/clothing/suit/storage/marine/sof/grs
 	var/back_type = /obj/item/storage/backpack/lightpack/black
 	var/mask_type = /obj/item/clothing/mask/gas/pmc/marsoc/grs
+	var/has_ceramic_plate = TRUE
 
 /datum/equipment_preset/cia_global_response/load_name(mob/living/carbon/human/new_human, randomise)
 	new_human.gender = pick(MALE,FEMALE)
@@ -55,6 +56,7 @@
 			headset_type = /obj/item/device/radio/headset/almayer/cia_grs/survivor
 			access = get_access(ACCESS_LIST_COLONIAL_ALL) + list(ACCESS_CIA, ACCESS_CIA_GRS)
 			selection_categories += FACTION_SURVIVOR
+			has_ceramic_plate = FALSE
 		if(STRENGTH_DEATH)
 			name = "[name] (!DEATHSQUAD!)"
 			faction_group = FACTION_LIST_CIA
@@ -72,7 +74,8 @@
 		new_human.equip_to_slot_or_del(new mask_type, WEAR_FACE)
 	if(uniform_type)
 		new_human.equip_to_slot_or_del(new uniform_type, WEAR_BODY)
-		new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/health/ceramic_plate, WEAR_ACCESSORY)
+		if(has_ceramic_plate)
+			new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/health/ceramic_plate, WEAR_ACCESSORY)
 	if(suit_type)
 		new_human.equip_to_slot_or_del(new suit_type, WEAR_JACKET)
 	new_human.equip_to_slot_or_del(new /obj/item/clothing/gloves/marine/veteran, WEAR_HANDS)
@@ -275,12 +278,12 @@
 
 /datum/equipment_preset/cia_global_response/sniper/weak
 	strength_type = STRENGTH_WEAK
+	helmet_type = /obj/item/clothing/head/helmet/marine/sof/grs/sniper/damaged
 	suit_type = /obj/item/clothing/suit/storage/marine/ghillie/grs/damaged
 
 /datum/equipment_preset/cia_global_response/sniper/weak/survivor
 	strength_type = STRENGTH_SURVIVOR
 	skills = /datum/skills/cia/global_response/sniper/survivor
-	helmet_type = /obj/item/clothing/head/helmet/marine/sof/grs/sniper/damaged
 
 /datum/equipment_preset/cia_global_response/sniper/load_gear(mob/living/carbon/human/new_human)
 	load_standard_gear(new_human)
@@ -788,12 +791,9 @@
 /datum/equipment_preset/cia_global_response/synth/load_gear(mob/living/carbon/human/new_human)
 	load_standard_gear(new_human)
 
-	new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/storage/surg_vest/equipped, WEAR_ACCESSORY)
-
 	//backpack and stuff in it
 	new_human.equip_to_slot_or_del(new /obj/item/tool/crowbar/tactical, WEAR_IN_BACK)
 	new_human.equip_to_slot_or_del(new /obj/item/roller, WEAR_IN_BACK)
-	new_human.equip_to_slot_or_del(new /obj/item/roller/surgical, WEAR_IN_BACK)
 	new_human.equip_to_slot_or_del(new /obj/item/reagent_container/blood/OMinus, WEAR_IN_BACK)
 
 	switch(strength_type)
@@ -809,6 +809,9 @@
 				new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/medium_stack, WEAR_IN_BACK)
 
 		if(STRENGTH_NORM, STRENGTH_NO_IFF)
+			new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/storage/surg_vest/equipped, WEAR_ACCESSORY)
+			new_human.equip_to_slot_or_del(new /obj/item/roller/surgical, WEAR_IN_BACK)
+
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/construction/full_barbed_wire/wy, WEAR_L_STORE)
 
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/medkit/wy/full_elite, WEAR_R_STORE)
@@ -819,6 +822,9 @@
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/grs_medical, WEAR_IN_BACK)
 
 		if(STRENGTH_DEATH)
+			new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/storage/surg_vest/equipped, WEAR_ACCESSORY)
+			new_human.equip_to_slot_or_del(new /obj/item/roller/surgical, WEAR_IN_BACK)
+
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/construction/full_barbed_wire/wy, WEAR_L_STORE)
 
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/medkit/wy/full_elite, WEAR_R_STORE)

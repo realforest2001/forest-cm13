@@ -63,6 +63,7 @@
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
 	armor_rad = CLOTHING_ARMOR_MEDIUM
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
+	storage_slots = 3
 
 /obj/item/clothing/suit/storage/marine/sof/grs/synth
 	name = "\improper GRS Synthetic Armor"
@@ -129,6 +130,7 @@
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
 	armor_rad = CLOTHING_ARMOR_MEDIUM
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
+	storage_slots = 3
 
 /obj/item/clothing/suit/storage/marine/ghillie/grs
 	name = "\improper GRS Marksman Armor"
