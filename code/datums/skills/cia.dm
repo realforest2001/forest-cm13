@@ -29,6 +29,16 @@ CIA
 		SKILL_JTAC = SKILL_JTAC_EXPERT,
 	)
 
+/datum/skills/cia/field_agent/adv //PMC Mix
+	name = "CIA Advanced Field Agent"
+	additional_skills = list(
+		SKILL_FIREARMS = SKILL_FIREARMS_SKILLED,
+		SKILL_CONSTRUCTION = SKILL_CONSTRUCTION_ENGI,
+		SKILL_ENGINEER = SKILL_ENGINEER_ENGI,
+		SKILL_JTAC = SKILL_JTAC_EXPERT,
+		SKILL_ENDURANCE = SKILL_ENDURANCE_MASTER,
+	)
+
 /datum/skills/cia/field_agent/senior
 	name = "CIA Senior Field Agent"
 	additional_skills = list(
