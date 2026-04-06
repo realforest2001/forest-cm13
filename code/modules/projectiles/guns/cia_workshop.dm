@@ -179,6 +179,21 @@
 /obj/item/weapon/gun/rifle/m47/heap
 	current_mag = /obj/item/ammo_magazine/rifle/m47/heap
 
+
+/obj/item/weapon/gun/rifle/m47/carbine/set_gun_config_values()
+	..()
+	accuracy_mult = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_5
+	accuracy_mult_unwielded = BASE_ACCURACY_MULT - HIT_ACCURACY_MULT_TIER_5
+	scatter = SCATTER_AMOUNT_TIER_9
+	burst_scatter_mult = SCATTER_AMOUNT_TIER_9
+	recoil_unwielded = RECOIL_AMOUNT_TIER_2
+
+/obj/item/weapon/gun/rifle/m47/carbine/ap
+	current_mag = /obj/item/ammo_magazine/rifle/m47/ap
+
+/obj/item/weapon/gun/rifle/m47/carbine/heap
+	current_mag = /obj/item/ammo_magazine/rifle/m47/heap
+
 /obj/item/weapon/gun/rifle/m47/grenadier
 	random_spawn_under = list(
 		/obj/item/attachable/attached_gun/grenade/grs/hedp,

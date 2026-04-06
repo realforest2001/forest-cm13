@@ -290,7 +290,6 @@
 
 	new_human.equip_to_slot_or_del(new /obj/item/clothing/accessory/storage/holster, WEAR_ACCESSORY)
 
-	new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/lever_action/xm88/cia, WEAR_J_STORE)
 
 	//backpack and stuff in it
 	new_human.equip_to_slot_or_del(new /obj/item/tool/crowbar/tactical, WEAR_IN_BACK)
@@ -304,15 +303,20 @@
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10, WEAR_IN_ACCESSORY)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10, WEAR_IN_JACKET)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10, WEAR_IN_JACKET)
-			new_human.equip_to_slot_or_del(new /obj/item/storage/belt/shotgun/xm88/black/half_full_cia, WEAR_WAIST)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/pouch/medical/socmed/not_op, WEAR_R_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/firstaid/regular/response, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/m15, WEAR_IN_BACK)
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/smoke, WEAR_IN_BACK)
 			if(strength_type == STRENGTH_SURVIVOR)
 				new_human.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/medium_stack, WEAR_IN_BACK)
+				new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/rifle/m47/carbine, WEAR_J_STORE)
+				new_human.equip_to_slot_or_del(new /obj/item/storage/belt/marine/black/m47/weak, WEAR_WAIST)
+			else
+				new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/lever_action/xm88/cia, WEAR_J_STORE)
+				new_human.equip_to_slot_or_del(new /obj/item/storage/belt/shotgun/xm88/black/half_full_cia, WEAR_WAIST)
 
 		if(STRENGTH_NORM, STRENGTH_NO_IFF)
+			new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/lever_action/xm88/cia, WEAR_J_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/pistol/m10/black_tactical/ap, WEAR_IN_ACCESSORY)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10/ap, WEAR_IN_ACCESSORY)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10/ap, WEAR_IN_ACCESSORY)
@@ -330,6 +334,7 @@
 			new_human.equip_to_slot_or_del(new /obj/item/storage/box/packet/phosphorus/strong, WEAR_IN_BACK)
 
 		if(STRENGTH_DEATH)
+			new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/lever_action/xm88/cia, WEAR_J_STORE)
 			new_human.equip_to_slot_or_del(new /obj/item/weapon/gun/pistol/m10/black_tactical/incendiary, WEAR_IN_ACCESSORY)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10/incendiary, WEAR_IN_ACCESSORY)
 			new_human.equip_to_slot_or_del(new /obj/item/ammo_magazine/pistol/m10/incendiary, WEAR_IN_ACCESSORY)
