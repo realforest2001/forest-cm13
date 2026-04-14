@@ -1,7 +1,83 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aaa" = (
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/medic;
+	name = "Med Sec Spawnpoint"
+	},
+/turf/open/floor/corsat/lightplate,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aab" = (
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/engineer;
+	name = "Tech Sec Spawnpoint"
+	},
+/turf/open/floor/corsat/plate,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
 "aac" = (
 /turf/open/mars/mars_dirt_12,
 /area/bigredv2/outside/c)
+"aad" = (
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/junior_exec;
+	name = "Jr Exec Spawnpoint";
+	num_uses = 2
+	},
+/turf/open/floor/wood,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aae" = (
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/exec;
+	name = "Exec Spawnpoint";
+	num_uses = 2
+	},
+/turf/open/floor/wood,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aaf" = (
+/obj/effect/decal/siding,
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/trainee;
+	name = "Trainee Spawnpoint";
+	num_uses = 2
+	},
+/turf/open/floor/wood,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aag" = (
+/obj/effect/decal/siding,
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/senior_exec;
+	name = "Sr Exec Spawnpoint"
+	},
+/turf/open/floor/wood,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aah" = (
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/standard;
+	name = "Sec Spawnpoint"
+	},
+/turf/open/floor/corsat/plate,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
+"aai" = (
+/obj/structure/bed/chair/comfy/orange{
+	dir = 1
+	},
+/turf/open/floor/corsat/plate,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
 "aaj" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/machinery/light/small{
@@ -9,6 +85,14 @@
 	},
 /turf/open/mars_cave/mars_cave_2,
 /area/bigredv2/caves/mining)
+"aak" = (
+/obj/structure/bed/chair/comfy/orange{
+	dir = 1
+	},
+/turf/open/floor/hybrisa/carpet/carpetreddeco,
+/area/event/deep_underground/dynamic{
+	name = "WY Call Center"
+	})
 "aar" = (
 /obj/structure/filingcabinet{
 	density = 0;
@@ -9606,6 +9690,10 @@
 "fif" = (
 /obj/structure/bed/chair/comfy/orange{
 	dir = 4
+	},
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/standard;
+	name = "Sec Spawnpoint"
 	},
 /turf/open/floor/corsat/red/east,
 /area/event/deep_underground/dynamic{
@@ -29848,6 +29936,10 @@
 	id = "Call Center Out";
 	name = "Call Center"
 	},
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/standard;
+	name = "Sec Spawnpoint"
+	},
 /turf/open/floor/corsat/squares,
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
@@ -34100,6 +34192,10 @@
 /area/bigredv2/outside/lz2_south_cas)
 "sqU" = (
 /obj/structure/bed/chair/comfy/blue,
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/goon/lead;
+	name = "Head Sec Spawnpoint"
+	},
 /turf/open/floor/hybrisa/carpet/carpetreddeco,
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
@@ -34264,6 +34360,10 @@
 /area/bigredv2/outside/filtration_cave_cas)
 "suB" = (
 /obj/structure/bed/chair/office/dark,
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/manager/assistant_manager;
+	name = "Asst Manager Spawnpoint"
+	},
 /turf/open/floor/wood,
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
@@ -34874,6 +34974,10 @@
 /area/bigredv2/outside/general_store)
 "sLM" = (
 /obj/effect/decal/siding,
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/trainee;
+	name = "Trainee Spawnpoint"
+	},
 /turf/open/floor/wood,
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
@@ -44938,6 +45042,10 @@
 "xWE" = (
 /obj/structure/bed/chair/comfy/hybrisa/black{
 	dir = 8
+	},
+/obj/effect/landmark/event_mob_spawn{
+	spawn_preset_path = /datum/equipment_preset/wy/manager/division_manager;
+	name = "Manager Spawnpoint"
 	},
 /turf/open/floor/hybrisa/carpet/carpetreddeco,
 /area/event/deep_underground/dynamic{
@@ -63786,7 +63894,7 @@ wPW
 ftw
 dVw
 eDg
-tyx
+aak
 pEx
 dqp
 ykt
@@ -63999,7 +64107,7 @@ wPW
 ftw
 sqU
 baO
-tyx
+aak
 frD
 sGQ
 ykt
@@ -64640,7 +64748,7 @@ sGG
 sGG
 ftw
 aUt
-ykt
+aai
 ykt
 ykt
 pZW
@@ -64853,7 +64961,7 @@ sGG
 sGG
 ftw
 aUt
-ykt
+aai
 xTg
 wCw
 rVk
@@ -65920,7 +66028,7 @@ unZ
 pZq
 xBO
 wWG
-ykt
+aah
 ftw
 ftw
 ftw
@@ -66997,7 +67105,7 @@ nym
 qdN
 fNj
 jpN
-pEx
+aad
 vvH
 wQS
 soQ
@@ -67630,13 +67738,13 @@ ftw
 ftw
 ftw
 pXC
-sLM
+aaf
 jpN
 nym
 qdN
 fNj
 jpN
-pEx
+aad
 dET
 wQS
 uxo
@@ -68269,13 +68377,13 @@ dMM
 jxA
 dqp
 pXC
-sLM
+aag
 jpN
 mOf
 oya
 hCP
 jpN
-pEx
+aae
 dTI
 wQS
 hzm
@@ -70839,7 +70947,7 @@ fNj
 wQS
 mSr
 cRj
-ykt
+aab
 esQ
 bBp
 ftw
@@ -71905,7 +72013,7 @@ vrf
 wRs
 hBK
 bLa
-kYR
+aaa
 xbE
 ftw
 wPW
