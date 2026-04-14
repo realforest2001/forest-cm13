@@ -1216,9 +1216,6 @@
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
 	})
-"aFo" = (
-/turf/open/floor/corsat/marked,
-/area/bigredv2/caves)
 "aFJ" = (
 /obj/structure/machinery/gear,
 /obj/effect/decal/cleanable/dirt,
@@ -16655,7 +16652,7 @@
 	autoname = 0;
 	c_tag = "Escape Door"
 	},
-/turf/template_noop,
+/turf/closed/wall/r_wall/biodome/biodome_unmeltable,
 /area/event/deep_underground/dynamic{
 	name = "WY Call Center"
 	})
@@ -71989,7 +71986,7 @@ wPW
 wPW
 wPW
 wPW
-aFo
+wPW
 ftw
 rbk
 ykt
