@@ -1,5 +1,6 @@
 /datum/equipment_preset/wy_ppo
 	name = "Weyland-Yutani Personal Protection Officer"
+	flags = EQUIPMENT_PRESET_EXTRA
 	faction = FACTION_WY
 	faction_group =	FACTION_LIST_MARINE_WY
 	origin_override = ORIGIN_WY_SEC
@@ -10,6 +11,7 @@
 	paygrades = list(PAY_SHORT_WY_SEC_PPO = JOB_PLAYTIME_TIER_0)
 	role_comm_title = "WY-PPO"
 	skills = /datum/skills/wy_ppo
+	languages = list(LANGUAGE_ENGLISH, LANGUAGE_JAPANESE)
 
 	minimap_icon = "goon_guard"
 	minimap_background = "background_goon"
