@@ -71,6 +71,7 @@
 	mob_size = MOB_SIZE_XENO_SMALL
 	acid_blood_damage = 0
 	bubble_icon = "pathogen"
+	fire_immunity = FIRE_VULNERABILITY
 	aura_strength = 2
 	counts_for_slots = FALSE
 
