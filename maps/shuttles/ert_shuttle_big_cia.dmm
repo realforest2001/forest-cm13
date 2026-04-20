@@ -130,6 +130,12 @@
 	},
 /turf/open/floor/almayer/plate,
 /area/shuttle/grs_barge)
+"ap" = (
+/obj/docking_port/mobile/emergency_response/big/cia_barge{
+	area_type = /area/shuttle/grs_barge
+	},
+/turf/template_noop,
+/area/template_noop)
 "bo" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "E";
@@ -697,12 +703,6 @@
 "PE" = (
 /turf/closed/wall/almayer/outer,
 /area/shuttle/grs_barge)
-"Qb" = (
-/obj/docking_port/mobile/emergency_response/big/cia_barge{
-	area_type = /area/shuttle/grs_barge
-	},
-/turf/closed/wall/almayer/outer,
-/area/shuttle/grs_barge)
 "Qx" = (
 /obj/structure/machinery/door/airlock/almayer/secure/reinforced{
 	req_access = null;
@@ -929,7 +929,7 @@ af
 Ro
 PE
 PE
-Tp
+ap
 Tp
 Tp
 Tp
@@ -1184,7 +1184,7 @@ NB
 rv
 rv
 YN
-Qb
+PE
 "}
 (10,1,1) = {"
 xK
