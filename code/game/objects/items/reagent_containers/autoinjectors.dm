@@ -3,7 +3,7 @@
 	var/chemname = "inaprovaline"
 	var/autoinjector_type = "autoinjector" //referencing the icon state name in syringe.dmi
 	//desc = "A rapid and safe way to administer small amounts of drugs by untrained or trained personnel."
-	desc = "An autoinjector containing Inaprovaline.  Useful for saving lives."
+	desc = "An autoinjector containing Inaprovaline. Useful for saving lives."
 	icon_state = "empty"
 	item_state = "autoinjector"
 	item_state_slots = list(WEAR_AS_GARB = "injector")
@@ -59,7 +59,7 @@
 	else
 		maptext = ""
 
-	if(uses_left)
+	if(uses_left && autoinjector_type)
 		var/image/filling = image('icons/obj/items/syringe.dmi', src, "[autoinjector_type]_[uses_left]")
 		filling.color = mix_color_from_reagents(reagents.reagent_list)
 		overlays += filling
@@ -93,6 +93,25 @@
 	volume = (REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD) * INJECTOR_USES
 	display_maptext = TRUE
 	maptext_label = "Tc"
+
+/obj/item/reagent_container/hypospray/autoinjector/tricord/random_amount
+
+/obj/item/reagent_container/hypospray/autoinjector/tricord/random_amount/Initialize()
+	. = ..()
+	var/amount = rand(1, 6)
+	switch(amount)
+		if(1)
+			reagents.add_reagent("tricordrazine", -45)
+			uses_left = 0
+			update_icon()
+		if(2, 3)
+			reagents.add_reagent("tricordrazine", -30)
+			uses_left = 1
+			update_icon()
+		if(4, 5)
+			reagents.add_reagent("tricordrazine", -15)
+			uses_left = 2
+			update_icon()
 
 /obj/item/reagent_container/hypospray/autoinjector/tricord/skillless
 	name = "tricordrazine EZ autoinjector"
@@ -144,6 +163,25 @@
 	display_maptext = TRUE
 	maptext_label = "Tr"
 
+/obj/item/reagent_container/hypospray/autoinjector/tramadol/random_amount
+
+/obj/item/reagent_container/hypospray/autoinjector/tramadol/random_amount/Initialize()
+	. = ..()
+	var/amount = rand(1, 6)
+	switch(amount)
+		if(1)
+			reagents.add_reagent("tramadol", -45)
+			uses_left = 0
+			update_icon()
+		if(2, 3)
+			reagents.add_reagent("tramadol", -30)
+			uses_left = 1
+			update_icon()
+		if(4, 5)
+			reagents.add_reagent("tramadol", -15)
+			uses_left = 2
+			update_icon()
+
 /obj/item/reagent_container/hypospray/autoinjector/tramadol/skillless
 	name = "tramadol EZ autoinjector"
 	desc = "An EZ autoinjector loaded with 3 doses of 15u of Tramadol, a weak but effective painkiller for normal wounds. You can refill it at Wey-Med vending machines and it doesn't require any training to use."
@@ -180,6 +218,25 @@
 	display_maptext = TRUE
 	maptext_label = "Kl"
 
+/obj/item/reagent_container/hypospray/autoinjector/kelotane/random_amount
+
+/obj/item/reagent_container/hypospray/autoinjector/kelotane/random_amount/Initialize()
+	. = ..()
+	var/amount = rand(1, 6)
+	switch(amount)
+		if(1)
+			reagents.add_reagent("kelotane", -45)
+			uses_left = 0
+			update_icon()
+		if(2 , 3)
+			reagents.add_reagent("kelotane", -30)
+			uses_left = 1
+			update_icon()
+		if(4 , 5)
+			reagents.add_reagent("kelotane", -15)
+			uses_left = 2
+			update_icon()
+
 /obj/item/reagent_container/hypospray/autoinjector/kelotane/skillless
 	name = "kelotane EZ autoinjector"
 	desc = "An EZ autoinjector loaded with 3 doses of 15u of Kelotane, a common burn medicine. Doesn't require any training to use. You can refill it at Wey-Med vending machines."
@@ -207,6 +264,25 @@
 	volume = (REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD) * INJECTOR_USES
 	display_maptext = TRUE
 	maptext_label = "Bi"
+
+/obj/item/reagent_container/hypospray/autoinjector/bicaridine/random_amount
+
+/obj/item/reagent_container/hypospray/autoinjector/bicaridine/random_amount/Initialize()
+	. = ..()
+	var/amount = rand(1, 6)
+	switch(amount)
+		if(1)
+			reagents.add_reagent("bicaridine", -45)
+			uses_left = 0
+			update_icon()
+		if(2, 3)
+			reagents.add_reagent("bicaridine", -30)
+			uses_left = 1
+			update_icon()
+		if(4, 5)
+			reagents.add_reagent("bicaridine", -15)
+			uses_left = 2
+			update_icon()
 
 /obj/item/reagent_container/hypospray/autoinjector/bicaridine/skillless
 	name = "bicaridine EZ autoinjector"
@@ -285,9 +361,9 @@
 /obj/item/reagent_container/hypospray/autoinjector/peridaxon
 	name = "peridaxon autoinjector"
 	chemname = "peridaxon"
-	desc = "An autoinjector loaded with 3 doses of 30u of Peridaxon, an emergency medicine used to stop most symptoms of organ damage. Does not fix organ damage. You can refill it at Wey-Med vending machines."
-	amount_per_transfer_from_this = HIGH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD
-	volume = (HIGH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD) * INJECTOR_USES
+	desc = "An autoinjector loaded with 3 doses of 7.5u of Peridaxon, an emergency medicine used to stop most symptoms of organ damage. Does not fix organ damage. You can refill it at Wey-Med vending machines."
+	amount_per_transfer_from_this = LOWH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD
+	volume = (LOWH_REAGENTS_OVERDOSE * INJECTOR_PERCENTAGE_OF_OD) * INJECTOR_USES
 	display_maptext = TRUE
 	maptext_label = "Pr"
 
@@ -340,12 +416,15 @@
 	amount_per_transfer_from_this = 5
 	volume = 25
 	uses_left = 5
+	autoinjector_type = "+stimpack_custom"
 	icon_state = "stimpack"
+	autoinjector_type = null
 	skilllock = SKILL_MEDICAL_DEFAULT
-	display_maptext = TRUE
+	display_maptext = FALSE //corporate secret
 	maptext_label = "Uz"
 
 /obj/item/reagent_container/hypospray/autoinjector/ultrazine/update_icon()
+	. = ..()
 	icon_state = uses_left ? "stimpack" : "stimpack0"
 	if((isstorage(loc) || ismob(loc)) && display_maptext)
 		maptext = SPAN_LANGCHAT("[maptext_label]")
@@ -369,11 +448,17 @@
 	icon = 'icons/obj/items/hunter/pred_gear.dmi'
 	icon_state = "crystal"
 	injectSFX = 'sound/items/pred_crystal_inject.ogg'
+	autoinjector_type = "thwei"
 	injectVOL = 15
 	amount_per_transfer_from_this = REAGENTS_OVERDOSE
 	volume = REAGENTS_OVERDOSE
 	uses_left = 1
 	black_market_value = 25
+
+/obj/item/reagent_container/hypospray/autoinjector/yautja/thrall
+	name = "orange unusual crystal"
+	chemname = "dathwei"
+	color = "#c46b41"
 
 /obj/item/reagent_container/hypospray/autoinjector/yautja/attack(mob/M as mob, mob/user as mob)
 	if(HAS_TRAIT(user, TRAIT_YAUTJA_TECH))
@@ -388,11 +473,19 @@
 	visible_message(SPAN_DANGER("[src] collapses into nothing."))
 	qdel(src)
 
+/obj/item/reagent_container/hypospray/autoinjector/yautja/update_icon()
+	overlays.Cut()
+	if(uses_left && autoinjector_type) //does not apply a colored fill overlay like the rest of the autoinjectors
+		var/image/filling = image('icons/obj/items/hunter/pred_gear.dmi', src, "[autoinjector_type]_[uses_left]")
+		overlays += filling
+		return
+
 /obj/item/reagent_container/hypospray/autoinjector/skillless
 	name = "first-aid autoinjector"
 	chemname = "tricordrazine"
 	desc = "An autoinjector loaded with a single dose of 15u of tricordrazine for marines to treat themselves with. You can refill it at Wey-Med vending machines."
 	icon_state = "tricord"
+	autoinjector_type = null
 	amount_per_transfer_from_this = 15
 	volume = 15
 	skilllock = SKILL_MEDICAL_DEFAULT
