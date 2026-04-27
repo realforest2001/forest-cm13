@@ -416,6 +416,9 @@
 
 /obj/item/clothing/accessory/health/research_plate/anti_decay/on_removed(mob/living/user, obj/item/clothing/C)
 	. = ..()
+	SIGNAL_HANDLER
+	UnregisterSignal(wearer, COMSIG_MOB_DEATH)
+	wearer.revive_grace_period = 9 MINUTES
 	wearer = null
 	attached_uni = null
 
