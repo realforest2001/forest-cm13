@@ -112,7 +112,6 @@
 
 /datum/job/antag/pred_surv/generate_entry_conditions(mob/living/hunter)
 	. = ..()
-	log_debug("YAUTJA SURV: [title] generate conditions triggered.")
 	if(SSticker.mode)
 		SSticker.mode.initialize_predator(hunter, ignore_pred_num = TRUE)
 
@@ -133,7 +132,6 @@
 	total_positions = slots
 
 	if(override_job)
-		log_debug("YAUTJA SURV: Job set to [survivor_job] (OVERRIDE)")
 		return
 
 	switch(mode)
@@ -147,7 +145,6 @@
 				survivor_job = JOB_BADBLOOD
 			else
 				survivor_job = JOB_STRANDED_PRED
-	log_debug("YAUTJA SURV: Job set to [survivor_job]")
 
 /datum/timelock/pred_surv
 	name = "Bad Blood Roles"
