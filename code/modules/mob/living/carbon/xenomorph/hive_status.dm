@@ -1868,7 +1868,7 @@
 	)
 
 	restricted_castes = list(
-		PATHOGEN_CREATURE_HARBINGER = 2
+		PATHOGEN_CREATURE_HARBINGER = 2,
 	)
 
 	tier_slot_multiplier = 0.8 // Experimental change.
