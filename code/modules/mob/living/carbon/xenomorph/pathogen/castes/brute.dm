@@ -76,6 +76,7 @@
 /mob/living/carbon/xenomorph/brute/Initialize()
 	. = ..()
 	make_pathogen_speaker()
+	ADD_TRAIT(src, TRAIT_ABILITY_NEOS_TAILSTAB, TRAIT_SOURCE_ABILITY("neos_tailstab"))
 	AddComponent(/datum/component/footstep, 4, 25, 11, 2, "alien_footstep_medium")
 
 /datum/action/xeno_action/activable/tail_stab/pathogen_t3/brute

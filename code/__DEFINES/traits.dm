@@ -271,14 +271,14 @@
 #define TRAIT_ABILITY_PARALYZING_SLASH "t_ability_paralyzing_slash"
 
 // -- pathogen traits --
+/// Used for neos tail stab ability.
+#define TRAIT_ABILITY_NEOS_TAILSTAB "t_ability_neos_tailstab"
 /// Used for pathogen blight slash ability.
 #define TRAIT_ABILITY_BLIGHT_SLASH "t_ability_blight_slash"
 /// Used for overmind and matriarch blight wave ability.
 #define TRAIT_ABILITY_BLIGHT_WAVE "t_ability_matriarch_blight_wave"
 /// Used for venator savage ability.
 #define TRAIT_ABILITY_VENATOR_SAVAGE "t_ability_venator_savage"
-/// Used for venator tails stab ability.
-#define TRAIT_ABILITY_VENATOR_TAILSTAB "t_ability_venator_tailstab"
 /// Used for venator abduct ability.
 #define TRAIT_ABILITY_VENATOR_ABDUCT "t_ability_venator_abduct"
 /// Used for harbinger and matriarch mycotoxin ability.

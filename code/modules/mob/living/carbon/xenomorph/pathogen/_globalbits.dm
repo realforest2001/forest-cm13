@@ -427,7 +427,7 @@
 	. = ..()
 	make_pathogen_speaker()
 	ADD_TRAIT(src, TRAIT_ABILITY_VENATOR_SAVAGE, TRAIT_SOURCE_ABILITY("venator_savage"))
-	ADD_TRAIT(src, TRAIT_ABILITY_VENATOR_TAILSTAB, TRAIT_SOURCE_ABILITY("venator_tailstab"))
+	ADD_TRAIT(src, TRAIT_ABILITY_NEOS_TAILSTAB, TRAIT_SOURCE_ABILITY("neos_tailstab"))
 	ADD_TRAIT(src, TRAIT_ABILITY_VENATOR_ABDUCT, TRAIT_SOURCE_ABILITY("venator_abduct"))
 /mob/living/carbon/xenomorph/venator/do_evolve()
 	do_pathogen_evolve()
@@ -443,6 +443,7 @@
 /mob/living/carbon/xenomorph/harbinger/Initialize(mapload, mob/living/carbon/xenomorph/old_xeno, hivenumber)
 	. = ..()
 	make_pathogen_speaker()
+	ADD_TRAIT(src, TRAIT_ABILITY_NEOS_TAILSTAB, TRAIT_SOURCE_ABILITY("neos_tailstab"))
 /mob/living/carbon/xenomorph/harbinger/do_evolve()
 	do_pathogen_evolve()
 	return

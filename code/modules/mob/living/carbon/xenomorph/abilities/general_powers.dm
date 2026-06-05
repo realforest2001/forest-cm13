@@ -1231,7 +1231,7 @@
 
 	target.last_damage_data = create_cause_data(initial(stabbing_xeno.caste_type), stabbing_xeno)
 
-	var/venator = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_VENATOR_TAILSTAB)
+	var/neos_tail = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_NEOS_TAILSTAB)
 	var/mycotoxin = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_TAILSTAB_MYCOTOXIN)
 
 	/// Direction var to make the tail stab look cool and immersive.
@@ -1239,7 +1239,7 @@
 	var/stab_overlay
 
 	if(blunt_stab)
-		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] [venator ? "slams a giant arm" : "swipes its tail"] into [target]'s [limb ? limb.display_name : "chest"], bashing it!"), SPAN_XENOWARNING("We [venator ? "slam our giant arm" : "swipe our tail"] into [target]'s [limb? limb.display_name : "chest"], bashing it!"))
+		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] [neos_tail ? "slams a giant arm" : "swipes its tail"] into [target]'s [limb ? limb.display_name : "chest"], bashing it!"), SPAN_XENOWARNING("We [neos_tail ? "slam our giant arm" : "swipe our tail"] into [target]'s [limb? limb.display_name : "chest"], bashing it!"))
 		if(prob(1))
 			playsound(target, 'sound/effects/comical_bonk.ogg', 50, TRUE)
 		else
@@ -1259,12 +1259,12 @@
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was injected with mycotoxin by [key_name(stabbing_xeno)]</font>")
 		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>injected [key_name(target)] with mycotoxin</font>")
 	else
-		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] skewers [target] through the [limb ? limb.display_name : "chest"] with its razor [venator ? "spikes" : "sharp tail"]!"), SPAN_XENOWARNING("We skewer [target] through the [limb? limb.display_name : "chest"] with our razor [venator ? "spikes" : "sharp tail"]!"))
+		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] skewers [target] through the [limb ? limb.display_name : "chest"] with its razor [neos_tail ? "spikes" : "sharp tail"]!"), SPAN_XENOWARNING("We skewer [target] through the [limb? limb.display_name : "chest"] with our razor [neos_tail ? "spikes" : "sharp tail"]!"))
 		playsound(target, "alien_bite", 50, TRUE)
 		stab_overlay = "tail"
-		log_attack("[key_name(stabbing_xeno)] [venator ? "spikelashed" : "tailstabbed"] [key_name(target)] at [get_area_name(stabbing_xeno)]")
-		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was [venator ? "spikelashed" : "tailstabbed"] by [key_name(stabbing_xeno)]</font>")
-		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>[venator ? "spikelashed" : "tailstabbed"] [key_name(target)]</font>")
+		log_attack("[key_name(stabbing_xeno)] [neos_tail ? "spikelashed" : "tailstabbed"] [key_name(target)] at [get_area_name(stabbing_xeno)]")
+		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was [neos_tail ? "spikelashed" : "tailstabbed"] by [key_name(stabbing_xeno)]</font>")
+		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>[neos_tail ? "spikelashed" : "tailstabbed"] [key_name(target)]</font>")
 
 	var/last_dir = stabbing_xeno.dir
 	if(last_dir != stab_direction)

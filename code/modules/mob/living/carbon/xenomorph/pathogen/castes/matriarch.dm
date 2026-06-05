@@ -84,6 +84,7 @@
 /mob/living/carbon/xenomorph/matriarch/Initialize()
 	. = ..()
 	make_pathogen_speaker()
+	ADD_TRAIT(src, TRAIT_ABILITY_NEOS_TAILSTAB, TRAIT_SOURCE_ABILITY("neos_tailstab"))
 	ADD_TRAIT(src, TRAIT_ABILITY_BLIGHT_WAVE, TRAIT_SOURCE_ABILITY("blight_wave"))
 	ADD_TRAIT(src, TRAIT_ABILITY_TAILSTAB_MYCOTOXIN, TRAIT_SOURCE_ABILITY("tailstab_mycotoxin"))
 	AddComponent(/datum/component/footstep, 2 , 35, 11, 4, "alien_footstep_large")
@@ -230,7 +231,10 @@
 	return ..()
 
 /datum/action/xeno_action/onclick/blight_wave/use_ability(atom/target, daze_length_seconds, slow_length_seconds)
+	var/mob/living/carbon/xenomorph/xeno_player = owner
 	cast_doom(daze_length_seconds, slow_length_seconds)
+	if(!HAS_TRAIT(xeno_player, TRAIT_ABILITY_BLIGHT_WAVE)) //In case matriarch will be overmind, they can lose this ability.
+		ADD_TRAIT(xeno_player, TRAIT_ABILITY_BLIGHT_WAVE, TRAIT_SOURCE_ABILITY("blight_wave"))
 	..()
 
 /datum/effect_system/smoke_spread/blight_wave
