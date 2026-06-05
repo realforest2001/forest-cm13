@@ -267,7 +267,7 @@
 #define TRAIT_ABILITY_BURROWED "t_ability_burrowed"
 /// Xenos with this trait can toggle long sight while resting.
 #define TRAIT_ABILITY_SIGHT_IGNORE_REST "t_ability_sight_ignore_rest"
-/// Xenos with this trait can toggle long sight while resting.
+/// Used by sentinel pralyzing slash ability.
 #define TRAIT_ABILITY_PARALYZING_SLASH "t_ability_paralyzing_slash"
 
 // -- pathogen traits --
