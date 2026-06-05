@@ -78,7 +78,6 @@
 
 	ADD_TRAIT(overmind_mob, TRAIT_IMMOBILIZED, OVERMIND_TRAIT)
 	ADD_TRAIT(overmind_mob, TRAIT_PATHOGEN_OVERMIND, OVERMIND_TRAIT)
-	ADD_TRAIT(overmind_mob, TRAIT_ABILITY_BLIGHT_WAVE, OVERMIND_TRAIT)
 	ADD_TRAIT(overmind_mob, TRAIT_UNDENSE, OVERMIND_TRAIT)
 	overmind_mob.set_body_position(STANDING_UP)
 	overmind_mob.set_resting(FALSE)
