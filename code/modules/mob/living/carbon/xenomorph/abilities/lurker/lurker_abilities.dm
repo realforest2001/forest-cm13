@@ -24,6 +24,10 @@
 	var/alpha_amount = 25
 	var/speed_buff = 0.20
 
+	var/invis_recharge_time = 20 SECONDS
+	var/invis_start_time = -1 // Special value for when we're not invisible
+	var/invis_duration = 30 SECONDS // so we can display how long the lurker is invisible to it
+
 // tightly coupled 'buff next slash' action
 /datum/action/xeno_action/onclick/lurker_assassinate
 	name = "Crippling Strike"

@@ -517,6 +517,7 @@
 	var/stab_range = 2
 	/// Used for defender's tail 'stab'.
 	var/blunt_stab = FALSE
+	var/matriarch_stab = FALSE
 
 /datum/action/xeno_action/onclick/evolve
 	name = "Evolve"

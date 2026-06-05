@@ -170,14 +170,31 @@
 */
 
 /datum/action/xeno_action/activable/doom/use_ability(atom/target)
+	cast_doom(daze_length_seconds, slow_length_seconds)
+	..()
+
+/*
+	BULWARK ABILITY - AoE shield
+	Long cooldown defensive ability, provides a shield which caps damage taken to 10% of the xeno's max health per individual source of damage.
+*/
+
+/datum/action/xeno_action/proc/cast_doom(atom/target, daze_length_seconds, slow_length_seconds)
 	var/mob/living/carbon/xenomorph/xeno = owner
 	XENO_ACTION_CHECK_USE_PLASMA(xeno)
 
-	playsound(xeno, 'sound/voice/deep_alien_screech2.ogg', 75, 0, status = 0)
+	var/blight_wave = HAS_TRAIT(xeno, TRAIT_ABILITY_BLIGHT_WAVE)
+	var/sound_choice = blight_wave ? 'sound/pathogen_creatures/pathogen_matriarch_screech.ogg' : 'sound/voice/deep_alien_screech2.ogg'
+
+	playsound(xeno, sound_choice, 75, 0, status = 0)
 	xeno.visible_message(SPAN_XENOHIGHDANGER("[xeno] emits a raspy guttural roar!"))
 	xeno.create_shriekwave()
 
-	var/datum/effect_system/smoke_spread/king_doom/smoke_gas = new()
+	var/datum/effect_system/smoke_spread/smoke_gas
+
+	if(blight_wave)
+		smoke_gas = new /datum/effect_system/smoke_spread/blight_wave
+	else
+		smoke_gas = new /datum/effect_system/smoke_spread/king_doom
 	smoke_gas.set_up(7, 0, get_turf(xeno), null, 6)
 	smoke_gas.start()
 
@@ -236,14 +253,8 @@
 					current_atom.set_light_range(0)
 					addtimer(CALLBACK(current_atom, TYPE_PROC_REF(/atom, set_light_range), range), 10 SECONDS)
 
-
 	apply_cooldown()
-	..()
-
-/*
-	BULWARK ABILITY - AoE shield
-	Long cooldown defensive ability, provides a shield which caps damage taken to 10% of the xeno's max health per individual source of damage.
-*/
+	return
 
 /datum/action/xeno_action/onclick/king_shield/use_ability()
 	var/mob/living/carbon/xenomorph/xeno = owner

@@ -48,12 +48,12 @@
 		/datum/action/xeno_action/onclick/plant_weeds/pathogen,
 		/datum/action/xeno_action/onclick/emit_pheromones,
 		/datum/action/xeno_action/activable/tail_stab/pathogen_t3,
-		/datum/action/xeno_action/activable/mycotoxin/matriarch,
+		/datum/action/xeno_action/activable/tail_stab/mycotoxin/matriarch,
 		/datum/action/xeno_action/onclick/shatter, // Macro 1
 		/datum/action/xeno_action/activable/rav_spikes, // Macro 2
 		/datum/action/xeno_action/onclick/spike_shed, // Macro 3
 		/datum/action/xeno_action/onclick/blight_wave, // Macro 4
-		/datum/action/xeno_action/onclick/blight_slash, //Macro 5
+		/datum/action/xeno_action/onclick/paralyzing_slash/blight_slash, //Macro 5
 	)
 	claw_type = CLAW_TYPE_VERY_SHARP
 
@@ -84,6 +84,8 @@
 /mob/living/carbon/xenomorph/matriarch/Initialize()
 	. = ..()
 	make_pathogen_speaker()
+	ADD_TRAIT(src, TRAIT_ABILITY_BLIGHT_WAVE, TRAIT_SOURCE_ABILITY("blight_wave"))
+	ADD_TRAIT(src, TRAIT_ABILITY_TAILSTAB_MYCOTOXIN, TRAIT_SOURCE_ABILITY("tailstab_mycotoxin"))
 	AddComponent(/datum/component/footstep, 2 , 35, 11, 4, "alien_footstep_large")
 	RegisterSignal(src, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(check_block))
 
@@ -227,75 +229,8 @@
 		return FALSE
 	return ..()
 
-/datum/action/xeno_action/onclick/blight_wave/use_ability(atom/target)
-	var/mob/living/carbon/xenomorph/xeno = owner
-	XENO_ACTION_CHECK_USE_PLASMA(xeno)
-
-	playsound(xeno, 'sound/pathogen_creatures/pathogen_matriarch_screech.ogg', 75, 0, status = 0)
-	xeno.visible_message(SPAN_XENOHIGHDANGER("[xeno] emits a raspy guttural roar!"))
-	xeno.create_shriekwave()
-
-	var/datum/effect_system/smoke_spread/blight_wave/smoke_gas = new()
-	smoke_gas.set_up(7, 0, get_turf(xeno), null, 6)
-	smoke_gas.start()
-
-	for(var/atom/current_atom as anything in view(owner))
-		if(istype(current_atom, /obj/item/device))
-			var/obj/item/device/potential_lightsource = current_atom
-
-			var/time_to_extinguish = get_dist(owner, potential_lightsource) DECISECONDS
-
-			//Flares
-			if(istype(potential_lightsource, /obj/item/device/flashlight/flare))
-				var/obj/item/device/flashlight/flare/flare = potential_lightsource
-				addtimer(CALLBACK(flare, TYPE_PROC_REF(/obj/item/device/flashlight/flare/, burn_out)), time_to_extinguish)
-
-			//Flashlights
-			if(istype(potential_lightsource, /obj/item/device/flashlight))
-				var/obj/item/device/flashlight/flashlight = potential_lightsource
-				addtimer(CALLBACK(flashlight, TYPE_PROC_REF(/obj/item/device/flashlight, turn_off_light)), time_to_extinguish)
-
-		else if(iscarbon(current_atom))
-			// "Confuse" and slow humans in the area and turn off their armour lights.
-			var/mob/living/carbon/carbon = current_atom
-			if(xeno.can_not_harm(carbon))
-				continue
-
-			carbon.EyeBlur(daze_length_seconds)
-			carbon.Daze(daze_length_seconds)
-			carbon.Superslow(slow_length_seconds)
-			carbon.add_client_color_matrix("doom", 99, color_matrix_multiply(color_matrix_saturation(0), color_matrix_from_string("#eeeeee")))
-			carbon.overlay_fullscreen("doom", /atom/movable/screen/fullscreen/flash/noise/nvg)
-			addtimer(CALLBACK(carbon, TYPE_PROC_REF(/mob, remove_client_color_matrix), "doom", 1 SECONDS), 5 SECONDS)
-			addtimer(CALLBACK(carbon, TYPE_PROC_REF(/mob, clear_fullscreen), "doom", 0.5 SECONDS), 5 SECONDS)
-
-			to_chat(carbon, SPAN_HIGHDANGER("[xeno]'s roar overwhelms your entire being!"))
-			shake_camera(carbon, 6, 1)
-
-			if(ishuman(current_atom))
-				var/mob/living/carbon/human/human = carbon
-				var/time_to_extinguish = get_dist(owner, human) DECISECONDS
-				var/obj/item/clothing/suit/suit = human.get_item_by_slot(WEAR_JACKET)
-				if(istype(suit, /obj/item/clothing/suit/storage/marine))
-					var/obj/item/clothing/suit/storage/marine/armour = suit
-					addtimer(CALLBACK(armour, TYPE_PROC_REF(/atom, turn_light), null, FALSE), time_to_extinguish)
-				for(var/datum/reagent/x in human.reagents.reagent_list)
-					human.reagents.remove_reagent(x.id, 100)
-
-
-		if(!istype(current_atom, /mob/dead))
-			var/power = current_atom.light_power
-			var/range = current_atom.light_range
-			if(power > 0 && range > 0)
-				if(current_atom.light_system != MOVABLE_LIGHT)
-					current_atom.set_light(l_range=0)
-					addtimer(CALLBACK(current_atom, TYPE_PROC_REF(/atom, set_light), range, power), 10 SECONDS)
-				else
-					current_atom.set_light_range(0)
-					addtimer(CALLBACK(current_atom, TYPE_PROC_REF(/atom, set_light_range), range), 10 SECONDS)
-
-
-	apply_cooldown()
+/datum/action/xeno_action/onclick/blight_wave/use_ability(atom/target, daze_length_seconds, slow_length_seconds)
+	cast_doom(daze_length_seconds, slow_length_seconds)
 	..()
 
 /datum/effect_system/smoke_spread/blight_wave

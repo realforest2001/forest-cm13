@@ -1094,6 +1094,8 @@
 		to_chat(stabbing_xeno, SPAN_XENOWARNING("We must be above ground to do this."))
 		return
 
+	var/mycotoxin = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_TAILSTAB_MYCOTOXIN)
+
 	if(!stabbing_xeno.check_state() || stabbing_xeno.cannot_slash)
 		return FALSE
 
@@ -1160,7 +1162,28 @@
 
 	var/mob/living/carbon/target = targetted_atom
 
-	if(target.stat == DEAD || HAS_TRAIT(target, TRAIT_NESTED))
+	if(mycotoxin)
+		if(issynth(targetted_atom))
+			return FALSE
+
+		var/mob/living/carbon/human/target_human = targetted_atom
+		var/mostly_dead = FALSE
+		if(!target_human.is_revivable(TRUE))
+			to_chat(stabbing_xeno, SPAN_PATHOGEN_LEADER("You cannot inject this target with mycotoxin, their body is too degraded!"))
+			return FALSE
+
+		if(target_human.stat & DEAD)
+			if(world.time > target_human.timeofdeath + target_human.revive_grace_period - 1 MINUTES)
+				mostly_dead = TRUE
+
+		if(!matriarch_stab && !mostly_dead)
+			to_chat(stabbing_xeno, SPAN_PATHOGEN_LEADER("You cannot inject this target with mycotoxin, their body still functions!"))
+			return FALSE
+	else
+		if(target.stat == DEAD)
+			return FALSE
+
+	if(HAS_TRAIT(target, TRAIT_NESTED))
 		return FALSE
 
 	var/obj/limb/limb = target.get_limb(check_zone(stabbing_xeno.zone_selected))
@@ -1200,30 +1223,55 @@
 		addtimer(CALLBACK(src, PROC_REF(reset_direction), last_dir, dir), 0.5 SECONDS)
 
 /// Reset the xenomorph's direction after the tail stab 'animation', unless they've moved since then
-/mob/living/carbon/xenomorph/proc/reset_direction(last_dir, new_dir)
-	if(new_dir == dir)
-		setDir(last_dir)
+/mob/living/carbon/xenomorph/proc/reset_direction(mob/living/carbon/xenomorph/stabbing_xeno, last_dir, new_dir)
+	if(new_dir == stabbing_xeno.dir)
+		stabbing_xeno.setDir(last_dir)
 
 /datum/action/xeno_action/activable/tail_stab/proc/ability_act(mob/living/carbon/xenomorph/stabbing_xeno, mob/living/carbon/target, obj/limb/limb, apply_behavior_delagate = TRUE)
 
 	target.last_damage_data = create_cause_data(initial(stabbing_xeno.caste_type), stabbing_xeno)
 
+	var/venator = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_VENATOR_TAILSTAB)
+	var/mycotoxin = HAS_TRAIT(stabbing_xeno, TRAIT_ABILITY_TAILSTAB_MYCOTOXIN)
+
+	/// Direction var to make the tail stab look cool and immersive.
+	var/stab_direction
 	var/stab_overlay
 
 	if(blunt_stab)
-		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] swipes its tail into [target]'s [limb ? limb.display_name : "chest"], bashing it!"), SPAN_XENOWARNING("We swipe our tail into [target]'s [limb? limb.display_name : "chest"], bashing it!"))
+		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] [venator ? "slams a giant arm" : "swipes its tail"] into [target]'s [limb ? limb.display_name : "chest"], bashing it!"), SPAN_XENOWARNING("We [venator ? "slam our giant arm" : "swipe our tail"] into [target]'s [limb? limb.display_name : "chest"], bashing it!"))
 		if(prob(1))
 			playsound(target, 'sound/effects/comical_bonk.ogg', 50, TRUE)
 		else
 			playsound(target, "punch", 50, TRUE)
+		// The xeno smashes the target with their tail, moving it to the side and thus their direction as well.
+		stab_direction = turn(stabbing_xeno.dir, pick(90, -90))
+		log_attack("[key_name(stabbing_xeno)] whacked [key_name(target)] at [get_area_name(stabbing_xeno)]")
+		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was whacked by [key_name(stabbing_xeno)]</font>")
+		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>whacked [key_name(target)]</font>")
 		stab_overlay = "slam"
-	else
+	if(mycotoxin)
 		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] skewers [target] through the [limb ? limb.display_name : "chest"] with its razor sharp tail!"), SPAN_XENOWARNING("We skewer [target] through the [limb? limb.display_name : "chest"] with our razor sharp tail!"))
 		playsound(target, "alien_bite", 50, TRUE)
+		// The xeno flips around for a second to impale the target with their tail. These look awsome.
+		stab_direction = turn(get_dir(stabbing_xeno, target), 180)
+		log_attack("[key_name(stabbing_xeno)] injected [key_name(target)] with mycotoxin at [get_area_name(stabbing_xeno)]")
+		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was injected with mycotoxin by [key_name(stabbing_xeno)]</font>")
+		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>injected [key_name(target)] with mycotoxin</font>")
+	else
+		stabbing_xeno.visible_message(SPAN_XENOWARNING("\The [stabbing_xeno] skewers [target] through the [limb ? limb.display_name : "chest"] with its razor [venator ? "spikes" : "sharp tail"]!"), SPAN_XENOWARNING("We skewer [target] through the [limb? limb.display_name : "chest"] with our razor [venator ? "spikes" : "sharp tail"]!"))
+		playsound(target, "alien_bite", 50, TRUE)
 		stab_overlay = "tail"
-	log_attack("[key_name(stabbing_xeno)] tailstabbed [key_name(target)] at [get_area_name(stabbing_xeno)]")
-	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was tailstabbed by [key_name(stabbing_xeno)]</font>")
-	stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>tailstabbed [key_name(target)]</font>")
+		log_attack("[key_name(stabbing_xeno)] [venator ? "spikelashed" : "tailstabbed"] [key_name(target)] at [get_area_name(stabbing_xeno)]")
+		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>was [venator ? "spikelashed" : "tailstabbed"] by [key_name(stabbing_xeno)]</font>")
+		stabbing_xeno.attack_log += text("\[[time_stamp()]\] <font color='red'>[venator ? "spikelashed" : "tailstabbed"] [key_name(target)]</font>")
+
+	var/last_dir = stabbing_xeno.dir
+	if(last_dir != stab_direction)
+		stabbing_xeno.setDir(stab_direction)
+		/// Ditto.
+		var/new_dir = stabbing_xeno.dir
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/mob/living/carbon/xenomorph, reset_direction), stabbing_xeno, last_dir, new_dir), 0.5 SECONDS)
 
 	stabbing_xeno.tail_stab_animation(target, blunt_stab)
 	stabbing_xeno.animation_attack_on(target)
@@ -1242,6 +1290,18 @@
 	else if(stabbing_xeno.mob_size == MOB_SIZE_XENO)
 		target.apply_effect(1, DAZE)
 	shake_camera(target, 2, 1)
+
+	var/message = "You have injected [target] with mycotoxin! If they perish with this toxin in their body they will rise again at your service!"
+	if(mycotoxin)
+		if(matriarch_stab)
+			target.reagents.add_reagent("mycotoxin_e", 4)
+			target.reagents.set_source_mob(owner, /datum/reagent/toxin/mycotoxin/enhanced)
+		else
+			target.reagents.add_reagent("mycotoxin", 6)
+			target.reagents.set_source_mob(owner, /datum/reagent/toxin/mycotoxin)
+			message = "You have injected [target] with mycotoxin! They will rise again in service to the Overmind!"
+		to_chat(target, SPAN_HIGHDANGER("You are injected with a powerful mycotoxin by [stabbing_xeno]!"))
+		to_chat(stabbing_xeno, SPAN_PATHOGEN_QUEEN(message))
 
 	target.handle_blood_splatter(get_dir(owner.loc, target.loc))
 	return target

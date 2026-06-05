@@ -267,6 +267,22 @@
 #define TRAIT_ABILITY_BURROWED "t_ability_burrowed"
 /// Xenos with this trait can toggle long sight while resting.
 #define TRAIT_ABILITY_SIGHT_IGNORE_REST "t_ability_sight_ignore_rest"
+/// Xenos with this trait can toggle long sight while resting.
+#define TRAIT_ABILITY_PARALYZING_SLASH "t_ability_paralyzing_slash"
+
+// -- pathogen traits --
+/// Used for pathogen blight slash ability.
+#define TRAIT_ABILITY_BLIGHT_SLASH "t_ability_blight_slash"
+/// Used for overmind and matriarch blight wave ability.
+#define TRAIT_ABILITY_BLIGHT_WAVE "t_ability_matriarch_blight_wave"
+/// Used for venator savage ability.
+#define TRAIT_ABILITY_VENATOR_SAVAGE "t_ability_venator_savage"
+/// Used for venator tails stab ability.
+#define TRAIT_ABILITY_VENATOR_TAILSTAB "t_ability_venator_tailstab"
+/// Used for venator abduct ability.
+#define TRAIT_ABILITY_VENATOR_ABDUCT "t_ability_venator_abduct"
+/// Used for harbinger and matriarch mycotoxin ability.
+#define TRAIT_ABILITY_TAILSTAB_MYCOTOXIN "t_ability_tailstab_mycotoxin"
 
 //-- item traits --
 // TOOL TRAITS

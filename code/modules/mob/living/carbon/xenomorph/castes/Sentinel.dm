@@ -72,39 +72,38 @@
 /datum/behavior_delegate/sentinel_base
 	name = "Base Sentinel Behavior Delegate"
 
-	// State
-	var/next_slash_buffed = FALSE
-
 #define NEURO_TOUCH_DELAY 4 SECONDS
 
 /datum/behavior_delegate/sentinel_base/melee_attack_modify_damage(original_damage, mob/living/carbon/carbon_target)
-	if (!next_slash_buffed)
+	var/para_slash = HAS_TRAIT(bound_xeno, TRAIT_ABILITY_PARALYZING_SLASH)
+
+	if(!para_slash)
 		return original_damage
 
-	if (!isxeno_human(carbon_target))
+	if(!isxeno_human(carbon_target))
 		return original_damage
 
 	if(skillcheck(carbon_target, SKILL_ENDURANCE, SKILL_ENDURANCE_MAX ))
 		carbon_target.visible_message(SPAN_DANGER("[carbon_target] withstands the neurotoxin!"))
-		next_slash_buffed = FALSE
+		REMOVE_TRAIT(bound_xeno, TRAIT_ABILITY_PARALYZING_SLASH, TRAIT_SOURCE_ABILITY("paralyzing_slash"))
 		return original_damage //endurance 5 makes you immune to weak neurotoxin
 	if(ishuman(carbon_target))
 		var/mob/living/carbon/human/human = carbon_target
 		if(human.chem_effect_flags & CHEM_EFFECT_RESIST_NEURO || human.species.flags & NO_NEURO)
 			human.visible_message(SPAN_DANGER("[human] shrugs off the neurotoxin!"))
-			next_slash_buffed = FALSE
+			REMOVE_TRAIT(bound_xeno, TRAIT_ABILITY_PARALYZING_SLASH, TRAIT_SOURCE_ABILITY("paralyzing_slash"))
 			return //species like zombies or synths are immune to neurotoxin
-	if (next_slash_buffed)
+	if(para_slash)
 		to_chat(bound_xeno, SPAN_XENOHIGHDANGER("We add neurotoxin into our attack, [carbon_target] is about to fall over paralyzed!"))
 		to_chat(carbon_target, SPAN_XENOHIGHDANGER("You feel like you're about to fall over, as [bound_xeno] slashes you with its neurotoxin coated claws!"))
 		carbon_target.sway_jitter(times = 3, steps = floor(NEURO_TOUCH_DELAY/3))
 		carbon_target.apply_effect(4, DAZE)
 		addtimer(CALLBACK(src, PROC_REF(paralyzing_slash), carbon_target), NEURO_TOUCH_DELAY)
-		next_slash_buffed = FALSE
-	if(!next_slash_buffed)
+		REMOVE_TRAIT(bound_xeno, TRAIT_ABILITY_PARALYZING_SLASH, TRAIT_SOURCE_ABILITY("paralyzing_slash"))
+	if(!para_slash)
 		var/datum/action/xeno_action/onclick/paralyzing_slash/ability = get_action(bound_xeno, /datum/action/xeno_action/onclick/paralyzing_slash)
 		if (ability && istype(ability))
-			ability.button.icon_state = "template"
+			ability.button.icon_state = "template_xeno"
 	return original_damage
 
 #undef NEURO_TOUCH_DELAY
@@ -115,7 +114,7 @@
 	if(!isxeno_human(target_carbon))
 		return
 
-	if(next_slash_buffed)
+	if(HAS_TRAIT(bound_xeno, TRAIT_ABILITY_PARALYZING_SLASH))
 		return INTENT_HARM
 
 /datum/behavior_delegate/sentinel_base/proc/paralyzing_slash(mob/living/carbon/human/human_target)
@@ -192,20 +191,16 @@
 /datum/action/xeno_action/onclick/paralyzing_slash/use_ability(atom/target)
 	var/mob/living/carbon/xenomorph/paraslash_user = owner
 
-	if (!istype(paraslash_user))
+	var/para_slash = HAS_TRAIT(paraslash_user, TRAIT_ABILITY_PARALYZING_SLASH)
+
+	if(!isxeno(paraslash_user))
 		return
 
-	if (!action_cooldown_check())
-		return
+	XENO_ACTION_CHECK_USE_PLASMA(paraslash_user)
 
-	if (!check_and_use_plasma_owner())
-		return
+	ADD_TRAIT(paraslash_user, TRAIT_ABILITY_PARALYZING_SLASH, TRAIT_SOURCE_ABILITY("paralyzing_slash"))
 
-	var/datum/behavior_delegate/sentinel_base/behavior = paraslash_user.behavior_delegate
-	if (istype(behavior))
-		behavior.next_slash_buffed = TRUE
-
-	to_chat(paraslash_user, SPAN_XENOHIGHDANGER("Our next slash will apply neurotoxin!"))
+	to_chat(paraslash_user, SPAN_XENOHIGHDANGER("Our next slash will apply [para_slash ? "blight" : "neurotoxin"]!"))
 	button.icon_state = "template_active"
 
 	addtimer(CALLBACK(src, PROC_REF(unbuff_slash)), buff_duration)
@@ -215,14 +210,14 @@
 
 /datum/action/xeno_action/onclick/paralyzing_slash/proc/unbuff_slash()
 	var/mob/living/carbon/xenomorph/unbuffslash_user = owner
-	if (!istype(unbuffslash_user))
-		return
-	var/datum/behavior_delegate/sentinel_base/behavior = unbuffslash_user.behavior_delegate
-	if (istype(behavior))
-		// In case slash has already landed
-		if (!behavior.next_slash_buffed)
-			return
-		behavior.next_slash_buffed = FALSE
 
-	to_chat(unbuffslash_user, SPAN_XENODANGER("We have waited too long, our slash will no longer apply neurotoxin!"))
+	var/para_slash = HAS_TRAIT(unbuffslash_user, TRAIT_ABILITY_PARALYZING_SLASH)
+
+	if(!istype(unbuffslash_user))
+		return
+
+	if(HAS_TRAIT(unbuffslash_user, TRAIT_ABILITY_PARALYZING_SLASH))
+		REMOVE_TRAIT(unbuffslash_user, TRAIT_ABILITY_PARALYZING_SLASH, TRAIT_SOURCE_ABILITY("paralyzing_slash"))
+
+	to_chat(unbuffslash_user, SPAN_XENODANGER("We have waited too long, our slash will no longer apply [para_slash ? "blight" : "neurotoxin"]!"))
 	button.icon_state = "template_xeno"

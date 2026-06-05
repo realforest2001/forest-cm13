@@ -55,7 +55,7 @@
 		/datum/action/xeno_action/onclick/choose_resin/pathogen/not_primary,
 		/datum/action/xeno_action/activable/secrete_resin/pathogen, // Macro 3 // Shared macro with Conditor
 		/datum/action/xeno_action/activable/headbite/neomorph, // Macro 4
-		/datum/action/xeno_action/onclick/blight_slash, //Macro 5
+		/datum/action/xeno_action/onclick/paralyzing_slash/blight_slash, //Macro 5
 	)
 	inherent_verbs = list(
 		/mob/living/carbon/xenomorph/proc/vent_crawl,
@@ -97,12 +97,7 @@
 
 /datum/action/xeno_action/activable/pounce/runner/neomorph
 	xeno_cooldown = 5 SECONDS
-	knockdown = TRUE // Should we knock down the target?
-	knockdown_duration = 1
-	slash = TRUE // Do we slash upon reception?
-	freeze_self = TRUE // Should we freeze ourselves after the lunge?
-	freeze_time = 5
-	can_be_shield_blocked = TRUE // Some legacy stuff, self explanatory
+	slash = TRUE
 	ability_primacy = XENO_PRIMARY_ACTION_2
 
 /datum/action/xeno_action/activable/headbite/neomorph

@@ -44,8 +44,8 @@
 		/datum/action/xeno_action/watch_xeno,
 		/datum/action/xeno_action/activable/tail_stab,
 		/datum/action/xeno_action/activable/pounce/lurker, // Macro 1
-		/datum/action/xeno_action/onclick/lurker_invisibility/blight, // Macro 2
-		/datum/action/xeno_action/onclick/blight_slash, //Macro 5
+		/datum/action/xeno_action/onclick/lurker_invisibility, // Macro 2
+		/datum/action/xeno_action/onclick/paralyzing_slash/blight_slash, //Macro 5
 	)
 	inherent_verbs = list(
 		/mob/living/carbon/xenomorph/proc/vent_crawl,
@@ -73,11 +73,6 @@
 /datum/behavior_delegate/pathogen_base/blight
 	name = "Base Blight Behavior Delegate"
 
-	// Config
-	var/invis_recharge_time = 20 SECONDS
-	var/invis_start_time = -1 // Special value for when we're not invisible
-	var/invis_duration = 30 SECONDS // so we can display how long the lurker is invisible to it
-
 /datum/behavior_delegate/pathogen_base/blight/melee_attack_additional_effects_self()
 	..()
 
@@ -85,40 +80,13 @@
 	if (lurker_invis_action)
 		lurker_invis_action.invisibility_off() // Full cooldown
 
-/datum/behavior_delegate/pathogen_base/blight/proc/decloak_handler(mob/source)
-	SIGNAL_HANDLER
-	var/datum/action/xeno_action/onclick/lurker_invisibility/lurker_invis_action = get_action(bound_xeno, /datum/action/xeno_action/onclick/lurker_invisibility)
-	if(istype(lurker_invis_action))
-		lurker_invis_action.invisibility_off(0.5) // Partial refund of remaining time
-
-/// Implementation for enabling invisibility.
-/datum/behavior_delegate/pathogen_base/blight/proc/on_invisibility()
-	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(bound_xeno, /datum/action/xeno_action/activable/pounce/lurker)
-	if(lurker_pounce_action)
-		lurker_pounce_action.knockdown = TRUE // pounce knocks down
-		lurker_pounce_action.freeze_self = TRUE
-	ADD_TRAIT(bound_xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
-	RegisterSignal(bound_xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL, PROC_REF(decloak_handler))
-	bound_xeno.stealth = TRUE
-	invis_start_time = world.time
-
-/// Implementation for disabling invisibility.
-/datum/behavior_delegate/pathogen_base/blight/proc/on_invisibility_off()
-	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(bound_xeno, /datum/action/xeno_action/activable/pounce/lurker)
-	if(lurker_pounce_action)
-		lurker_pounce_action.knockdown = FALSE // pounce no longer knocks down
-		lurker_pounce_action.freeze_self = FALSE
-	bound_xeno.stealth = FALSE
-	REMOVE_TRAIT(bound_xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
-	UnregisterSignal(bound_xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL)
-	invis_start_time = -1
-
 /datum/behavior_delegate/pathogen_base/blight/append_to_stat()
 	. = list()
 
 	// Invisible
-	if(invis_start_time != -1)
-		var/time_left = (invis_duration-(world.time - invis_start_time)) / 10
+	var/datum/action/xeno_action/onclick/lurker_invisibility/lurker_inv = get_action(bound_xeno, /datum/action/xeno_action/onclick/lurker_invisibility)
+	if(lurker_inv.invis_start_time != -1)
+		var/time_left = (lurker_inv.invis_duration-(world.time - lurker_inv.invis_start_time)) / 10
 		. += "Invisibility Remaining: [time_left] second\s."
 		return
 
@@ -161,38 +129,3 @@
 
 	to_chat(bound_xeno, SPAN_XENOHIGHDANGER("We bumped into someone and lost our invisibility!"))
 	lurker_invisibility_action.invisibility_off(0.5) // partial refund of remaining time
-
-
-/datum/action/xeno_action/onclick/lurker_invisibility/blight/invisibility_off(refund_multiplier = 0.0)
-	var/mob/living/carbon/xenomorph/xeno = owner
-
-	if(!istype(xeno))
-		return
-	if(owner.alpha == initial(owner.alpha) && !xeno.stealth)
-		return
-
-	if(invis_timer_id != TIMER_ID_NULL)
-		deltimer(invis_timer_id)
-		invis_timer_id = TIMER_ID_NULL
-
-	animate(xeno, alpha = initial(xeno.alpha), time = 0.1 SECONDS, easing = QUAD_EASING)
-	to_chat(xeno, SPAN_XENOHIGHDANGER("We feel our invisibility end!"))
-
-	button.icon_state = "template_xeno"
-	xeno.update_icons()
-
-	xeno.speed_modifier += speed_buff
-	xeno.recalculate_speed()
-
-	var/datum/behavior_delegate/pathogen_base/blight/behavior = xeno.behavior_delegate
-	if(!istype(behavior))
-		CRASH("blight behavior_delegate missing/invalid for [xeno]!")
-
-	var/recharge_time = behavior.invis_recharge_time
-	if(behavior.invis_start_time > 0) // Sanity
-		refund_multiplier = clamp(refund_multiplier, 0, 1)
-		var/remaining = 1 - (world.time - behavior.invis_start_time) / behavior.invis_duration
-		recharge_time = behavior.invis_recharge_time - remaining * refund_multiplier * behavior.invis_recharge_time
-	apply_cooldown_override(recharge_time)
-
-	behavior.on_invisibility_off()

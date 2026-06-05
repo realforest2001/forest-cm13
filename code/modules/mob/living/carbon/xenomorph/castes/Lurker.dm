@@ -73,9 +73,6 @@
 	name = "Base Lurker Behavior Delegate"
 
 	// Config
-	var/invis_recharge_time = 20 SECONDS
-	var/invis_start_time = -1 // Special value for when we're not invisible
-	var/invis_duration = 30 SECONDS // so we can display how long the lurker is invisible to it
 	var/buffed_slash_damage_ratio = 1.2
 	var/slash_slow_duration = 35
 
@@ -123,40 +120,13 @@
 	if (lurker_invis_action)
 		lurker_invis_action.invisibility_off() // Full cooldown
 
-/datum/behavior_delegate/lurker_base/proc/decloak_handler(mob/source)
-	SIGNAL_HANDLER
-	var/datum/action/xeno_action/onclick/lurker_invisibility/lurker_invis_action = get_action(bound_xeno, /datum/action/xeno_action/onclick/lurker_invisibility)
-	if(istype(lurker_invis_action))
-		lurker_invis_action.invisibility_off(0.5) // Partial refund of remaining time
-
-/// Implementation for enabling invisibility.
-/datum/behavior_delegate/lurker_base/proc/on_invisibility()
-	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(bound_xeno, /datum/action/xeno_action/activable/pounce/lurker)
-	if(lurker_pounce_action)
-		lurker_pounce_action.knockdown = TRUE // pounce knocks down
-		lurker_pounce_action.freeze_self = TRUE
-	ADD_TRAIT(bound_xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
-	RegisterSignal(bound_xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL, PROC_REF(decloak_handler))
-	bound_xeno.stealth = TRUE
-	invis_start_time = world.time
-
-/// Implementation for disabling invisibility.
-/datum/behavior_delegate/lurker_base/proc/on_invisibility_off()
-	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(bound_xeno, /datum/action/xeno_action/activable/pounce/lurker)
-	if(lurker_pounce_action)
-		lurker_pounce_action.knockdown = FALSE // pounce no longer knocks down
-		lurker_pounce_action.freeze_self = FALSE
-	bound_xeno.stealth = FALSE
-	REMOVE_TRAIT(bound_xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
-	UnregisterSignal(bound_xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL)
-	invis_start_time = -1
-
 /datum/behavior_delegate/lurker_base/append_to_stat()
 	. = list()
 
 	// Invisible
-	if(invis_start_time != -1)
-		var/time_left = (invis_duration-(world.time - invis_start_time)) / 10
+	var/datum/action/xeno_action/onclick/lurker_invisibility/lurker_inv = get_action(bound_xeno, /datum/action/xeno_action/onclick/lurker_invisibility)
+	if(lurker_inv.invis_start_time != -1)
+		var/time_left = (lurker_inv.invis_duration-(world.time - lurker_inv.invis_start_time)) / 10
 		. += "Invisibility Remaining: [time_left] second\s."
 		return
 
@@ -233,12 +203,7 @@
 /datum/action/xeno_action/onclick/lurker_invisibility/use_ability(atom/targeted_atom)
 	var/mob/living/carbon/xenomorph/xeno = owner
 
-	if(!istype(xeno))
-		return
-	if(!action_cooldown_check())
-		return
-	if(!check_and_use_plasma_owner())
-		return
+	XENO_ACTION_CHECK_USE_PLASMA(xeno)
 
 	xeno.deselect_timer = world.time + 5 // Half a second to prevent double clicks
 
@@ -253,8 +218,7 @@
 	xeno.speed_modifier -= speed_buff
 	xeno.recalculate_speed()
 
-	var/datum/behavior_delegate/lurker_base/behavior = xeno.behavior_delegate
-	behavior.on_invisibility()
+	on_invisibility()
 
 	// if we go off early, this also works fine.
 	invis_timer_id = addtimer(CALLBACK(src, PROC_REF(invisibility_off)), duration, TIMER_STOPPABLE)
@@ -284,18 +248,14 @@
 	xeno.speed_modifier += speed_buff
 	xeno.recalculate_speed()
 
-	var/datum/behavior_delegate/lurker_base/behavior = xeno.behavior_delegate
-	if(!istype(behavior))
-		CRASH("lurker_base behavior_delegate missing/invalid for [xeno]!")
-
-	var/recharge_time = behavior.invis_recharge_time
-	if(behavior.invis_start_time > 0) // Sanity
+	var/recharge_time = invis_recharge_time
+	if(invis_start_time > 0) // Sanity
 		refund_multiplier = clamp(refund_multiplier, 0, 1)
-		var/remaining = 1 - (world.time - behavior.invis_start_time) / behavior.invis_duration
-		recharge_time = behavior.invis_recharge_time - remaining * refund_multiplier * behavior.invis_recharge_time
+		var/remaining = 1 - (world.time - invis_start_time) / invis_duration
+		recharge_time = invis_recharge_time - remaining * refund_multiplier * invis_recharge_time
 	apply_cooldown_override(recharge_time)
 
-	behavior.on_invisibility_off()
+	on_invisibility_off()
 
 /datum/action/xeno_action/onclick/lurker_invisibility/ability_cooldown_over()
 	if(owner.client?.prefs.show_cooldown_messages)
@@ -325,6 +285,38 @@
 
 	apply_cooldown()
 	return ..()
+
+/datum/action/xeno_action/onclick/lurker_invisibility/proc/decloak_handler(mob/source)
+	SIGNAL_HANDLER
+	invisibility_off(0.5) // Partial refund of remaining time
+
+/// Implementation for enabling invisibility.
+/datum/action/xeno_action/onclick/lurker_invisibility/proc/on_invisibility()
+	var/mob/living/carbon/xenomorph/xeno = owner
+
+	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(xeno, /datum/action/xeno_action/activable/pounce/lurker)
+	if(lurker_pounce_action)
+		lurker_pounce_action.knockdown = TRUE // pounce knocks down
+		lurker_pounce_action.freeze_self = TRUE
+
+	ADD_TRAIT(xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
+	RegisterSignal(xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL, PROC_REF(decloak_handler))
+	xeno.stealth = TRUE
+	invis_start_time = world.time
+
+/// Implementation for disabling invisibility.
+/datum/action/xeno_action/onclick/lurker_invisibility/proc/on_invisibility_off()
+	var/mob/living/carbon/xenomorph/xeno = owner
+
+	var/datum/action/xeno_action/activable/pounce/lurker/lurker_pounce_action = get_action(xeno, /datum/action/xeno_action/activable/pounce/lurker)
+	if(lurker_pounce_action)
+		lurker_pounce_action.knockdown = FALSE // pounce no longer knocks down
+		lurker_pounce_action.freeze_self = FALSE
+
+	xeno.stealth = FALSE
+	REMOVE_TRAIT(xeno, TRAIT_CLOAKED, TRAIT_SOURCE_ABILITY("cloak"))
+	UnregisterSignal(xeno, COMSIG_MOB_EFFECT_CLOAK_CANCEL)
+	invis_start_time = -1
 
 /datum/action/xeno_action/onclick/lurker_assassinate/proc/unbuff_slash()
 	var/mob/living/carbon/xenomorph/xeno = owner

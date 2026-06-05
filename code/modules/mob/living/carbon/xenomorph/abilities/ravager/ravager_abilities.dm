@@ -52,6 +52,7 @@
 	var/damage = 40
 
 	var/superslow_duration = 3 SECONDS
+	var/should_sslow = FALSE
 
 //// BERSERKER ACTIONS
 

@@ -85,14 +85,12 @@
 	if(!atom || atom.layer >= FLY_LAYER || !isturf(abduct_user.loc))
 		return
 
-	if(!action_cooldown_check() || abduct_user.action_busy)
+	var/venator = HAS_TRAIT(abduct_user, TRAIT_ABILITY_VENATOR_ABDUCT)
+
+	if(abduct_user.action_busy)
 		return
 
-	if(!abduct_user.check_state())
-		return
-
-	if(!check_plasma_owner())
-		return
+	XENO_ACTION_CHECK(abduct_user)
 
 	// Build our turflist
 	var/list/turf/turflist = list()
@@ -168,7 +166,7 @@
 		to_chat(abduct_user, SPAN_XENOWARNING("We don't have any room to do our abduction!"))
 		return
 
-	abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user]'s segmented tail starts coiling..."), SPAN_XENODANGER("We begin coiling our tail, aiming towards \the [atom]..."))
+	abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user]'s [venator ? "tentacles" : "segmented tail"] starts coiling..."), SPAN_XENODANGER("We begin coiling our [venator ? "tentacles" : "segmented tail"], aiming towards \the [atom]..."))
 	abduct_user.emote("roar")
 
 	var/throw_target_turf = get_step(abduct_user, facing)
@@ -178,7 +176,7 @@
 		to_chat(abduct_user, SPAN_XENOWARNING("You relax your tail."))
 		apply_cooldown()
 
-		for (var/obj/effect/xenomorph/xeno_telegraph/xenotelegraph in telegraph_atom_list)
+		for(var/obj/effect/xenomorph/xeno_telegraph/xenotelegraph in telegraph_atom_list)
 			telegraph_atom_list -= xenotelegraph
 			qdel(xenotelegraph)
 
@@ -186,13 +184,12 @@
 
 		return
 
-	if(!check_and_use_plasma_owner())
-		return
+	XENO_ACTION_CHECK_USE_PLASMA(abduct_user)
 
 	REMOVE_TRAIT(abduct_user, TRAIT_IMMOBILIZED, TRAIT_SOURCE_ABILITY("Abduct"))
 
 	playsound(get_turf(abduct_user), 'sound/effects/bang.ogg', 25, 0)
-	abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user] suddenly uncoils its tail, firing it towards [atom]!"), SPAN_XENODANGER("We uncoil our tail, sending it out towards \the [atom]!"))
+	abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user] suddenly uncoils its [venator ? "tentacles" : "segmented tail"], [venator ? "extending them" : "firing it"] towards [atom]!"), SPAN_XENODANGER("We uncoil our [venator ? "tentacles" : "segmented tail"], sending it out towards \the [atom]!"))
 
 	var/list/targets = list()
 	for(var/turf/target_turf in turflist)
@@ -201,17 +198,24 @@
 				continue
 
 			targets += target
-	if(LAZYLEN(targets) == 1)
-		abduct_user.balloon_alert(abduct_user, "slowed one target", text_color = "#51a16c")
-	else if(LAZYLEN(targets) == 2)
-		abduct_user.balloon_alert(abduct_user, "rooted two targets", text_color = "#51a16c")
-	else if(LAZYLEN(targets) >= 3)
-		abduct_user.balloon_alert(abduct_user, "stunned [LAZYLEN(targets)] targets", text_color = "#51a16c")
+
+	var/target_count = LAZYLEN(targets)
+	var/captured_message
+
+	if(target_count == 1)
+		captured_message = venator ? "our tentacles catch and slow one target!" : "slowed one target"
+	else if(target_count == 2)
+		captured_message = venator ? "our tentacles catch and root two targets!" : "rooted two targets"
+	else if(target_count >= 3)
+		captured_message = venator ? "our tentacles catch and stun [target_count] targets!" : "stunned [target_count] targets"
+
+	if(captured_message)
+		abduct_user.balloon_alert(abduct_user, captured_message, text_color = "#51a16c")
 
 	apply_cooldown()
 
 	for(var/mob/living/carbon/target in targets)
-		abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user]'s hooked tail coils itself around [target]!"), SPAN_XENODANGER("Our hooked tail coils itself around [target]!"))
+		abduct_user.visible_message(SPAN_XENODANGER("\The [abduct_user]'s [venator ? "writhing tentacles coil" : "hooked tail coils itself"] around [target]!"), SPAN_XENODANGER("Our [venator ? "writhing tentacles coil" : "hooked tail coils itself"] around [target]!"))
 
 		target.apply_effect(0.2, WEAKEN)
 
