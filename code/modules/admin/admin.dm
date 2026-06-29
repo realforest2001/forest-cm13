@@ -50,14 +50,20 @@
 /proc/msg_admin_ff(text, alive = TRUE)
 	log_attack(text)
 	var/rendered = SPAN_COMBAT("[SPAN_PREFIX("ATTACK:")] ")
+	var/text_holder
 	if(alive)
-		rendered += SPAN_FF_ALIVE("[SPAN_MESSAGE("[text]")]")
+		//rendered += SPAN_FF_ALIVE("[SPAN_MESSAGE("[text]")]")
+		text_holder = "[SPAN_MESSAGE("[text]")]"
 	else
-		rendered += SPAN_FF_DEAD("///DEAD/// - [SPAN_MESSAGE("[text]")]")
-	for(var/client/C as anything in GLOB.admins)
-		if(C && C.admin_holder && (R_MOD & C.admin_holder.rights))
-			if(C.prefs.toggles_chat & CHAT_FFATTACKLOGS)
-				to_chat(C, rendered)
+		//rendered += SPAN_FF_DEAD("///DEAD/// - [SPAN_MESSAGE("[text]")]")
+		text_holder = "///DEAD/// - [SPAN_MESSAGE("[text]")]"
+	for(var/client/admin_client as anything in GLOB.admins)
+		if(admin_client && admin_client.admin_holder && (R_MOD & admin_client.admin_holder.rights))
+			var/datum/preferences/admin_prefs = admin_client.prefs
+			if(admin_prefs.toggles_chat & CHAT_FFATTACKLOGS)
+				var/final_text = rendered
+				final_text += "<font color=[alive ? admin_prefs.ff_log_color : admin_prefs.ffd_log_color]><b>[text_holder]</b></font>"
+				to_chat(admin_client, final_text)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////Panels
 
